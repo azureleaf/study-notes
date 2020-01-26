@@ -11,7 +11,7 @@
 
 
 
-## SSHとSSL
+## SSHとSSL, TLS
 
 ## 認証のしくみ
 

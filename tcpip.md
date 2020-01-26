@@ -2,84 +2,142 @@
 
 ## 通信プロトコルって何？
 
-
 ## これを勉強するとなんの役に立つの？
 
-- エンジニア
-- ネットワーク機器の役割を理解
+- HTTP通信の背景がわかる
+- ネットワーク機器の役割を理解しやすい
+- 他のエンジニアと話しててもナメられない
 
-実際、全てを理解する必要はなさそう。自分が開発で関与する部分の前後（フロントエンジニアならHTTPとIP）だけ理解していれば問題ない。たぶん。
+実際、全てを理解する必要はなさそう。自分が開発で関与する部分の前後（フロントエンジニアなら HTTP, TCP, IP）だけ理解していればたぶん問題ない。
 
 ## TCP/IP Model vs OSI Model
 
-|#| OSI |#| TCP/IP |
-|:---:|:---:|:---:|:---:|
-|7| Application |4| Application |
-|6| Presentation | 4| Application |
-|5| Session |4| Application |
-|4| Transport |3| Transport |
-|3| Network |2| Internet |
-|2| Data Link |1| Network Interface |
-|1| Physical |1| Network Interface |
+|  #  |     OSI      |  #  |      TCP/IP       |
+| :-: | :----------: | :-: | :---------------: |
+|  7  | Application  |  4  |    Application    |
+|  6  | Presentation |  4  |    Application    |
+|  5  |   Session    |  4  |    Application    |
+|  4  |  Transport   |  3  |     Transport     |
+|  3  |   Network    |  2  |     Internet      |
+|  2  |  Data Link   |  1  | Network Interface |
+|  1  |   Physical   |  1  | Network Interface |
+
+- 知識としては OSI モデルの７層を覚えないといけないが、実務上は４層の TCP/IP で考えることが多いように見受けられる
 
 ## OSI Model
 
-|#| Layer | Role |
-|:---:|:---:|:---:|
-|7| Application | アプリケーション毎の規定 | 
-|6| Presentation | 文字コードなどの表現の規定 |
-|5| Session | 通信の確立、維持、終了までのセッションの規定 | 
-|4| Transport | 「セグメント」の転送の信頼性のための規定。 | 
-|3| Network | 「パケット」をネットワーク間で通信する方法の規定。 | 
-|2| Data Link | 「フレーム」を宛先MACアドレスなどに基づいて送る規定 | 
-|1| Physical | 「ビット」の列を電気信号に変換する規定 | 
+|  #  |    Layer     |                         Role                          |
+| :-: | :----------: | :---------------------------------------------------: |
+|  7  | Application  |               アプリケーション毎の規定                |
+|  6  | Presentation |              文字コードなどの表現の規定               |
+|  5  |   Session    |     通信の確立、維持、終了までのセッションの規定      |
+|  4  |  Transport   |      「セグメント」の転送の信頼性のための規定。       |
+|  3  |   Network    |  「パケット」をネットワーク間で通信する方法の規定。   |
+|  2  |  Data Link   | 「フレーム」を宛先 MAC アドレスなどに基づいて送る規定 |
+|  1  |   Physical   |        「ビット」の列を電気信号に変換する規定         |
 
-
-- 送信側の時は、OSI７層目から出発して１層目に行く。受信側では、逆に１層目から７層目に向かってデータが加工されていく。
-- ７層目に入る前の生データは「ペイロード」と呼ばれる。層を下るたびにL7 Header, L6 Header, L5 Header...のようにヘッダが追加されていく。
-
+- 送信側の時は、OSI ７層目から出発して１層目に行く。受信側では、逆に１層目から７層目に向かってデータが加工されていく。
+- ７層目に入る前の生データは「ペイロード」と呼ばれる。層を下るたびに L7 Header, L6 Header, L5 Header...のようにヘッダが追加されていく。
 
 ## TCP/IP Model
 
-|#| TCP/IP Layer | Protocol |
-|:---:|:---:|:---:|
-|4| Application | HTTP, FTP, SMTP, SSHなど。
-|3| Transport | TCP, UDP。エラー訂正や再送の制御など |
-|2| Internet | IPがここででてくる。ルーティングなど。ルータが活躍する時のデータはこれ |
-|1| Network Interface | PPP, Ethernetが重要。電気的な接続。 |
+| #   | TCP/IP Layer      | Protocol Example                                                              | Data                                                                                           | Device         |
+| --- | ----------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
+| 4   | Application       | HTTP, FTP, SMTP, SSH                                                          | HTTP Header + Data                                                                             |                |
+| 3   | Transport         | TCP, UDP                                     | Segment = TCP Header <br> + HTTP Header <br> + Data                                            | Router         |
+| 2   | Internet          | IP | Packet = IP Header <br> + TCP Header <br> + HTTP Header <br> + Data                            | Swtich, Bridge |
+| 1   | Network Interface | PPP, Ethernet                   | Frame = Ethernet Header <br> + IP Header <br> + TCP Header <br> + Data <br> + Ethernet Trailer | Hub, Cable     |
 
-## HTTP
+- 一番大切なのが TCP と IP なので、この名前になった
+- Network Interface Layer を、OSI 第二層のように別名 Data Link Layer ということもあるらしい
+- Internet 層の「Packet」は Datagram と呼ぶこともある。両者の違いはサイトによってばらばらで、明確でない。
 
-- ブラウザでURLを入力した時、リンクをクリックしたとき、「送信」「ダウンロード」などのボタンを押した時、その裏では普通HTTPのデータのやり取りがされている。AxiosはHTTPを簡単にやるための仕組み。
-- HTTPを使わずによく使われている技術として「Web Socket」「Socket.io」がある。
+## 4. Application Layer (TCP/IP)
+
+### HTTP Header
+
+- ブラウザで URL を入力した時、リンクをクリックしたとき、「送信」「ダウンロード」などのボタンを押した時、その裏では普通 HTTP のデータのやり取りがされている。Axios は HTTP を簡単にやるための仕組み。
+  - Axios
+  - XHR
+  - Fetch API
+- HTTP を使わずによく使われている技術として「Web Socket」「Socket io」がある。
+
+|         |        HTTP        |   WebSocket   |
+| :-----: | :----------------: | :-----------: |
+| Duplex  |        Half        |     Full      |
+| Message | Request & Response | Bidirectional |
 
 ### HTTP Request
 
 ### HTTP Response
 
+### Port Number
+
+
+## 3. Transport Layer (TCP/IP)
+
+### TCP vs UDP
+
+|TCP | UDP|
+| --- | --- |
+|信頼度優先|速度優先|
+|WWW, Mail|VoIP Phone, Streaming|
+|1対1|1対多|
+
+### TCP Header
+
+重要そうなやつだけ。
+
+- 送信元のポート番号
+- 送信先のポート番号
+- シーケンス番号：　このデータが何バイト目なのか
+- 確認応答番号：
+- Control flag： それぞれ1ビット。
+    - URG
+    - ACK
+    - PSH
+    - RST
+    - SYN
+    - FIN
+
+### UDP Header
+
+- 送信元のポート番号
+- 送信先のポート番号
+- データ長
+- Checksum
+
+### TCPのしくみ
+
+- 確認応答が来なければ
+
+
+## 2. Internet Layer (TCP/IP)
+
+## 1. Network Interface Layer (TCP/IP)
 
 ## Topics
 
 - IP Address
-    - Subnet Mask
-    - IPv4 vs IPv6
+  - Subnet Mask
+  - IPv4 vs IPv6
 - MAC Address
 - Hardwares
-    - Router
-    - Repeater Hub
-    - Bridge
-    - Switching Hub
+  - Router
+  - Repeater Hub
+  - Bridge
+  - Switching Hub
 - Routing
-    - Routing Table
-    - NAT/NAPT
-    - Static Routing
-    - Dynamic Routing
-    - RIP
-    - OSPF
+  - Routing Table
+  - NAT/NAPT
+  - Static Routing
+  - Dynamic Routing
+  - RIP
+  - OSPF
 - UDP vs TCP
 - Port
 - Ethernet
-    - PPP & PPPoE
+  - PPP & PPPoE
 - Shell Commands
-    - ARP
-    - ipconfig
+  - ARP
+  - ipconfig
