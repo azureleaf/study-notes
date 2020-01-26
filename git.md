@@ -35,10 +35,10 @@
     - `git commit -m "feat:"`
     - `git push origin master`
     - `git pull origin master`
-1. 覚えるのが必須
+1. 覚えて当然のやつ
     - `git clone http://blahblah.git`
     - `git init`
     - `git log -n 3`
     - `git revert`
     - `git stash`
-1. たまに使うやつ
+1. たまに使うので存在だけ覚えてればいいやつ
