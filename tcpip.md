@@ -1,14 +1,15 @@
 # 通信プロトコルを制覇する
 
 ## 通信プロトコルって何？
+- 通信するときのデータの仕様のお約束
+- 複数の段階に分け、それぞれの段階の出口と入口のデータ形式を決めておくことで、様々なプロトコルを組み合わせることができる。
 
 ## これを勉強するとなんの役に立つの？
 
-- HTTP 通信の背景がわかる
-- ネットワーク機器の役割を理解しやすい
+- HTTP通信の背景がわかる。
+- ネットワーク機器の役割を理解しやすい。ネットワークエンジニアなら必須。
 - 他のエンジニアと話しててもナメられない
-
-実際、全てを理解する必要はなさそう。自分が開発で関与する部分の前後（フロントエンジニアなら HTTP, TCP, IP）だけ理解していればたぶん問題ない。
+- 実際、全てを理解する必要はなさそう。自分が開発で関与する部分の前後（フロントエンジニアなら HTTP, TCP, IP）だけ理解していればたぶん問題ない。
 
 ## TCP/IP Model vs OSI Model
 
@@ -41,7 +42,7 @@
 
 ## TCP/IP Model
 
-| #   | TCP/IP Layer      | Protocol             | Protocol Data Unit                                                                             | Device         |
+| #   | TCP/IP Layer      | Protocol             | PDU: Protocol Data Unit                                                                          | Device         |
 | --- | ----------------- | -------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
 | 4   | Application       | HTTP, FTP, SMTP, SSH | HTTP Header + Data                                                                             |                |
 | 3   | Transport         | TCP, UDP             | Segment = TCP Header <br> + HTTP Header <br> + Data                                            | Router         |
@@ -51,6 +52,7 @@
 - 一番大切なのが TCP と IP なので、この名前になった
 - Network Interface Layer を、OSI 第二層のように別名 Data Link Layer ということもあるらしい
 - Internet 層の「Packet」は Datagram と呼ぶこともある。両者の違いはサイトによってばらばらで、明確でない。
+- 上の表だと、単一のファイルにヘッダが続々と足されていくようなイメージだが、実際にはバラバラに分割される。一つ上からやってきたものは単なるひとかたまりのペイロードとして認識され、中がどうなっているのかは下層のプロトコルは意識することなく加工していく。
 
 ## 4. Application Layer (TCP/IP)
 
@@ -69,7 +71,24 @@
 
 ### HTTP Request
 
-### HTTP Response
+#### Method
+
+- POST
+- GET
+- PUT
+- DELETE
+- 他にも多数
+
+POST vs PUT
+
+### Structure of Request & Response
+
+|Request| |Response|
+|--|--|--|
+| `GET /book/list.html HTTP/1.1` | Start Line | `HTTP/1.1 200 OK` |
+| `HOST: www.mylibrary.com`<br>`User-Agent: Mozilla/5.0`<br>...| Request Headers | `Server: Apache`<br>`Content-Type: text/html; charset=utf-8`<br>... |
+|| (empty line) |  |
+| `bookId=123&author=Jane+Austen` | Request Body | `<HTML><HEAD>`<br>... |
 
 ### Port Number
 
