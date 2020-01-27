@@ -4,7 +4,7 @@
 
 ## これを勉強するとなんの役に立つの？
 
-- HTTP通信の背景がわかる
+- HTTP 通信の背景がわかる
 - ネットワーク機器の役割を理解しやすい
 - 他のエンジニアと話しててもナメられない
 
@@ -41,12 +41,12 @@
 
 ## TCP/IP Model
 
-| #   | TCP/IP Layer      | Protocol Example                                                              | Data                                                                                           | Device         |
-| --- | ----------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
-| 4   | Application       | HTTP, FTP, SMTP, SSH                                                          | HTTP Header + Data                                                                             |                |
-| 3   | Transport         | TCP, UDP                                     | Segment = TCP Header <br> + HTTP Header <br> + Data                                            | Router         |
-| 2   | Internet          | IP | Packet = IP Header <br> + TCP Header <br> + HTTP Header <br> + Data                            | Swtich, Bridge |
-| 1   | Network Interface | PPP, Ethernet                   | Frame = Ethernet Header <br> + IP Header <br> + TCP Header <br> + Data <br> + Ethernet Trailer | Hub, Cable     |
+| #   | TCP/IP Layer      | Protocol             | Protocol Data Unit                                                                             | Device         |
+| --- | ----------------- | -------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
+| 4   | Application       | HTTP, FTP, SMTP, SSH | HTTP Header + Data                                                                             |                |
+| 3   | Transport         | TCP, UDP             | Segment = TCP Header <br> + HTTP Header <br> + Data                                            | Router         |
+| 2   | Internet          | IP                   | Packet = IP Header <br> + TCP Header <br> + HTTP Header <br> + Data                            | Swtich, Bridge |
+| 1   | Network Interface | PPP, Ethernet, ARP   | Frame = Ethernet Header <br> + IP Header <br> + TCP Header <br> + Data <br> + Ethernet Trailer | Hub, Cable     |
 
 - 一番大切なのが TCP と IP なので、この名前になった
 - Network Interface Layer を、OSI 第二層のように別名 Data Link Layer ということもあるらしい
@@ -73,16 +73,15 @@
 
 ### Port Number
 
-
 ## 3. Transport Layer (TCP/IP)
 
 ### TCP vs UDP
 
-|TCP | UDP|
-| --- | --- |
-|信頼度優先|速度優先|
-|WWW, Mail|VoIP Phone, Streaming|
-|1対1|1対多|
+| TCP        | UDP                   |
+| ---------- | --------------------- |
+| 信頼度優先 | 速度優先              |
+| WWW, Mail  | VoIP Phone, Streaming |
+| 1 対 1     | 1 対多                |
 
 ### TCP Header
 
@@ -92,13 +91,13 @@
 - 送信先のポート番号
 - シーケンス番号：　このデータが何バイト目なのか
 - 確認応答番号：
-- Control flag： それぞれ1ビット。
-    - URG
-    - ACK
-    - PSH
-    - RST
-    - SYN
-    - FIN
+- Control flag： それぞれ 1 ビット。
+  - URG
+  - ACK
+  - PSH
+  - RST
+  - SYN
+  - FIN
 
 ### UDP Header
 
@@ -107,14 +106,48 @@
 - データ長
 - Checksum
 
-### TCPのしくみ
+### TCP のしくみ
 
 - 確認応答が来なければ
 
-
 ## 2. Internet Layer (TCP/IP)
 
+### IP Header
+
+### IP Address
+
+- Subnet Mask 
+
+- IPv4 vs IPv6
+
+
+### VLAN
+
 ## 1. Network Interface Layer (TCP/IP)
+
+## Network Device
+
+### Network Types
+- WAN
+  - IP-VPN
+  - WAE: Widearea Ethernet
+
+### 大規模ネットワークでの構成
+
+1. Internet もしくは IP-VPN　もしくは 広域イーサネット
+1. Router
+1. Firewall: ここで DMZ にも分岐する
+1. L3 Switch
+1. L2 Switch: LAN の数だけ複数ある。複数のL3 Switchに接続することもある。
+1. LAN
+1. Wireless Access Point や PC
+
+### 小規模ネットワークでの構成
+
+1. Internet
+1. MODEM or ONU
+1. Router (Firewall, L3 Switch)
+1. PCs or VoIP Phone
 
 ## Topics
 
