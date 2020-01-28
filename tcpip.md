@@ -44,7 +44,7 @@
 
 ## TCP/IP Model
 
-| #   | TCP/IP Layer      | Protocol             | PDU: Protocol Data Unit                                                                          | Device         |
+| #   | TCP/IP Layer      | Protocol Examples           | PDU: Protocol Data Unit                                                                          | Device         |
 | --- | ----------------- | -------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
 | 4   | Application       | HTTP, FTP, SMTP, POP3, SSH | HTTP Header + Data                                                                             |                |
 | 3   | Transport         | TCP, UDP             | Segment = TCP Header <br> + HTTP Header <br> + Data                                            | Router         |
@@ -62,7 +62,7 @@
 
 ### HTTP
 
-- HTTPはStateless。以下の４つの流れは１回だけ行われ、またそれぞれの回（画像１取得のための回、CSSファイル取得のための回、...）は独立しておりお互いに全く無関係。StatelessなHTTPだけだとまともなウェブサービスは成立しない（例えばページ移動してもショッピングカートの中身は維持したい）ので、セッションやクッキーなどの機能で状態を維持する。
+- HTTPはStateless。以下の４つの流れは１回だけ行われ、またそれぞれの回（画像１取得のための回、CSSファイル取得のための回、...）は独立しておりお互いに全く無関係。StatelessなHTTPだけだとまともなウェブサービスは成立しない（例えばページ移動してもショッピングカートの中身は維持したい）ので、セッションやクッキーなどの機能で状態を維持することになる。
     1. 通信の確立
     1. 要求
     1. 応答
@@ -100,6 +100,16 @@ POST vs PUT
 | `HOST: www.mylibrary.com`<br>`User-Agent: Mozilla/5.0`<br>...| Request Headers / Response Headers | `Server: Apache`<br>`Content-Type: text/html; charset=utf-8`<br>... |
 || (empty line) |  |
 | `bookId=123&author=Jane+Austen` | Request Body | `<HTML><HEAD>`<br>... |
+
+### HTTP Status Code
+- `200 OK` ウェブサイトがきちんと表示されるとき
+- `301 Moved Permanently` 「３０１リダイレクト」と呼ばれるもの。検索エンジンの評価を引き継げる。
+- `302 Moved Temporarily` 一時的な移動。Googleボットはサイト評価を移動しない
+- `401 Unauthorized`　認証をそもそもしてないとき、認証に失敗したときなど
+- `403 Forbidden`　管理者以外アクセス禁止の場所の場合
+- `404 Not Found`
+- `500 Internal Server Error`　サーバーの内部エラー。バグなどが原因
+- `503 Service Unavailable`　サーバーのメンテナンスや、過負荷など
 
 ### Port Number
 
