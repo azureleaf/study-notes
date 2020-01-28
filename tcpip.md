@@ -39,24 +39,36 @@
 
 - 送信側の時は、OSI ７層目から出発して１層目に行く。受信側では、逆に１層目から７層目に向かってデータが加工されていく。
 - ７層目に入る前の生データは「ペイロード」と呼ばれる。層を下るたびに L7 Header, L6 Header, L5 Header...のようにヘッダが追加されていく。
+- ヘッダにはText baseとBinary Baseの２種類がある
+- ヘッダには制御情報が含まれる。制御だけを目的として、本体なしでヘッダだけを送ることもある
 
 ## TCP/IP Model
 
 | #   | TCP/IP Layer      | Protocol             | PDU: Protocol Data Unit                                                                          | Device         |
 | --- | ----------------- | -------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
-| 4   | Application       | HTTP, FTP, SMTP, SSH | HTTP Header + Data                                                                             |                |
+| 4   | Application       | HTTP, FTP, SMTP, POP3, SSH | HTTP Header + Data                                                                             |                |
 | 3   | Transport         | TCP, UDP             | Segment = TCP Header <br> + HTTP Header <br> + Data                                            | Router         |
 | 2   | Internet          | IP                   | Packet = IP Header <br> + TCP Header <br> + HTTP Header <br> + Data                            | Swtich, Bridge |
-| 1   | Network Interface | PPP, Ethernet, ARP   | Frame = Ethernet Header <br> + IP Header <br> + TCP Header <br> + Data <br> + Ethernet Trailer | Hub, Cable     |
+| 1   | Network Interface | Ethernet, PPP, ARP   | Frame = Ethernet Header <br> + IP Header <br> + TCP Header <br> + Data <br> + Ethernet Trailer | Hub, Cable     |
 
 - 一番大切なのが TCP と IP なので、この名前になった
 - Network Interface Layer を、OSI 第二層のように別名 Data Link Layer ということもあるらしい
 - Internet 層の「Packet」は Datagram と呼ぶこともある。両者の違いはサイトによってばらばらで、明確でない。
-- 上の表だと、単一のファイルにヘッダが続々と足されていくようなイメージだが、実際にはバラバラに分割される。一つ上からやってきたものは単なるひとかたまりのペイロードとして認識され、中がどうなっているのかは下層のプロトコルは意識することなく加工していく。
+- 上の表だと、単一のファイルにヘッダが続々と足されていくようなイメージだが、実際にはバラバラに分割される。一つ上からやってきたものは単なるひとかたまりのペイロードとして認識され、中がどうなっているのかは下層のプロトコルは意識することなく加工していく
+- ペイロード（上層のヘッダ＋上層時点でのペイロード）はカプセル化しているので、下の階層では中は解読できない（なぜ？）
+- 各層でどのプロトコルを使うかは、実際上はほぼ決まっている。例えば第四層でHTTP、POP3、SMTPなどを使う時、第三層ではほぼ間違いなくTCPを使う。UDPはあまりに適当なので、リアルタイム性が必要なプロトコル以外では使わない。
 
 ## 4. Application Layer (TCP/IP)
 
-### HTTP Header
+### HTTP
+
+- HTTPはStateless。以下の４つの流れは１回だけ行われ、またそれぞれの回（画像１取得のための回、CSSファイル取得のための回、...）は独立しておりお互いに全く無関係。StatelessなHTTPだけだとまともなウェブサービスは成立しない（例えばページ移動してもショッピングカートの中身は維持したい）ので、セッションやクッキーなどの機能で状態を維持する。
+    1. 通信の確立
+    1. 要求
+    1. 応答
+    1. 通信の切断
+
+- Cookie
 
 - ブラウザで URL を入力した時、リンクをクリックしたとき、「送信」「ダウンロード」などのボタンを押した時、その裏では普通 HTTP のデータのやり取りがされている。Axios は HTTP を簡単にやるための仕組み。
   - Axios
@@ -69,7 +81,6 @@
 | Duplex  |        Half        |     Full      |
 | Message | Request & Response | Bidirectional |
 
-### HTTP Request
 
 #### Method
 
@@ -86,11 +97,31 @@ POST vs PUT
 |Request| |Response|
 |--|--|--|
 | `GET /book/list.html HTTP/1.1` | Start Line | `HTTP/1.1 200 OK` |
-| `HOST: www.mylibrary.com`<br>`User-Agent: Mozilla/5.0`<br>...| Request Headers | `Server: Apache`<br>`Content-Type: text/html; charset=utf-8`<br>... |
+| `HOST: www.mylibrary.com`<br>`User-Agent: Mozilla/5.0`<br>...| Request Headers / Response Headers | `Server: Apache`<br>`Content-Type: text/html; charset=utf-8`<br>... |
 || (empty line) |  |
 | `bookId=123&author=Jane+Austen` | Request Body | `<HTML><HEAD>`<br>... |
 
 ### Port Number
+
+### SMTP & POP3
+
+- いずれもメールを取り扱うために広く使われている
+- SMTPは「メールの送信」に使われる。
+    - クライアントから、クライアント側のメールサーバAへの送信
+    - メールサーバAから、受け取り手がわのメールサーバBへの送信
+- POP3は「自分宛てのメールが到着したかの確認、そして受信」に使われる
+- それぞれ担当するのはSMTPサーバ、POP3サーバ、と呼ばれる。ただし実際は１つの物理サーバが２つのサーバを兼任するケースが多い。
+
+### FTP
+
+
+### Telnet & SSH
+
+- 別のコンピュータにログインするためのしくみ
+- Telnetが平文なのに対して、SSHは暗号化され安全
+- WindowsはRDPという、リモートデスクトップのための独自のプロトコルを持つ。
+
+
 
 ## 3. Transport Layer (TCP/IP)
 
@@ -143,6 +174,14 @@ POST vs PUT
 ### VLAN
 
 ## 1. Network Interface Layer (TCP/IP)
+
+### Ethernet
+
+### PPP
+
+ダイアルアップ接続やADSL。
+
+### 
 
 ## Network Device
 
