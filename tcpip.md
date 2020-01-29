@@ -171,7 +171,6 @@ POST vs PUT
 
 ## 2. Internet Layer (TCP/IP)
 
-
 ### IP Address (IPv4)
 
 8bit ずつ４つで区切る
@@ -187,13 +186,13 @@ POST vs PUT
 
 #### IPv4 Header
 
-- Version: 
+- Version:
 - Header length: 20 bytes
 - Priority and Type of Service – specifies how the datagram should be handled. The first 3 bits are the priority bits.
-Total length – the length of the entire packet (header + data). The minimum length is 20 bytes, and the maximum is 65,535 bytes.
+  Total length – the length of the entire packet (header + data). The minimum length is 20 bytes, and the maximum is 65,535 bytes.
 - Identification:
-- Flags: 
-- 
+- Flags:
+-
 
 ### IP Address (IPv6)
 
@@ -203,32 +202,31 @@ Total length – the length of the entire packet (header + data). The minimum le
 
 `2001:2df6:1ee9:050f::::0019/64`
 
-- IPv6もやはりネットワーク部とホスト部があり、ネットワーク部の長さは末端の数（上記では64）で表される
+- IPv6 もやはりネットワーク部とホスト部があり、ネットワーク部の長さは末端の数（上記では 64）で表される
 
 #### IPv6 Header
 
-
 ### IPv4 vs IPv6
 
-| IPv4 IP Address |               | IPv6 IP Address |
-| --------------- | ------------- | --------------- |
-| 32 bit          | Length        | 128 bit         |
-| Decimal         | Number System | Hexadecimal     |
-| no              | Multicast     | yes             |
-
+| IPv4 IP Address |               | IPv6 IP Address   |
+| --------------- | ------------- | ----------------- |
+| 32 bit (4 byte) | Length        | 128 bit (16 byte) |
+| Decimal         | Number System | Hexadecimal       |
+| no              | Multicast     | yes               |
 
 #### Private Address
 
-- Private AddressはGlobal Addressとして使ってはいけない
-- Private Addressは、違うネットワークならかぶってもOK（当然）
+- Private Address は Global Address として使ってはいけない
+- Private Address は、違うネットワークならかぶっても OK（当然）
 - 範囲としては以下の３種
   - `10.0.0.0` to `10.255.255.255`
   - `172.0.0.0` to `172.31.255.255`
   - `192.168.0.0` to `192.168.255.255`
-- 同じネットワーク内からの接続は、同一のglobal addressを共有している
-- private addressそのままではインターネット接続できないので、NATやNAPTが必要になる
+- 同じネットワーク内からの接続は、同一の global address を共有している
+- private address そのままではインターネット接続できないので、NAT や NAPT が必要になる
 
 - NAT: Netowork Address Translation
+
   - グローバルアドレスを複数確保する
   - そのアドレスの数までなら、同時接続できる
   - 全てのグローバルアドレスが占有されていたら、空くまで待つ
@@ -238,11 +236,9 @@ Total length – the length of the entire packet (header + data). The minimum le
   - Multiple devices can access to the internet at the same time
   - This mechanism is enabled by using **different port number** for each device
 
-
 ### DNS: Domain Name System
 
-- Get the 
-
+- Get the
 
 ## 1. Network Interface Layer (TCP/IP)
 
@@ -257,16 +253,17 @@ Total length – the length of the entire packet (header + data). The minimum le
 ## Network Device
 
 - Repeater
-  - 
+
+  -
   - Regenerate the signal before it became too weak or too corrupted
   - However repeater doesn't amplify the signal
 
-- Bridge 
+- Bridge
   - Connects two hubs of two different networks
   - Advantage: You can segment the single network by using bridge. By doing this, you can make smaller collision domain.
 
+* Switch
 
-- Switch
   - 信号を中継する
   - 多数のイーサネットポートを持っている
   - 信号が来たら、それがどの宛先なのかを判断し、そのデバイスのみに送出する。
@@ -274,29 +271,21 @@ Total length – the length of the entire packet (header + data). The minimum le
   - 利点：
   - 欠点：　宛先を判別する作業などに一定の時間がかかるので、その分は遅くなる
 
-- Layer 2 Switch
-  - ここでいうLayer 2とは、OSIモデルの第二層（データリンク層）である。
-  - 信号の宛先を判断するのに、MACアドレスを使う。つまりどのポートがどのMACアドレスのデバイスとつながっているのかを記憶している。
-
+* Layer 2 Switch
+  - ここでいう Layer 2 とは、OSI モデルの第二層（データリンク層）である。
+  - 信号の宛先を判断するのに、MAC アドレスを使う。つまりどのポートがどの MAC アドレスのデバイスとつながっているのかを記憶している。
 
 - Layer 3 Switch
-  - OSI Modelの第三層（）
-  - Layer 2 Switchの機能に加えて、IPによる宛先判別ができる
-  - VLANの分割ができる
+  - OSI Model の第三層（）
+  - Layer 2 Switch の機能に加えて、IP による宛先判別ができる
+  - VLAN の分割ができる
 
-
-
-
-- Hub
-
+* Hub
 
 - Router
   - Connects LANs (switch) and WANs (internet)
-  - L3 SwitchとRouterはいずれもroutingができる。ただし、L3 Switchがハードウェア的にroutingするのに対して、routerはソフトウェア的にroutingする。この点ではL3 Switchが高速で上。ただし、routerはソフトウェアでやるので、ethernet以外の回線や、様々なプロトコルに対応できる。
-  - Routing Table: 
-
-
-
+  - L3 Switch と Router はいずれも routing ができる。ただし、L3 Switch がハードウェア的に routing するのに対して、router はソフトウェア的に routing する。この点では L3 Switch が高速で上。ただし、router はソフトウェアでやるので、ethernet 以外の回線や、様々なプロトコルに対応できる。
+  - Routing Table:
 
 ### Network Types
 
