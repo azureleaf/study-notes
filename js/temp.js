@@ -1,37 +1,21 @@
-function returnPromise(i = 1) {
-  return new Promise(function(resolve, reject) {
-    setTimeout(() => {
-      // ランダムに成功・失敗する
-      if (Math.random() < 0.9) {
-        console.log("今回はセーフ！");
-        resolve(i + 1);
-      } else {
-        console.log("アウト！");
-        reject(new Error(i + "回目でアウトでした。"));
-      }
-    }, 1000);
-  });
-}
-
-returnPromise()
-  .then(i => {
-    return returnPromise(i);
-  })
-  .then(i => {
-    return returnPromise(i);
-  })
-  .then(i => {
-    return returnPromise(i);
-  })
-  .then(i => {
-    return returnPromise(i);
-  })
-  .then(() => {
-    console.log("全てセーフでした。");
-  })
-  .catch(error => {
-    console.error("エラー内容：", error);
-  })
-  .finally(() => {
-    console.log("終了します。");
-  });
+function returnPromise(obj) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(() => {
+        console.log(obj.i + "回目です。現在の値は" + obj.num);
+        obj.num = obj.num * 2;
+        obj.i = obj.i + 1;
+        resolve(obj);
+      }, 1000);
+    });
+  }
+  
+  returnPromise({ num: 100, i: 1 })
+    .then(obj => {
+      return returnPromise(obj); // 2回目です。現在の値は200
+    })
+    .then(obj => {
+      return returnPromise(obj);
+    })
+    .then(obj => {
+      return returnPromise(obj);
+    });

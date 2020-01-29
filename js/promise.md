@@ -36,12 +36,12 @@ function returnPromise(value) {
 }
 
 // 実際にPromiseを使って、同期的に関数を実行していく
-returnPromise(100)
+returnPromise(100)  // 現在の値は100
   .then(value => {
-    return returnPromise(value);
+    return returnPromise(value); // 現在の値は200
   })
   .then(value => {
-    return returnPromise(value);
+    return returnPromise(value); // 現在の値は400
   });
 ```
 
@@ -62,13 +62,13 @@ function returnPromise(obj) {
   });
 }
 
-returnPromise({ num: 100, i: 1 })
+returnPromise({ num: 100, i: 1 }) // 1回目です。現在の値は100
   .then(obj => {
-    return returnPromise(obj);
+    return returnPromise(obj); // 2回目です。現在の値は200
   })
   .then(obj => {
-    return returnPromise(obj);
-  });
+    return returnPromise(obj); // 3回目です。現在の値は400
+  })
 ```
 
 ## 実例:　 onFulfilled / onRejected の場合分け、及びエラー処理を丁寧にした場合
