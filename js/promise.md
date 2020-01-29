@@ -10,10 +10,10 @@
 
 ## Promise を使うとどんないいことがある？
 
-- JavaScript は基本的に非同期である。つまり、順番などを無視して、コード内部での前後関係を無視して実行できるところから一斉にスタートする。
+- JavaScript は基本的に非同期である。つまり、コード内部での前後関係を無視して、実行できそうなところは全て一斉にスタートする。
 - ただし、callback を使うと、順序を指定して実行できる。関数 A が終わったら関数 B を実行、それが終わったら関数 C を実行...のようにできるということ。しかし、これは**コールバック地獄と呼ばれ、コードの可読性が大幅に低下してしまう**。
 - そこで Promise が発明された。これにより、可読性を維持しつつ、順序指定ができる。
-- ただし、なんでも同期的にやればいいというわけではない。そもそもなぜ JavaScript が非同期なのかというと、**複数の関数を並行して進めることにより全体の終了速度を早くできるから**である。Promise で同期的にやってしまうと遅くなっていく（そして、それは Web 開発では致命的。ページの読み込みや動作が遅いとユーザはすぐ逃げていってしまう）ので、Promise と非同期処理を組み合わせて最大限の速度となるようにする仕組みもある：
+- ただし、なんでも同期的にやればいいというわけではない。そもそもなぜ JavaScript が非同期なのかというと、**複数の関数を並行して進めることにより全体の終了速度を早くできるから**である。Promise で同期的にやると全体の処理時間は長くなっていく。そして、それは Web 開発では致命的。ページの読み込みや動作が遅いとユーザはすぐ逃げていってしまうから。なので、Promise で同期処理する部分は最小に抑えつつ、非同期処理と組み合わせて全体が最大限の速度となるようにする仕組みもある：
   - `Promise.all([])`:
   - `Promise.race([])`:
 - そもそもどういう時に複数の関数を**同期的に**実行したいのか？(この部分要加筆)
@@ -24,10 +24,10 @@
 ## 実例：ひとつの値をリレーしていく場合
 
 ```javascript
-// 値を受け取り、１秒待ってから２倍した値を返却するPromise
+// 値を受け取って１秒待ってから２倍した値を返却するPromise...を返却する関数
 function returnPromise(value) {
   // Promiseをnewして返却する
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
       console.log("現在の値は" + value);
       resolve(value * 2);
@@ -36,7 +36,7 @@ function returnPromise(value) {
 }
 
 // 実際にPromiseを使って、同期的に関数を実行していく
-returnPromise(100)  // 現在の値は100
+returnPromise(100) // 現在の値は100
   .then(value => {
     return returnPromise(value); // 現在の値は200
   })
@@ -52,7 +52,7 @@ returnPromise(100)  // 現在の値は100
 ```javascript
 // 数値と今何回目を受け取り、１秒待ってから２倍した値と今何回目かを返却するPromise
 function returnPromise(obj) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
       console.log(obj.i + "回目です。現在の値は" + obj.num);
       obj.num = obj.num * 2;
@@ -68,18 +68,20 @@ returnPromise({ num: 100, i: 1 }) // 1回目です。現在の値は100
   })
   .then(obj => {
     return returnPromise(obj); // 3回目です。現在の値は400
-  })
+  });
 ```
 
-## 実例:　 onFulfilled / onRejected の場合分け、及びエラー処理を丁寧にした場合
+## 実例:　エラー処理を丁寧にやる場合
+
+onFulfilled / onRejected の場合分け、エラー処理などを全部やるとこうなる
 
 ```javascript
 function returnPromise(i = 1) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
       // ランダムに成功・失敗する
       if (Math.random() < 0.85) {
-        console.log("今回はセーフ！");
+        console.log("セーフ！");
         resolve(i + 1);
       } else {
         console.log("アウト！");
@@ -110,5 +112,132 @@ returnPromise()
   })
   .finally(() => {
     console.log("終了します。");
+  });
+```
+
+## 実例： Promise.all()とPromise.race()の直列
+
+- 通常のPromise、Promise.all()、Promise.race()を順に実行するだけ。
+- 思い通りの順序で実行されているのか確認するため、所要時間を計測している。
+
+```javascript
+
+let startTime, endTime;
+
+var promiseStart = new Promise(resolve => {
+  startTime = Date.now();
+  console.log("全体を開始します。");
+  resolve();
+});
+
+function returnPromise(name) {
+  return new Promise(resolve => {
+    var delay = 1000 + Math.random() * 2000;
+    stat[name] = delay;
+    setTimeout(() => {
+      console.log(
+        name + "を実行中です。" + Math.round(delay) + "ms遅延しました。"
+      );
+      resolve();
+    }, delay);
+  });
+}
+
+// 各関数の所要時間を記憶
+stat = {};
+
+promiseStart
+  .then(() => {
+    return returnPromise("a");
+  })
+  .then(() => {
+    console.log("Promise.all()を実行します");
+    return Promise.all([returnPromise("b1"), returnPromise("b2")]);
+  })
+  .then(() => {
+    console.log("Promise.all()が終了しました。");
+    console.log("Promise.race()を開始します。");
+
+    // Promise.resolve()という記法により、onFulfilled状態のPromiseが生成される
+    // Promiseを返さないとthenableにできず、次に進まないので
+    return Promise.resolve();
+  })
+  .then(() => {
+    return Promise.race([returnPromise("c1"), returnPromise("c2")]);
+  })
+  .finally(() => {
+    endTime = Date.now();
+    console.log("Promise.race()が終了しました。");
+    console.log("全体を終了しました。各関数の所要時間は以下のとおりです。");
+    console.log(stat);
+    console.log(
+      "それぞれの所要時間から予想される全体の実行時間は" +
+        Math.round(
+          stat.a +
+            (stat.b1 > stat.b2 ? stat.b1 : stat.b2) +
+            (stat.c1 > stat.c2 ? stat.c1 : stat.c2)
+        ) +
+        "msです。"
+    );
+    console.log("実測値の実行時間は" + Math.round(endTime - startTime) + " msでした");
+
+  });
+```
+
+
+## 実例： Promise.all()の内部でPromise.race()を実行（失敗中。機能不全）
+
+```javascript
+let startTime, endTime;
+
+// 各関数の所要時間を記憶
+stat = {};
+
+var promiseStart = new Promise(resolve => {
+  startTime = Date.now();
+  console.log("全体を開始します。");
+  resolve();
+});
+
+function returnPromise(name) {
+  return new Promise(resolve => {
+    var delay = Math.random() * 2000;
+    stat[name] = delay;
+    setTimeout(() => {
+      console.log(
+        name + "を実行中です。" + Math.round(delay) + " ms遅延しました。"
+      );
+      resolve();
+    }, delay);
+  });
+}
+
+promiseStart
+  .then(() => {
+    console.log("Promise.all()を実行します");
+    return Promise.all([
+      returnPromise("a"),
+      returnPromise("b"),
+      Promise.race[(returnPromise("c1"), returnPromise("c2"))]
+    ]);
+  })
+  .finally(() => {
+    endTime = Date.now();
+    console.log("Promise.all()が終了しました。");
+    console.log("全体を終了しました。各関数の所要時間は以下のとおりです。");
+    console.log(stat);
+    console.log(
+      "それぞれの所要時間から予想される全体の実行時間は" +
+        Math.round(
+          Math.max(stat.a, stat.b, stat.c1 > stat.c2 ? stat.c2 : stat.c1)
+        ) +
+        " msです。"
+    );
+    console.log("実測値の実行時間は" + Math.round(endTime - startTime) + " msでした");
+    console.log(
+      "ちなみに一番遅い奴は" +
+        Math.round(Math.max(...Object.values(stat))) +
+        "msでした。"
+    );
   });
 ```
