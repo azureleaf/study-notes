@@ -115,13 +115,12 @@ returnPromise()
   });
 ```
 
-## 実例： Promise.all()とPromise.race()の直列
+## 実例： Promise.all()と Promise.race()の直列
 
-- 通常のPromise、Promise.all()、Promise.race()を順に実行するだけ。
+- 通常の Promise、Promise.all()、Promise.race()を順に実行するだけ。
 - 思い通りの順序で実行されているのか確認するため、所要時間を計測している。
 
 ```javascript
-
 let startTime, endTime;
 
 var promiseStart = new Promise(resolve => {
@@ -175,20 +174,24 @@ promiseStart
         Math.round(
           stat.a +
             (stat.b1 > stat.b2 ? stat.b1 : stat.b2) +
-            (stat.c1 > stat.c2 ? stat.c1 : stat.c2)
+            (stat.c1 > stat.c2 ? stat.c2 : stat.c1)
         ) +
         "msです。"
     );
-    console.log("実測値の実行時間は" + Math.round(endTime - startTime) + " msでした");
-
+    console.log(
+      "実測値の実行時間は" + Math.round(endTime - startTime) + " msでした"
+    );
   });
 ```
 
+## 実例： Promise同士の入れ子
 
-## 実例： Promise.all()の内部でPromise.race()を実行（失敗中。機能不全）
+- Promise同士をネストさせることができる。
+- 下では、c2_1の実行後に必ずc2_2を実行するようにしているが、その合計時間がc1よりも遅い場合（thenしているので、多くの場合そうなるだろうが）はc2_1, c2_2いずれも大本のPromise.all()からは無視される。
+- 疑問：`Promise.all()[Promise1, Promise2].then((i)=>{console.log(i)})`のとき、Promise1のresolve(value1)とPromise2のresolve(value2)として、iには何が入るのか？？？
 
 ```javascript
-let startTime, endTime;
+var startTime, endTime;
 
 // 各関数の所要時間を記憶
 stat = {};
@@ -201,6 +204,7 @@ var promiseStart = new Promise(resolve => {
 
 function returnPromise(name) {
   return new Promise(resolve => {
+    // race()の結果が全体のどう影響するのか確認するため、c2のPromiseを一番遅くする
     var delay = Math.random() * 2000;
     stat[name] = delay;
     setTimeout(() => {
@@ -217,8 +221,13 @@ promiseStart
     console.log("Promise.all()を実行します");
     return Promise.all([
       returnPromise("a"),
-      returnPromise("b"),
-      Promise.race[(returnPromise("c1"), returnPromise("c2"))]
+      Promise.all([returnPromise("b1"), returnPromise("b2")]),
+      Promise.race([
+        returnPromise("c1"),
+        returnPromise("c2_1").then(() => {
+          return returnPromise("c2_2");
+        })
+      ])
     ]);
   })
   .finally(() => {
@@ -229,15 +238,46 @@ promiseStart
     console.log(
       "それぞれの所要時間から予想される全体の実行時間は" +
         Math.round(
-          Math.max(stat.a, stat.b, stat.c1 > stat.c2 ? stat.c2 : stat.c1)
+          Math.max(
+            stat.a,
+            stat.b1 > stat.b2 ? stat.b1 : stat.b2,
+            stat.c1 > stat.c2 ? stat.c2 : stat.c1
+          )
         ) +
         " msです。"
     );
-    console.log("実測値の実行時間は" + Math.round(endTime - startTime) + " msでした");
+    console.log(
+      "実測値の実行時間は" + Math.round(endTime - startTime) + " msでした"
+    );
     console.log(
       "ちなみに一番遅い奴は" +
         Math.round(Math.max(...Object.values(stat))) +
         "msでした。"
     );
   });
+
+```
+
+## Promise.all()の nest
+
+```javascript
+var arr = [{ subarr: [1, 2, 3] }, { subarr: [4, 5, 6] }, { subarr: [7, 8, 9] }];
+function processAsync(n) {
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve(n * n);
+    }, Math.random() * 2000);
+  });
+}
+Promise.all(
+  arr.map(function(entity) {
+    return Promise.all(
+      entity.subarr.map(function(item) {
+        return processAsync(item);
+      })
+    );
+  })
+).then(function(data) {
+  console.log(data);
+});
 ```
