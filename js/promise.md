@@ -1,4 +1,4 @@
-# Promise とは何なのか？（未完成：async await, Promise.all Promise.race をまだ書いてない）
+# Promise とは何なのか？（未完成：async awaitをまだ書いてない）
 
 - Promise は、オブジェクトである
 - Promise は、「Promise オブジェクトを new して返すような関数」の中で中身を定義する
@@ -14,8 +14,8 @@
 - ただし、callback を使うと、順序を指定して実行できる。関数 A が終わったら関数 B を実行、それが終わったら関数 C を実行...のようにできるということ。しかし、これは**コールバック地獄と呼ばれ、コードの可読性が大幅に低下してしまう**。
 - そこで Promise が発明された。これにより、可読性を維持しつつ、順序指定ができる。
 - ただし、なんでも同期的にやればいいというわけではない。そもそもなぜ JavaScript が非同期なのかというと、**複数の関数を並行して進めることにより全体の終了速度を早くできるから**である。Promise で同期的にやると全体の処理時間は長くなっていく。そして、それは Web 開発では致命的。ページの読み込みや動作が遅いとユーザはすぐ逃げていってしまうから。なので、Promise で同期処理する部分は最小に抑えつつ、非同期処理と組み合わせて全体が最大限の速度となるようにする仕組みもある：
-  - `Promise.all([])`:
-  - `Promise.race([])`:
+  - `Promise.all([promise1, promise2])`: promise1, promise2は非同期に開始するが、両方が終わった時点でreturn 
+  - `Promise.race([promise1, promise2])`: promise1, promise2のうちどちらか一方が終わった時点でreturn。もう一方も実行自体は続行するが、それが終わってもPromise.race()に影響しない。
 - そもそもどういう時に複数の関数を**同期的に**実行したいのか？(この部分要加筆)
   - 外部へのサーバーへのデータ取得をするとき（画像、API の JSON、その他）
   - 実行しようとする関数にデータ依存関係があるとき（HTML ファイルが用意できていない状態で CSS ファイルを適用しようとしても、対象が存在しないのでバグってしまう）
@@ -186,7 +186,7 @@ promiseStart
 ## 実例： Promise.all()、Promise.race()の並列（入れ子）
 
 - Promise 同士をネストさせることができる。
-- 下では、c2_1 の実行後に必ず c2_2 を実行するようにしているが、その合計時間が c1 よりも遅い場合（then しているので、多くの場合そうなるだろうが）は c2_1, c2_2 いずれも大本の Promise.all()からは無視される。
+- 下では、c2_1 の実行後に c2_2 を実行するようにしているが、その合計時間が c1 よりも遅い場合（then して長くなっている分、だいたいc2の方が遅いだろうが）は親のPromise.all()はc2が終了したかどうかを気にしない。
 
 ```javascript
 var startTime, endTime;
@@ -260,8 +260,8 @@ promiseStart
 ## 実例：Promise.all()のresolve()内容を確認する
 
 - `Promise1`, `Promise2`はそれぞれ内部で`resolve(value1)`,`resolve(value2)`するとする。
-- このとき、`Promise.all([Promise1, Promise2]).then((i)=>{console.log(i)})`のiには`[ value1, value2]`が入る
-- このresolve()の結果の配列内部の順序は、最初のPromise.allで書いた順序そのままである。各Promise終了の先着順になるのかと思ったら、そうじゃなかった。
+- このとき、`Promise.all([Promise1, Promise2]).then((i)=>{console.log(i)})`のiには一体何が入るのか？という疑問が生じる。通常のPromiseとthen()は一対一だが、このPromise.all()の場合はresolve()が複数呼ばれるので。
+- 答えからいうと`[ value1, value2]`のように配列が入る。このresolve()の結果の配列内部の順序は、最初のPromise.allで書いた順序そのままである。各Promise終了の先着順になるのかと思ったら、そうじゃなかった。
 
 
 ```javascript
