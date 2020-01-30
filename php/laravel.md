@@ -29,6 +29,10 @@
 ### Set up the DB
 
 
+## Blade
+
+
+
 ## Maintenance
 
 - `composer dump-autoload` なぜか大体これをやれば解決
