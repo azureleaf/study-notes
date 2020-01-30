@@ -166,7 +166,6 @@ promiseStart
   })
   .finally(() => {
     endTime = Date.now();
-    console.log("Promise.race()が終了しました。");
     console.log("全体を終了しました。各関数の所要時間は以下のとおりです。");
     console.log(stat);
     console.log(
@@ -184,11 +183,10 @@ promiseStart
   });
 ```
 
-## 実例： Promise同士の入れ子
+## 実例： Promise.all()、Promise.race()の並列（入れ子）
 
-- Promise同士をネストさせることができる。
-- 下では、c2_1の実行後に必ずc2_2を実行するようにしているが、その合計時間がc1よりも遅い場合（thenしているので、多くの場合そうなるだろうが）はc2_1, c2_2いずれも大本のPromise.all()からは無視される。
-- 疑問：`Promise.all()[Promise1, Promise2].then((i)=>{console.log(i)})`のとき、Promise1のresolve(value1)とPromise2のresolve(value2)として、iには何が入るのか？？？
+- Promise 同士をネストさせることができる。
+- 下では、c2_1 の実行後に必ず c2_2 を実行するようにしているが、その合計時間が c1 よりも遅い場合（then しているので、多くの場合そうなるだろうが）は c2_1, c2_2 いずれも大本の Promise.all()からは無視される。
 
 ```javascript
 var startTime, endTime;
@@ -204,7 +202,6 @@ var promiseStart = new Promise(resolve => {
 
 function returnPromise(name) {
   return new Promise(resolve => {
-    // race()の結果が全体のどう影響するのか確認するため、c2のPromiseを一番遅くする
     var delay = Math.random() * 2000;
     stat[name] = delay;
     setTimeout(() => {
@@ -219,9 +216,13 @@ function returnPromise(name) {
 promiseStart
   .then(() => {
     console.log("Promise.all()を実行します");
+
+    // Promise.all()の中に、PromiseやPromise.race(),別のPromise.all()などを内包
     return Promise.all([
       returnPromise("a"),
       Promise.all([returnPromise("b1"), returnPromise("b2")]),
+
+      // c1はPromise１つなのに対して、c2は２つ実行しているので大抵c1の方が速いはず
       Promise.race([
         returnPromise("c1"),
         returnPromise("c2_1").then(() => {
@@ -232,7 +233,6 @@ promiseStart
   })
   .finally(() => {
     endTime = Date.now();
-    console.log("Promise.all()が終了しました。");
     console.log("全体を終了しました。各関数の所要時間は以下のとおりです。");
     console.log(stat);
     console.log(
@@ -250,15 +250,45 @@ promiseStart
       "実測値の実行時間は" + Math.round(endTime - startTime) + " msでした"
     );
     console.log(
-      "ちなみに一番遅い奴は" +
-        Math.round(Math.max(...Object.values(stat))) +
+      "ちなみに一番速い奴は" +
+        Math.round(Math.min(...Object.values(stat))) +
         "msでした。"
     );
   });
-
 ```
 
-## Promise.all()の nest
+## 実例：Promise.all()のresolve()内容を確認する
+
+- `Promise1`, `Promise2`はそれぞれ内部で`resolve(value1)`,`resolve(value2)`するとする。
+- このとき、`Promise.all([Promise1, Promise2]).then((i)=>{console.log(i)})`のiには`[ value1, value2]`が入る
+- このresolve()の結果の配列内部の順序は、最初のPromise.allで書いた順序そのままである。各Promise終了の先着順になるのかと思ったら、そうじゃなかった。
+
+
+```javascript
+function returnPromise(name, delay) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      console.log(name + "を実行中");
+      resolve(name);
+    }, delay);
+  });
+}
+
+Promise.resolve()
+  .then(() => {
+    return Promise.all([
+      // 実行結果：「cを実行中」->「aを実行中」->「bを実行中」
+      returnPromise("a", 600),
+      returnPromise("b", 1000),
+      returnPromise("c", 200)
+    ]);
+  })
+  .then(arg => {
+    console.log(arg); // [ 'a', 'b', 'c' ]
+  });
+```
+
+## 実例：Promise.all()の nest で配列を扱う
 
 ```javascript
 var arr = [{ subarr: [1, 2, 3] }, { subarr: [4, 5, 6] }, { subarr: [7, 8, 9] }];
