@@ -1,13 +1,15 @@
 # Laravel Study Note
 
-## 開発の流れ
+- Laravelで毎日勉強したことを記録し、自分のモチベーションにしたい
+- 細かいことは公式ドキュメントに任せて、要点とキーワードだけを網羅するように心がけたい。凝りだすとキリがないし...
 
 
-### (Install Composer)
 
-### (Install Laravel)
+## (Install Composer)
 
-### Set up MySQL
+## (Install Laravel)
+
+## Set up MySQL
 
 1. `sudo apt install mysql-server`
 1. `sudo mysql`
@@ -17,7 +19,7 @@
 1. `sudo apt install php-mysql` Install DB Extension
 
 
-### Set up the project
+## Set up the project
 
 1. `laravel new myapp`
 1. `cd myapp`
@@ -26,10 +28,29 @@
 1. `cp .env.sample .env`
 1. `php artisan key:generate`
 
-### Set up the DB
+## Set up the DB
+
+## Set up Middlewares
+
+- Middleware Group
+- Global Middleware
+- 
+
+## Set up Migrations & Seeders
 
 
-## Blade
+## Set up Controllers
+
+
+## Set up Blade
+
+
+### Directive
+Vue.jsを使うなら、Bladeのディレクティブはそんなに覚えなくて問題ないけど。以下くらいは抑えるべき
+
+- @if
+- @for
+- @foreach
 
 
 
