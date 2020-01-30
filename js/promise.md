@@ -158,10 +158,12 @@ promiseStart
     console.log("Promise.race()を開始します。");
 
     // Promise.resolve()という記法により、onFulfilled状態のPromiseが生成される
+    // 「中身の処理の実装はいらないけど、空っぽのPromise objectは生成したい」状況で有用
     // Promiseを返さないとthenableにできず、次に進まないので
     return Promise.resolve();
   })
   .then(() => {
+    // c1, c2のうち速い方だけがresolve()で次に渡される
     return Promise.race([returnPromise("c1"), returnPromise("c2")]);
   })
   .finally(() => {
@@ -220,6 +222,9 @@ promiseStart
     // Promise.all()の中に、PromiseやPromise.race(),別のPromise.all()などを内包
     return Promise.all([
       returnPromise("a"),
+
+      // 以下の表記は実質的に意味ないが、Promsise.all()をネストしてみたかったので
+      // b1, b2をaと同じレベルでPromise.all()の配列に入れれば同じことはできる
       Promise.all([returnPromise("b1"), returnPromise("b2")]),
 
       // c1はPromise１つなのに対して、c2は２つ実行しているので大抵c1の方が速いはず
