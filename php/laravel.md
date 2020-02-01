@@ -122,6 +122,34 @@ Route::resource('users', 'AdminUserController')
 `Route::view('/welcome', 'welcome', ['name' => 'Taylor']);`
 
 
+## Session & Cookie
+
+### そもそもセッションとクッキーってなんだっけ？
+
+- HTTPはstateless。ただし、実用的なウェブサイトでは、ページ移動しても状態を保持できなきゃお話にならない
+- Session IDはユーザ特定の番号であり、Cookieはそれを保管する場所
+- 実装では、DBにユーザ情報を記憶する
+    - User ID
+    - User IP
+    - User Agent
+    - Payload
+    - Last Activity
+- Cookieはkeyとvalueからなる
+- ChromeのDevToolでCookieを確認可能。ただし、そこで見られるユーザIDは暗号化されるので、DBの値とは別物
+- CookieはExpirationがある
+
+
+### 使用手順
+
+1. `SESSION_DRIVER=database`
+1. `php artisan config:clear` Reflect the change in .env
+1. `php artisan make:migration create_sessions_table`
+1. Add schema to the migration file
+1. Migrate
+1. ``
+1. ``
+
+
 
 ## Maintenance
 
