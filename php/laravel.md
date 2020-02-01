@@ -75,6 +75,53 @@ Vue.jsを使うなら、Bladeのディレクティブはそんなに覚えなく
 - @foreach
 
 
+## Routing 
+
+- routes/web.phpで定義するのが基本
+- コントローラからルートを定義することもある
+
+### 基本のRouting
+
+
+- `Route::get('/user', 'UserController@index');`
+
+Route Parameters
+- `Route::get('user/{id}', 'UserController@show');`
+- Regular Expression
+```php
+Route::get('user/{id}/{name}', function ($id, $name) {
+    // 処理
+})->where(['id' => '[0-9]+', 'name' => '[a-z]+']);
+```
+
+
+
+Routingにmiddlewareを組み合わせる
+- `Route::get('profile', 'UserController@show')->middleware('auth');`: 外部に書く
+- `Route::post($uri, $callback);`
+
+### Resource Controller
+
+`php artisan make:controller PhotoController --resource --model=Photo`: CRUDに則ったルーティングが自動で一括生成される
+
+`Route::resource()`
+
+```php
+Route::resource('users', 'AdminUserController')
+->parameters([
+    'users' => 'admin_user'
+]);
+```
+
+
+
+### 他の便利機能
+
+`Route::redirect('/here', '/there', 301);`
+
+`Route::view('/welcome', 'welcome', ['name' => 'Taylor']);`
+
+
 
 ## Maintenance
 
@@ -82,18 +129,17 @@ Vue.jsを使うなら、Bladeのディレクティブはそんなに覚えなく
 - `composer update` composer.jsonを更新した時にやる？
 
 
-## Keywords
 
-### Bootstrap
+## Bootstrap
     - 
 
-### Composer View:
+## Composer View:
 
-### Validator
+## Validator
 
-### Middleware
+## Middleware
 
-### View Composer
+## View Composer
 
 - What's this?
     - Viewがレンダリングされるとき（つまりコントローラでview()が実行される時）に呼び出されるコールバック関数かクラスメソッドのこと
@@ -118,13 +164,31 @@ Vue.jsを使うなら、Bladeのディレクティブはそんなに覚えなく
 - サービスプロバイダは、サービスをサービスコンテナにサービスを登録するのが仕事。
 
 
-### MVC vs ADR
+## MVC vs ADR
 
-### DB Facade vs Eloquent
+## DB Facade vs Eloquent
 
 - StackOverflowを見る限り、DB Classを使うことを推す人が結構いる。速度がEloquentよりずっと速いとか
 - ただし、自分みたいに使うデータがめちゃくちゃ少ない場合にはEloquentでORMの使い方に慣れるほうが良さそう
 
+## Laravel + Vue.js
+
+1. `composer require laravel/ui
+1. `php artisan ui vue --auth`
+1. `npm install`
+1. `npm install vue` 不要？
+1. `npm install vue-router` 不要？
+1. `npm run dev`
+1. Create Vue Component @resources/js/components/MyComponent.vue
+1. Register Vue Component to resources/js/app.js: `Vue.component('example-component', require('./components/ExampleComponent.vue').default);`
+1. Create resources/js/router.js for Vue Router
+1. Add `<router-link>` and `<router-view>` to Blade file
+1. `npm run watch`
+1. `php artisan serve`
 
 
-
+## Laravel実行環境の選択肢
+- ローカルにインストール：　一番普通だけど、ローカル環境汚染が嫌なのと、複数パソコンで同一環境を再現するのが面倒
+- Laradock：　王道のDocker。一番実用的な気がする。日本語のネット情報も豊富
+- Homestead：　VirtualBox + Vagrant。公式が推奨してるけど、本当にそんなに使われているのか？
+- Laravel Valet：　Mac専用だから自分には関係ない
