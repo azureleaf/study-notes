@@ -3,6 +3,12 @@
 - Laravelで勉強したことを記録することで、自分のモチベーションを高めたい
 - 細かいことは公式ドキュメントに任せて、要点とキーワードだけを網羅するように心がけたい。凝りだすとキリがないし...
 
+## TOC
+
+1. [Setup](#setup-project)
+1. [Session & Cookie](#session)
+1. [](#)
+1. [](#)
 
 ## Laravelでの基本的な処理手順
 
@@ -29,7 +35,7 @@
 1. `sudo apt install php-mysql` Install DB Extension
 
 
-## Set up the project
+## Set up the project <a name="setup-project"></a>
 
 1. `laravel new myapp`
 1. `cd myapp`
@@ -115,6 +121,46 @@ Route::resource('users', 'AdminUserController')
 
 
 
+
+
+## Authentication (認証)
+
+- 認証関係の設定はだいたい`config/auth.php`
+
+
+
+
+- Laravelでの認証の種類
+    - ログイン認証
+    - Laravel Passport
+    - API認証
+
+- ログインを要求するページとログイン不要の公開ページをどのようにして一括登録するのか？
+    - おそらくmiddleware groupだと思うが
+- ログインページをどのようにしてカスタマイズするのか？
+
+- `Auth::routes();`
+
+### Guard
+- Web Guard: sessionによる認証
+- API Guard: tokenによる認証
+
+#### PHP artisan migrat
+
+
+## Authorization (認可)
+
+- 認証が本人確認なのに対して、認可は権限の付与っぽい
+
+### Gateによる認可
+
+### Policyによる認可
+
+### misc
+- "localhost:8000/login"などのルートはweb.phpではなく、`Illuminate\Routing\Router.php`にある
+
+
+
 ### 他の便利機能
 
 `Route::redirect('/here', '/there', 301);`
@@ -122,22 +168,31 @@ Route::resource('users', 'AdminUserController')
 `Route::view('/welcome', 'welcome', ['name' => 'Taylor']);`
 
 
-## Session & Cookie
+## Session & Cookie <a name="session"></a>
 
-### そもそもセッションとクッキーってなんだっけ？
+### そもそもセッションってなんだっけ？
 
-- HTTPはstateless。ただし、実用的なウェブサイトでは、ページ移動しても状態を保持できなきゃお話にならない
-- Session IDはユーザ特定の番号であり、Cookieはそれを保管する場所
-- 実装では、DBにユーザ情報を記憶する
-    - User ID
-    - User IP
-    - User Agent
-    - Payload
-    - Last Activity
-- Cookieはkeyとvalueからなる
-- ChromeのDevToolでCookieを確認可能。ただし、そこで見られるユーザIDは暗号化されるので、DBの値とは別物
-- CookieはExpirationがある
+- Session IDはユーザを識別するための番号
+- Session IDをブラウザ側で保管する場所が、Cookie
+- Session IDをサーバー側で保管する場所が、Session
+- HTTPはstateless。しかし実用的なウェブサイトでは、ページ移動しても状態を保持できなきゃお話にならない。だからセッションができた
+- 実装では、DBにユーザ情報を記憶する。こういうカラム
+    - id
+    - user_id
+    - ip_address
+    - user_agent
+    - payload
+    - last_update
 
+### そもそもクッキーってなんだっけ？
+
+- Cookieはkeyとvalueのペアからなる
+- ChromeのDevTool > Application TabでCookieを確認可能
+    - ここに書いてあるユーザIDは暗号化されるので、DBの値とは別物
+- Cookieのデータには制約も多い
+    - expirationあり。設定しない場合ブラウザが閉じると破棄される
+    - Max size: 4096 bytes / domain, 50 cookies / domain
+- Cookieの値はユーザ側で変えたい放題だと思うけど、それを使って他のユーザだと偽ることもできる？
 
 ### 使用手順
 
@@ -150,7 +205,6 @@ Route::resource('users', 'AdminUserController')
 1. ``
 
 
-
 ## Maintenance
 
 - `composer dump-autoload` なぜか大体これをやれば解決
@@ -159,7 +213,7 @@ Route::resource('users', 'AdminUserController')
 
 
 ## Bootstrap
-    - 
+- 
 
 ## Composer View:
 
@@ -173,6 +227,10 @@ Route::resource('users', 'AdminUserController')
     - Viewがレンダリングされるとき（つまりコントローラでview()が実行される時）に呼び出されるコールバック関数かクラスメソッドのこと
     - viewがrenderされるたびに情報を変数として結合する
     - View Composerはサービスプロバイダを通じて登録する
+
+- View Composer vs Controller
+    - DBへのアクセス、日付の挿入などを行えるという点で両者は共通している？？？
+    - じゃあどう使い分けるのか？
 
 - Advantage:
     - MVCを徹底できる； View logicをコントローラに書かず、またBlade template側にもロジックを入れないようにする
