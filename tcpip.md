@@ -332,6 +332,8 @@ POST vs PUT
 
 - OSIの第三層（Network Layer）
 - Connects LANs (switch) and WANs (internet)
+- ルータがないと、１つの外部回線に１台しか接続できない
+- １つのネットワークにルータ機能がONの機器が複数あると問題が起きる
 - Routing Table
 - 
 
@@ -366,6 +368,15 @@ POST vs PUT
 - どっちも routing できる
 - L3 Switch がハードウェア的に routing。その分高速
 - Router はソフトウェア的に routing する。Ethernet 以外の回線や、様々なプロトコルに対応できる
+
+### Wireless Access Point
+
+- 多くの無線ルータは、Router + Wireless Access Pointを兼務。APモード（APとしての機能に専念）とRTモード（両者の役割）の切替ができる。
+
+
+### Range Extender / WiFi Booster / WiFi Extender （中継器）
+
+- WiFiの動作範囲を拡大する
 
 ### Network Types
 
