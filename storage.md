@@ -11,19 +11,20 @@
     - Disadvantage:
         - Lack "Durability" of ACID
         - Expensive
-## Products
 
 
+## SQL DBs
 
+- MySQL
+- PostgreSQL
 
-## SQL
-
-## No-SQL
+## No-SQL DBs
 ### Document Databases
 - JSONのような形式保存
 - MongoDB
 ### Key-value Database
-- Redis
+- Redis: in-memory
+- memcached: in-memory
 ### Graph Database
 - Nodeで保存
 - Neo4j
@@ -37,7 +38,9 @@
 
 - Cloud Storage Service
     - AWS S3
-    - 個別
-        - Google Drive
-        - Microsoft OneDrive
-        - DropBox
+
+
+- File hosting Service
+    - Google Drive
+    - Microsoft OneDrive
+    - DropBox
