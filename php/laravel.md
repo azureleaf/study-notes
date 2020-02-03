@@ -2,6 +2,7 @@
 
 - Laravelで勉強したことを記録することで、自分のモチベーションを高めたい
 - 細かいことは公式ドキュメントに任せて、要点とキーワードだけを網羅するように心がけたい。凝りだすとキリがないし...
+- Trying to write as much content as possible in English
 
 ## TOC
 
@@ -14,58 +15,77 @@
 
 ### (root)	
 - .env
-    - Config sensitive infos: DB passwords, AWS keys, Port num, etc.
-    - Therefore you must add this file to .gitignore
+    - Config sensitive env params. Therefore you must add this file to the .gitignore
+    - Keys in this file can be referred inside the project; `env('APP_DEBUG', false)` where second arg is default value when the value is not defined
+    - Settings:
+    ```
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=mydb
+    DB_USERNAME=john
+    DB_PASSWORD=password1234
+    ```
 - .gitattributes	
 - .gitignore	      
 - artisan
     - artisan commandの本体？
 - composer.json
-    - PHP quivalent to package.json
+    - Composer equivalent of npm package.json
 - composer.lock
-    - PHP Equivalent to package-lock.json
+    - Composer Equivalent of npm package-lock.json
 - package.json
 - package-lock.json	
 - phpunit.xml
-    - PHP Unit Test
+    - unit test setting
 - server.php
-    - Server Starting Codes
+    - codes to start servers
 - webpack.mix.js	
 - yarn.lock	
 			
 ### app/
-You put core codes here. Almost all the classes will be put here Files inside this directory will be autoloaded by Composer When you use "make" Artisan commands, subdirectories will be added to app/
+Files inside this directory will be autoloaded by Composer. When you use `make: `family Artisan commands, subdirs will be added to this app/ dir
 
-- app/Broadcasting	"make:channel" Artisan Command creates this dir Event broadcastingとは
-- app/Console	Define how you interact with the app with CLI Includes all the user-defined "artisan" command settings
+- app/Broadcasting
+    - `php artisan make:channel`
+    - What's Event broadcasting???
+- app/Console
+    - Define how you interact with the app with CLI Includes all the user-defined "artisan" command settings
         
-- app/Events	"make:event" and "event:generate" create this dir Includes Event Classes 
-- app/Listeners	This is the counterpart listeners of app/Events 
-        
+- app/Events
+    - `php artisan make:event`
+    - `php artisan event:generate`
+- app/Listeners
+    - This is the counterpart listeners of app/Events 
 - app/Exceptions	
         
 - app/Http
     - Define how you interact with the app with HTTP protocol Includes the Controllers, Middlewares, Requests
 - app/Http/Middleware
-	- php artisan make:middleware
+	- `php artisan make:middleware`
 - app/Http/Controllers
-	- php artisan make:controller
+	- `php artisan make:controller`
 - app/Http/Kernel.php
-	- middlewareのルーティング MWを作ったら、ここに登録する
-        
-- app/Jobs	"make:job" Artisan Command creates this dir
+    - Register user-defined MW here
+- app/Jobs
+    - `php artisan make:job`
 - app/Mail	
 - app/Notifications	
 - app/Policies	
-- app/Providers	Main actual bodies of Service Providers, maybe List of Service Providers are defined in the config/app.php
+- app/Providers
+    - Main bodies of Service Providers
+    - maybe List of Service Providers are defined in the config/app.php
 - app/Rules	
-- app/User.php	ユーザー認証に関するスクリプト
+- app/User.php
+    - User authentication
 			
 ### bootstrap/
+Set initial actions which will be executed in the beginning of the entire app. In the world of programming, "Bootstrapping" means starting the entire process (OS, framework, codes, etc.) without any input, by itself.
 
-アプリケーション実行時に最初に行われる処理がまとめられている In the world of programming, "Bootstrapping" means starting the entire process (OS, framework, codes, etc.) without any input, by itself.
-    bootstrap/app.php	Starting file of the entire framework (?)
-    bootstrap/cache/	Caches are important to accerelate entire framework
+- bootstrap/app.php
+    - Starting file of the entire framework (?)
+- bootstrap/cache/
+	- Caches are important to accerelate entire framework
 			
 ### config/			Config files directory
 - config/broadcasting.php
@@ -80,13 +100,13 @@ You put core codes here. Almost all the classes will be put here Files inside th
 ### database/			You put DB migrations, model factories, and seeds You don't put the DB itself
 		
 - database/migrations/
-    - php artisan make:migration
+    - `php artisan make:migration`
 - database/seeds/
-    - php artisan make:seeder
+    - `php artisan make:seeder`
 - database/seeds/DatabaseSeeder.php
-    - 既定のファイル このファイルに自作のseederを登録していく
+    - Register user-defined seeders to this file
 - database/seeds/PeopleTableSeeder.php
-    - 自分で作ったSeederはこのようになる
+    - Put user-defined file in this format here
 			
 ### public/
 外部にそのまま公開されるファイルの置き場
@@ -101,19 +121,24 @@ Holds Views Holds raw SASS / LESS/ JS to be compiled
     - instantiate Laravel Echo instance
 
 - resources/views/
-    - Viewの保存場所 テンプレートファイル（index.phpにせよ、index.blade.phpにせよ）はここに置かれる
+    - Put template files (either vanilla index.php or index.blade.php)
 
 - resources/views/CONTROLLER_NAME_1/
-    - resources/views/CONTROLLER_NAME_2/	雑然とテンプレートをおいていくのではなく、対応するコントローラ毎にテンプレートをまとめておくのが慣習 コントローラに無関係なViewは、サブディレクトリではなく直接置く
+- resources/views/CONTROLLER_NAME_2/
+    - 雑然とテンプレートをおいていくのではなく、対応するコントローラ毎にテンプレートをまとめておくのが慣習
+    - コントローラに無関係なViewは、サブディレクトリではなく直接置く
 			
 			
 ### routes/	
 
 - routes/web.php
-    - RouteServiceProvider Manage "web" middleware group resources/viewsにあるBladeテンプレートへのルーティングはここに記述する Route::get(“/”, function(){ return view(“blahblah”)}と書くが、直接HTMLをreturnしても可
-
+    - RouteServiceProvider
+    - Manage "web" middleware group
+    - resources/viewsにあるBladeテンプレートへのルーティングはここに記述する
+    
 - routes/api.php
-    - RouteServiceProvider Manage "api" middleware group
+    - RouteServiceProvider
+    - Manage "api" middleware group
 
 - routes/console.php
     - Define Closure-based console commands
@@ -122,7 +147,7 @@ Holds Views Holds raw SASS / LESS/ JS to be compiled
     - Register Event Broadcasting Channels
 			
 ### storage/			
-プログラムによって保存されるファイルの置き場 Compiled Blade templates File-based sessions Cache Files Various Files generated by frameworks
+Files created by the internal program: Compiled Blade templates, File-based sessions Cache Files, and other Various Files generated by frameworks
 
 - storage/app
     - Files generated by application
@@ -201,9 +226,50 @@ PHPUnit Note that all the test classes must start from "Test" word
 1. Register service provider itself @`config/app.php`
 
 
+## Composer
+
+- `composer install`
+- `composer install --dev`
+- `composer install --no-dev`
+- `composer update`
+    - Run this after you edit composer.json
+- `composer require --dev phpunit/phpunit ^6.2`
+- `composer install`
+
+
+
 ## Set up Blade
 
 
+## Event Broadcasting
+
+### What is "event" in the first place?
+
+### What's this?
+- Sending the 
+- WebSocket
+- With broadcasting, you can implement useful functions such as:
+    - Real-time notification on the website
+
+### How to broadcast
+
+- A. Pusher
+- B. Redis
+
+### Procedure to add broadcasting
+
+1. Register `App\Providers\BroadcastServiceProvider::class,` @config\app.php (By default, this line is just commented out)
+1. Set broadcast deriver @.env
+1. `php artisan make:event TaskAdded`
+1. Edit the generated event file:
+    ```php
+    use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
+    class TaskAdded implements ShouldBroadcast
+    {
+        use Dispatchable, InteractsWithSockets, SerializesModels;
+    }
+    ```
 
 
 ### Directive
@@ -252,16 +318,16 @@ Route::resource('users', 'AdminUserController')
 ]);
 ```
 
+### Routing MISC
 
+- `php artisan route:list`
+    - List all the routing inside the project
 
 
 
 ## Authentication (認証)
 
 - 認証関係の設定はだいたい`config/auth.php`
-
-
-
 
 - Laravelでの認証の種類
     - ログイン認証
@@ -274,11 +340,17 @@ Route::resource('users', 'AdminUserController')
 
 - `Auth::routes();`
 
+### Add auth to your project
+
+1. Define migration file for the Users table (created by default)
+1. Migrate
+1. `php artisan make:auth`
+
 ### Guard
 - Web Guard: sessionによる認証
 - API Guard: tokenによる認証
 
-#### PHP artisan migrat
+
 
 
 ## Authorization (認可)
