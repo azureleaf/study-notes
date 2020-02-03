@@ -196,12 +196,9 @@ POST vs PUT
 
 ### IP Address (IPv6)
 
-`2001:2df6:1ee9:050f:0000:0000:0000:0019/64`
-
-これは以下も同じ意味
-
-`2001:2df6:1ee9:050f::::0019/64`
-
+- `2001:2df6:1ee9:050f:0000:0000:0000:0019/64`
+- `2001:2df6:1ee9:050f::::0019/64`
+- 上記の両者は同じ意味。連続するゼロ４つは省略記法があるということ（ただし省略は１つながりのみ）
 - IPv6 もやはりネットワーク部とホスト部があり、ネットワーク部の長さは末端の数（上記では 64）で表される
 
 #### IPv6 Header
@@ -217,7 +214,7 @@ POST vs PUT
 #### Private Address
 
 - Private Address は Global Address として使ってはいけない
-- Private Address は、違うネットワークならかぶっても OK（当然）
+- Private Address は、違うネットワークなら当然かぶっても OK
 - 範囲としては以下の３種
   - `10.0.0.0` to `10.255.255.255`
   - `172.0.0.0` to `172.31.255.255`
@@ -244,48 +241,131 @@ POST vs PUT
 
 ### Ethernet
 
+- RJ-45
+- CAT 6
+- CAT 5
+
 ### PPP
 
 ダイアルアップ接続や ADSL。
 
-###
-
 ## Network Device
 
-- Repeater
+### ONU / MODEM
 
-  -
-  - Regenerate the signal before it became too weak or too corrupted
-  - However repeater doesn't amplify the signal
+### "hub"
 
-- Bridge
-  - Connects two hubs of two different networks
-  - Advantage: You can segment the single network by using bridge. By doing this, you can make smaller collision domain.
+- 普通Repeaterのことか？
+- しかし"Switching Hub"もハブと呼ばれていることがある気がする
 
-* Switch
+### Repeater 
 
-  - 信号を中継する
-  - 多数のイーサネットポートを持っている
-  - 信号が来たら、それがどの宛先なのかを判断し、そのデバイスのみに送出する。
-  - Advantage: Reduce the unnecessary signals on the network, and will contribute to the privacy protection. Smaller collision domain???
-  - 利点：
-  - 欠点：　宛先を判別する作業などに一定の時間がかかるので、その分は遅くなる
+- **今では使われていない**
+- Regenerate the signal before it became too weak or too corrupted
+- However repeater doesn't amplify the signal
+- CSMA/CD方式を採用
+- OSIのPhysical Layerしか見ない
 
-* Layer 2 Switch
-  - ここでいう Layer 2 とは、OSI モデルの第二層（データリンク層）である。
-  - 信号の宛先を判断するのに、MAC アドレスを使う。つまりどのポートがどの MAC アドレスのデバイスとつながっているのかを記憶している。
+#### CSMA/CD
+- 通信ケーブルにデータを流すためのルールである
+- CS: Carrier Sense
+- MA: Multiple Access
+- CD: Collision Detection
+    - 複数の装置が同時に送信を開始してしまった場合は、双方のデータが使えなくなる。それを検知したら再送することになる
 
-- Layer 3 Switch
-  - OSI Model の第三層（）
-  - Layer 2 Switch の機能に加えて、IP による宛先判別ができる
-  - VLAN の分割ができる
+### Bridge
 
-* Hub
+- ２つの異なるネットワークのハブ同士を接続する
+- Collision Domainを小さくできるのが利点
+- データのMACアドレスを確認し、ブリッジの反対側のネットワーク宛でなかったら向こう側にはそのデータを流さない
+    - つまり、Bridgeは内部でネットワーク毎のMACアドレスの一覧（MAC Address Table）を学習する必要がある
+- RepeaterがOSI物理層しか見ないのにたいして、BridgeはData Link Layerの情報も活用する
 
-- Router
-  - Connects LANs (switch) and WANs (internet)
-  - L3 Switch と Router はいずれも routing ができる。ただし、L3 Switch がハードウェア的に routing するのに対して、router はソフトウェア的に routing する。この点では L3 Switch が高速で上。ただし、router はソフトウェアでやるので、ethernet 以外の回線や、様々なプロトコルに対応できる。
-  - Routing Table:
+### Layer 2 Switch
+
+- 信号を中継する
+- 多数のイーサネットポートを持っている
+- ここでいう Layer 2 とは、OSI モデルの第二層（データリンク層）である。
+- 信号が来たら、それがどの宛先なのかを判断し、そのデバイスのみに送出する。
+
+#### 利点
+- 
+- VLAN分割が可能
+
+#### 欠点
+- 宛先を判別する作業などに一定の時間がかかるので、その分は遅くなる
+
+#### VLAN
+
+- 一つの物理的なネットワークを、複数の論理的ネットワークに分割する技術
+- 利点
+    - 
+    - Enhanced Security
+    - Broadcastによる帯域消費を最小限にできる
+
+- Trunk Link
+    - １本のケーブルに複数のVLAN Frameを流す
+    - VLANを実現するのに欠かせない機能
+- VLAN越え通信
+    - 
+- Static VLAN / Port VLAN
+- Dynamic VLAN
+
+#### Switch vs Bridge
+- 共通点
+    - どちらもフレームを解析
+    - どちらもOSI Data Link Layer
+    - どちらもMAC Address Tableを保持
+- 相違点
+    - Bridgeはソフトウェア処理
+    - Switchはハードウェア（ASIC）処理。したがって高速
+
+
+### Layer 3 Switch
+
+- OSI Model の第三層（）
+- Layer 2 Switch の機能に加えて、IP による宛先判別ができる
+
+
+### Router
+
+
+- OSIの第三層（Network Layer）
+- Connects LANs (switch) and WANs (internet)
+- Routing Table
+- 
+
+
+- Default Route
+    - 既定の動作では、Routing Tableに一致する宛先がない場合にはｓのパケットは破棄される
+    - Default Routeを設定すると、宛先不明パケットは全てそこに送られる
+
+#### 小規模拠点におけるルーターの機能
+- Routing
+- Firewall
+- VPN
+- NAT / NAPT
+- Packet Filtering
+
+
+#### 特殊なRouter
+- Core Router
+- Edge Router
+- Access Router
+- Multi-protocol Router
+#### Static Routing
+#### Dynamic Routing
+- "1 hop"
+- Algorithm
+    - Distance Vector Algorithm: RIP Protocol
+    - Link State Algorithm： OSPF Protocol
+    - Path Vector Algorithm
+
+### Router vs L3 Switch?
+
+- どっちも routing できる
+- L3 Switch がハードウェア的に routing。その分高速
+- Router はソフトウェア的に routing する。Ethernet 以外の回線や、様々なプロトコルに対応できる
 
 ### Network Types
 
@@ -301,14 +381,90 @@ POST vs PUT
 1. L3 Switch
 1. L2 Switch: LAN の数だけ複数ある。複数の L3 Switch に接続することもある。
 1. LAN
-1. Wireless Access Point や PC
+1. Wireless Access Point や PC(Ethernet)
 
 ### 小規模ネットワークでの構成
 
 1. Internet
 1. MODEM or ONU
 1. Router (Firewall, L3 Switch)
-1. PCs or VoIP Phone
+1. PCs (Ethernet) / VoIP Phone / Wireless AP
+
+「WiFiルータ」として売ってるものは、Router + L3 Switch + Wireless APの全てを担っている？？？
+
+## VoIP
+
+## Wireless LAN
+
+### Wireless LAN Network Types
+
+- A. Infrastructure Mode
+  - 一番普通。アクセスポイントにみんなが接続
+- B. Ad Hoc Mode / Peer-to-peer Mode / IBSS (independent basic service set)
+  - ゲーム機同士の接続とか。
+
+### Wireless LAN Devices
+
+- Wireless LAN Client
+- Wireless LAN Controller
+- Wireless LAN Access Point
+
+### Wireless Networking Standards
+
+- IEEE802.11b: 11 Mbps
+- IEEE802.11a: 54 Mbps
+- IEEE802.11g: 54 Mbps
+- IEEE802.11n: 600 Mbps
+- IEEE802.11ac (WiFi 5): 6.93 Gbps
+- IEEE802.11ax (WiFi 6): 次世代規格
+
+### Frequency
+
+- 2.4 GHz
+- 5 GHz
+
+- Dual Band
+- Triband
+
+### CSMA/CA
+
+- **１つのアクセスポイントにアクセスできるのは、１台だけ**
+
+  -
+
+- CS: Carrier Sense
+- MA: Multiple Access
+- CA: Collision Avoidance
+
+### Areas
+
+- Service Area
+- Cover Area
+- Coverage Area
+- Coverage Hole
+
+### Channel
+
+### Wireless LAN Security Protocols
+
+- WPA
+- WPA2:
+- WEP: もう使っちゃだめ。暗号化はするが脆弱
+
+### Wireless LAN Security Technology
+
+- MAC Address Filtering
+  - まあまあ意味ある
+  - 脆弱性：　 Wireless LAN カードの盗難、MAC Address の偽装
+- SSID
+  -
+- IEEE802.1X
+
+### Wireless LAN MISC
+
+- Ekahau Site Survey: AP の電波強度を可視化するツール
+- Mesh WiFi
+- AOSS
 
 ## Topics
 

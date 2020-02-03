@@ -2,7 +2,6 @@
 
 - Laravelで勉強したことを記録することで、自分のモチベーションを高めたい
 - 細かいことは公式ドキュメントに任せて、要点とキーワードだけを網羅するように心がけたい。凝りだすとキリがないし...
-- Trying to write as much content as possible in English
 
 ## TOC
 
@@ -15,9 +14,9 @@
 
 ### (root)	
 - .env
-    - Config sensitive env params. Therefore you must add this file to the .gitignore
-    - Keys in this file can be referred inside the project; `env('APP_DEBUG', false)` where second arg is default value when the value is not defined
-    - Settings:
+    - 安全にもかかわる環境変数はここで設定する。なので、このファイルは.gitignoreに加える必要性あり
+    - このファイルのkey:valueは`env('APP_DEBUG', false)` のようにしてプロジェクト内部から呼び出せる。第二引数はデフォルト引数
+    - 設定内容例:
     ```
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
@@ -31,9 +30,9 @@
 - artisan
     - artisan commandの本体？
 - composer.json
-    - Composer equivalent of npm package.json
+    - package.jsonのcomposer版
 - composer.lock
-    - Composer Equivalent of npm package-lock.json
+    - package-lock.jsonのcomposer版
 - package.json
 - package-lock.json	
 - phpunit.xml
