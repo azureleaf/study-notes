@@ -9,9 +9,11 @@
     - `git push <remote> <branch>`という構造
 - `git pull origin master`
 - `git status`
-- `git mv`と`git rm`
+- `git mv`
     - Git管理されているファイルを移動したり、名前を変更したりするときには必ずこれらを使う
     - **エクスプローラ上などで勝手に変更してはいけない！**　そのファイルの変更履歴が反映されなくなってしまう。
+- `git rm`
+    - そのファイルを削除し、なおかつgitのindexからも外す
 - `git branch`
 - `git branch NEW_BRANCH_NAME`
 - `git checkout BRANCH_NAME`
