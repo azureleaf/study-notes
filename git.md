@@ -94,6 +94,12 @@
 - クラウド上にコードを保存するサービス
 - 外部に公開するか、内部専用なのか選べる。
 
+### SourceTree
+
+- gitの履歴などを可視化するツール
+- CUIではなく、GUIを使ったコミットやマージそのほかもできる
+- WindowsとMacに対応（Linuxには対応せず...）
+
 ### CI/CD: Continuous Integration + Continuous Deployment （もしくは Continuous Delivery）
 
 - CI: push されたコードについて、自動でテストを行う機能。

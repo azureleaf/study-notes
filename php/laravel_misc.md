@@ -116,7 +116,7 @@ Vue.js を使うなら、Blade のディレクティブはそんなに覚えな�
 
 ## Facade
 
-### What's this?
+### What's Facade?
 
 - Facade を使うと、Laravel 内部の機能に簡単にアクセスできる
   - 記述量を減らすことができる
