@@ -2,6 +2,7 @@
 
 
 
+
 ## ★★★
 - `git add -A`
 - `git commit -m "debug: Solve DB access error"`
@@ -33,10 +34,13 @@
     - In the local, you have:
         - `master`: Local master branch. **Not** updated by `git fetch`
         - `origin/master`: Remote master branch. Updated by `git fetch`
-    - `git pull origin master` = `git fetch` + `git merge`
+    - `git pull` = `git fetch` + `git merge`
 
 ### `git merge` vs `git rebase`
 - `git merge`
+    - mergeすると不具合が出る可能性があるので、いきなりmasterにmergeしてはいけない
+    - master側をブランチ側にまずmergeし、不具合がないことを確かめてから
+
 - `git rebase -i origin master`
     - Similar to `git merge`
     - `git rebase` keep the commits on the branch while `git merge` doesn't
@@ -59,7 +63,11 @@
     - 新しいremoteを追加（例：GitHubに上げてたリポジトリを、GitLabにも上げられるようにするとか）
 - `git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git`
 
+## Good Tutorial Websites
 
+- [サルでもわかる](https://backlog.com/ja/git-tutorial/)
+- [Atlassian](https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud)
+- [Git Rebase vs Git Merge](http://www-creators.com/archives/1943)
  
 
 ## Git管理すると何がいいの？
@@ -70,15 +78,19 @@
 
 ## Keywords
 
-- Pull Request / Merge Request
-    - 「僕の作ったブランチをチェックして、masterなどに統合してくれ」という要望
-    - 新人エンジニアなどが、ベテランに依頼する。ベテランはコードをレビューし、問題がなければマージする
-    - GitHubではpull request, GitLabではMerge Requestと呼ばれているが同じもの
-- Subversion (svn): gitと同じような古いツール。だが、今はほとんどの企業でgitに取って代わられた
-- GitHub / GitLab / BitBucket
-    - クラウド上にコードを保存するサービス
-    - 外部に公開するか、内部専用なのか選べる。
-    - 
-- CI: Continuous Integration
-- CD: Continuous Deployment
+### Pull Request / Merge Request
+- 「僕の作ったブランチをチェックして、masterなどに統合してくれ」という要望
+- 新人エンジニアなどが、ベテランに依頼する。ベテランはコードをレビューし、問題がなければマージする
+- GitHubではpull request, GitLabではMerge Requestと呼ばれているが同じもの
+### Subversion (svn)
+- gitと同じような古いツール。だが、今は多くの企業でgitに取って代わられた
+### GitHub / GitLab / BitBucket
+- クラウド上にコードを保存するサービス
+- 外部に公開するか、内部専用なのか選べる。
+### CI/CD: Continuous Integration + Continuous Deployment （もしくはContinuous Delivery）
+- CI: pushされたコードについて、自動でテストを行う機能。
+- テストのし忘れなど防ぎ、コードの品質を保てる
+- テストして問題があれば、mergeされない
+- 有名なツールは「Circle CI」「Jenkins」「GitLab」など
+- Continuous Deploymentでは、テストで問題なければ本番環境へのデプロイも自動で行う
 
