@@ -1,7 +1,6 @@
 # Laravel Study Note
 
-- Laravelで勉強したことを記録することで、自分のモチベーションを高めたい
-- 細かいことは公式ドキュメントに任せて、要点とキーワードだけを網羅するように心がけたい。凝りだすとキリがないし...
+- Laravel で勉強したことを記録することで、自分の学習モチベーションを高めたい
 
 ## TOC
 
@@ -12,171 +11,176 @@
 
 ## Files
 
-### (root)	
+### (root)
+
 - .env
-    - 安全にもかかわる環境変数はここで設定する。なので、このファイルは.gitignoreに加える必要性あり
-    - このファイルのkey:valueは`env('APP_DEBUG', false)` のようにしてプロジェクト内部から呼び出せる。第二引数はデフォルト引数
-    - 設定内容例:
-    ```
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=mydb
-    DB_USERNAME=john
-    DB_PASSWORD=password1234
-    ```
-- .gitattributes	
-- .gitignore	      
+  - 安全にもかかわる環境変数はここで設定する。なので、このファイルは.gitignore に加える必要性あり
+  - このファイルの key:value は`env('APP_DEBUG', false)` のようにしてプロジェクト内部から呼び出せる。第二引数はデフォルト引数
+  - 設定内容例:
+  ```
+  DB_CONNECTION=mysql
+  DB_HOST=127.0.0.1
+  DB_PORT=3306
+  DB_DATABASE=mydb
+  DB_USERNAME=john
+  DB_PASSWORD=password1234
+  ```
+- .gitattributes
+- .gitignore
 - artisan
-    - artisan commandの本体？
+  - artisan command の本体？
 - composer.json
-    - package.jsonのcomposer版
+  - package.json の composer 版
 - composer.lock
-    - package-lock.jsonのcomposer版
+  - package-lock.json の composer 版
 - package.json
-- package-lock.json	
+- package-lock.json
 - phpunit.xml
-    - unit test setting
+  - unit test setting
 - server.php
-    - codes to start servers
-- webpack.mix.js	
-- yarn.lock	
-			
+  - codes to start servers
+- webpack.mix.js
+- yarn.lock
+
 ### app/
-Files inside this directory will be autoloaded by Composer. When you use `make: `family Artisan commands, subdirs will be added to this app/ dir
+
+Files inside this directory will be autoloaded by Composer. When you use `make:`family Artisan commands, subdirs will be added to this app/ dir
 
 - app/Broadcasting
-    - `php artisan make:channel`
-    - What's Event broadcasting???
+  - `php artisan make:channel`
+  - What's Event broadcasting???
 - app/Console
-    - Define how you interact with the app with CLI Includes all the user-defined "artisan" command settings
-        
+  - Define how you interact with the app with CLI Includes all the user-defined "artisan" command settings
 - app/Events
-    - `php artisan make:event`
-    - `php artisan event:generate`
+  - `php artisan make:event`
+  - `php artisan event:generate`
 - app/Listeners
-    - This is the counterpart listeners of app/Events 
-- app/Exceptions	
-        
+  - This is the counterpart listeners of app/Events
+- app/Exceptions
 - app/Http
-    - Define how you interact with the app with HTTP protocol Includes the Controllers, Middlewares, Requests
-- app/Http/Middleware
-	- `php artisan make:middleware`
-- app/Http/Controllers
-	- `php artisan make:controller`
+  - Define how you interact with the app with HTTP protocol Includes the Controllers, Middlewares, Requests
+- app/Http/Middleware - `php artisan make:middleware`
+- app/Http/Controllers - `php artisan make:controller`
 - app/Http/Kernel.php
-    - Register user-defined MW here
+  - Register user-defined MW here
 - app/Jobs
-    - `php artisan make:job`
-- app/Mail	
-- app/Notifications	
-- app/Policies	
+  - `php artisan make:job`
+- app/Mail
+- app/Notifications
+- app/Policies
 - app/Providers
-    - Main bodies of Service Providers
-    - maybe List of Service Providers are defined in the config/app.php
-- app/Rules	
+  - Main bodies of Service Providers
+  - maybe List of Service Providers are defined in the config/app.php
+- app/Rules
 - app/User.php
-    - User authentication
-			
+  - User authentication
+
 ### bootstrap/
+
 Set initial actions which will be executed in the beginning of the entire app. In the world of programming, "Bootstrapping" means starting the entire process (OS, framework, codes, etc.) without any input, by itself.
 
 - bootstrap/app.php
-    - Starting file of the entire framework (?)
-- bootstrap/cache/
-	- Caches are important to accerelate entire framework
-			
-### config/			Config files directory
+  - Starting file of the entire framework (?)
+- bootstrap/cache/ - Caches are important to accerelate entire framework
+
+### config/ Config files directory
+
 - config/broadcasting.php
-    - Config Broadcast
+  - Config Broadcast
 - config/app.php
-    - Config Service Providers providersという配列に、providerを逐次追加していく タイムゾーンの設定もここ
+  - Config Service Providers providers という配列に、provider を逐次追加していく タイムゾーンの設定もここ
 - config/database.php
-    - Config DB
-- config/session.php
-	- Config Session
-    
-### database/			You put DB migrations, model factories, and seeds You don't put the DB itself
-		
+  - Config DB
+- config/session.php - Config Session
+
+### database/ You put DB migrations, model factories, and seeds You don't put the DB itself
+
 - database/migrations/
-    - `php artisan make:migration`
+  - `php artisan make:migration`
 - database/seeds/
-    - `php artisan make:seeder`
+  - `php artisan make:seeder`
 - database/seeds/DatabaseSeeder.php
-    - Register user-defined seeders to this file
+  - Register user-defined seeders to this file
 - database/seeds/PeopleTableSeeder.php
-    - Put user-defined file in this format here
-			
+  - Put user-defined file in this format here
+
 ### public/
+
 外部にそのまま公開されるファイルの置き場
-	
+
 - public/index.php
-    - Entry point for all the Req Configure autoloading Holds CSS/images/JS
-			
+  - Entry point for all the Req Configure autoloading Holds CSS/images/JS
+
 ### resources/
+
 Holds Views Holds raw SASS / LESS/ JS to be compiled
 
 - resources/js/bootstrap.js
-    - instantiate Laravel Echo instance
+
+  - instantiate Laravel Echo instance
 
 - resources/views/
-    - Put template files (either vanilla index.php or index.blade.php)
+
+  - Put template files (either vanilla index.php or index.blade.php)
 
 - resources/views/CONTROLLER_NAME_1/
 - resources/views/CONTROLLER_NAME_2/
-    - 雑然とテンプレートをおいていくのではなく、対応するコントローラ毎にテンプレートをまとめておくのが慣習
-    - コントローラに無関係なViewは、サブディレクトリではなく直接置く
-			
-			
-### routes/	
+  - 雑然とテンプレートをおいていくのではなく、対応するコントローラ毎にテンプレートをまとめておくのが慣習
+  - コントローラに無関係な View は、サブディレクトリではなく直接置く
+
+### routes/
 
 - routes/web.php
-    - RouteServiceProvider
-    - Manage "web" middleware group
-    - resources/viewsにあるBladeテンプレートへのルーティングはここに記述する
-    
+  - RouteServiceProvider
+  - Manage "web" middleware group
+  - resources/views にある Blade テンプレートへのルーティングはここに記述する
 - routes/api.php
-    - RouteServiceProvider
-    - Manage "api" middleware group
+
+  - RouteServiceProvider
+  - Manage "api" middleware group
 
 - routes/console.php
-    - Define Closure-based console commands
+
+  - Define Closure-based console commands
 
 - routes/channels.php
-    - Register Event Broadcasting Channels
-			
-### storage/			
+  - Register Event Broadcasting Channels
+
+### storage/
+
 Files created by the internal program: Compiled Blade templates, File-based sessions Cache Files, and other Various Files generated by frameworks
 
 - storage/app
-    - Files generated by application
+
+  - Files generated by application
 
 - storage/app/public
-    - Files generated by the user; such as User avatar In this case, you need to make "symbolic link(what?)" to this directory in public/storage dir
+
+  - Files generated by the user; such as User avatar In this case, you need to make "symbolic link(what?)" to this directory in public/storage dir
 
 - storage/framework
-    - Files generated by Framework
+
+  - Files generated by Framework
 
 - storage/logs
-			
+
 ### tests/
+
 PHPUnit Note that all the test classes must start from "Test" word
-			
+
 ### vendor/
-フレームワーク本体のプログラムが置かれている dependencies for Composer
 
+Composer dependencies are here. Laravel itself is inside this dir too. (such as `vendor\laravel\framework\src\Illuminate`)
 
+## Laravel での基本的な処理手順
 
-## Laravelでの基本的な処理手順
-
-1. `public/index.php` Laravel Appの入り口。nginxやApache側から最初に投げられる場所
+1. `public/index.php` Laravel App の入り口。nginx や Apache 側から最初に投げられる場所
 1. `app/Http/Kerne.php`
 1. Service Provider
-1. `routers/web.php` ここでrouting
+1. `routers/web.php` ここで routing
 1. Middleware 認証、データ加工、redirect, etc.
-1. Controller　DBへのアクセス
+1. Controller 　 DB へのアクセス
 1. Middleware
-
 
 ## (Install Composer)
 
@@ -190,7 +194,6 @@ PHPUnit Note that all the test classes must start from "Test" word
 1. `sudo /etc/init.d/mysql stop`
 1. `sudo /etc/init.d/mysql start`
 1. `sudo apt install php-mysql` Install DB Extension
-
 
 ## Set up the project <a name="setup-project"></a>
 
@@ -207,7 +210,7 @@ PHPUnit Note that all the test classes must start from "Test" word
 
 - Middleware Group
 - Global Middleware
-- 
+-
 
 ## Set up Migrations & Seeders
 
@@ -217,13 +220,11 @@ PHPUnit Note that all the test classes must start from "Test" word
 
 `php artisan make:controller UsersController`
 
-
 ## Set up Service Providers
 
 1. `php artisan make:provider TestServiceProvider`
-1. Register the service class to `register()` @`app/providers/TestServiceProvider.php` : この動作は「bindする」と呼ばれる
+1. Register the service class to `register()` @`app/providers/TestServiceProvider.php` : この動作は「bind する」と呼ばれる
 1. Register service provider itself @`config/app.php`
-
 
 ## Composer
 
@@ -231,24 +232,22 @@ PHPUnit Note that all the test classes must start from "Test" word
 - `composer install --dev`
 - `composer install --no-dev`
 - `composer update`
-    - Run this after you edit composer.json
+  - Run this after you edit composer.json
 - `composer require --dev phpunit/phpunit ^6.2`
 - `composer install`
 
-
-
 ## Set up Blade
-
 
 ## Event Broadcasting
 
 ### What is "event" in the first place?
 
 ### What's this?
-- Sending the 
+
+- Sending the
 - WebSocket
 - With broadcasting, you can implement useful functions such as:
-    - Real-time notification on the website
+  - Real-time notification on the website
 
 ### How to broadcast
 
@@ -261,60 +260,117 @@ PHPUnit Note that all the test classes must start from "Test" word
 1. Set broadcast deriver @.env
 1. `php artisan make:event TaskAdded`
 1. Edit the generated event file:
-    ```php
-    use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-    class TaskAdded implements ShouldBroadcast
-    {
-        use Dispatchable, InteractsWithSockets, SerializesModels;
-    }
-    ```
+   ```php
+   use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+   class TaskAdded implements ShouldBroadcast
+   {
+       use Dispatchable, InteractsWithSockets, SerializesModels;
+   }
+   ```
 
 ### Directive
-Vue.jsを使うなら、Bladeのディレクティブはそんなに覚えなくて問題ないけど。以下くらいは抑えるべき
+
+Vue.js を使うなら、Blade のディレクティブはそんなに覚えなくて問題ないけど。以下くらいは抑えるべき
 
 - @if
 - @for
 - @foreach
 
+## Facade
 
-## Routing 
+### What's this?
 
-- routes/web.phpで定義するのが基本
+- Facade を使うと、Laravel 内部の機能に簡単にアクセスできる
+  - 記述量を減らすことができる
+- デザインパターンの一つ
+- Laravel といえば Facade というくらい有名
+- Facade は本来は「建物の正面」の意味
+
+### Look into `Route::get()`
+
+- You use `Route::get()`. This `Route` is a Facade
+- `Route` is the alias for `Illuminate\Support\Facades\Route::class`. This alias is defined in `config/app.php`
+- This `Route` class inherits from `Illuminate\Support\Facades\Facade`. However, `get()` isn't defined here;
+
+```php
+namespace Illuminate\Support\Facades;
+
+class Route extends Facade
+{
+    protected static function getFacadeAccessor()
+    {
+        return 'router';
+    }
+}　　　
+```
+
+- This `Facade` class doesn't have `get()` either. `__callStatic()` is the fallback method when the called method (now `get()`) isn't defined.
+
+```php
+abstract class Facade{
+    // 途中省略
+    public static function __callStatic($method, $args)
+    {
+        $instance = static::getFacadeRoot();
+
+        if (! $instance) {
+            throw new RuntimeException('A facade root has not been set.');
+        }
+
+        return $instance->$method(...$args);
+    }
+}
+```
+
+- これ以降まだよくわかってない
+
+### User-defined Facade
+
+1. Create Service Provider
+1. Create Facade file
+1. Add facade to config/app.php
+1. Try to run the facade
+
+## Queue
+
+## Routing
+
+- routes/web.php で定義するのが基本
 - コントローラからルートを定義することもある
 
-### 基本のRouting
-
+### 基本の Routing
 
 - `Route::get('/user', 'UserController@index');`
 
 Route Parameters
+
 - `Route::get('user/{id}', 'UserController@show');`
 - Regular Expression
+
 ```php
 Route::get('user/{id}/{name}', function ($id, $name) {
     // 処理
 })->where(['id' => '[0-9]+', 'name' => '[a-z]+']);
 ```
 
+Routing に middleware を組み合わせる
 
-
-Routingにmiddlewareを組み合わせる
 - `Route::get('profile', 'UserController@show')->middleware('auth');`: 外部に書く
 - `Route::post($uri, $callback);`
 
 Named Route
+
 - 作成：`Route::get('articles', 'ArticlesController@index')->name('articles.index');`
 - 利用：`return redirect()->route('articles.index');`
-- URLに別名を与える機能
-- URLが変更になったときに、それが記述される場所を全て変更するのは面倒
-- name routeにしておけば、その別名の定義部分を一箇所変更するだけでその別名を使っている箇所に全て反映できる。
-
+- URL に別名を与える機能
+- URL が変更になったときに、それが記述される場所を全て変更するのは面倒
+- name route にしておけば、その別名の定義部分を一箇所変更するだけでその別名を使っている箇所に全て反映できる。
 
 ### Resource Controller
 
-`php artisan make:controller PhotoController --resource --model=Photo`: CRUDに則ったルーティングが自動で一括生成される
+`php artisan make:controller PhotoController --resource --model=Photo`: CRUD に則ったルーティングが自動で一括生成される
 
 `Route::resource()`
 
@@ -328,19 +384,20 @@ Route::resource('users', 'AdminUserController')
 ### Routing MISC
 
 - `php artisan route:list`
-    - List all the routing inside the project
+  - List all the routing inside the project
 
 ## Authentication (認証)
 
 - 認証関係の設定はだいたい`config/auth.php`
 
-- Laravelでの認証の種類
-    - ログイン認証
-    - Laravel Passport
-    - API認証
+- Laravel での認証の種類
+
+  - ログイン認証
+  - Laravel Passport
+  - API 認証
 
 - ログインを要求するページとログイン不要の公開ページをどのようにして一括登録するのか？
-    - おそらくmiddleware groupだと思うが
+  - おそらく middleware group だと思うが
 - ログインページをどのようにしてカスタマイズするのか？
 
 - `Auth::routes();`
@@ -352,21 +409,21 @@ Route::resource('users', 'AdminUserController')
 1. `php artisan make:auth`
 
 ### Guard
-- Web Guard: sessionによる認証
-- API Guard: tokenによる認証
+
+- Web Guard: session による認証
+- API Guard: token による認証
 
 ## Authorization (認可)
 
 - 認証が本人確認なのに対して、認可は権限の付与っぽい
 
-### Gateによる認可
+### Gate による認可
 
-### Policyによる認可
+### Policy による認可
 
 ### misc
-- "localhost:8000/login"などのルートはweb.phpではなく、`Illuminate\Routing\Router.php`にある
 
-
+- "localhost:8000/login"などのルートは web.php ではなく、`Illuminate\Routing\Router.php`にある
 
 ### 他の便利機能
 
@@ -374,41 +431,51 @@ Route::resource('users', 'AdminUserController')
 
 `Route::view('/welcome', 'welcome', ['name' => 'Taylor']);`
 
-
 ## Session & Cookie <a name="session"></a>
 
 ### そもそもセッションってなんだっけ？
 
-- Session IDはユーザを識別するための番号
-- Session IDをブラウザ側で保管する場所が、Cookie
-- Session IDをサーバー側で保管する場所が、Session
-- HTTPはstateless。しかし実用的なウェブサイトでは、ページ移動しても状態を保持できなきゃお話にならない。だからセッションができた
-- 実装では、DBにユーザ情報を記憶する。こういうカラム
-    - id
-    - user_id
-    - ip_address
-    - user_agent
-    - payload
-    - last_update
+- Session ID はユーザを識別するための番号
+- Session ID をブラウザ側で保管する場所が、Cookie
+- Session ID をサーバー側で保管する場所が、Session
+  - つまり、Session を DB で管理するなら、Session を記憶するためのテーブルをあらかじめ migrate しておく必要があるということ
+- HTTP は stateless。しかし実用的なウェブサイトでは、ページ移動しても状態を保持できなきゃお話にならない。だからセッションができた
 
+- Session is managed by middleware `\Illuminate\Session\Middleware\StartSession::class`
 
 ### そもそもクッキーってなんだっけ？
 
-- Cookieはkeyとvalueのペアからなる
-- ChromeのDevTool > Application TabでCookieを確認可能
-    - ここに書いてあるユーザIDは暗号化されるので、DBの値とは別物
-- Cookieのデータには制約も多い
-    - expirationあり。設定しない場合ブラウザが閉じると破棄される
-    - Max size: 4096 bytes / domain, 50 cookies / domain
-- Cookieの値はユーザ側で変えたい放題だと思うけど、それを使って他のユーザだと偽ることもできる？
+- Cookie は key と value のペアからなる
+- Chrome の DevTool > Application Tab で Cookie を確認可能
+  - ここに書いてあるユーザ ID は暗号化されるので、DB の値とは別物
+- Cookie has expiration
+  - Defined in `config/Session.php`
+  - `'lifetime' => env('SESSION_LIFETIME', 120),` So 120 min by default.
+  - If expiration isn't set, cookie will be discarded when the browser is closed
+- Cookie has data size limit
+  - 4096 bytes / domain
+  - 50 cookies / domain
+- Cookie の値はユーザ側で変えたい放題だと思うけど、それを使って他のユーザだと偽ることもできる？
 
-### misc
+### Using Session
 
-- Session Driver: Choose one @ .env
-    - database
-    - cookie: サーバー側でもcookieとして保存？なんか管理しずらそう
-    - file
-    - redis
+1. Set up
+   - Session Driver: Choose one in ".env"
+   - database
+   - cookie: サーバー側でも cookie として保存？なんか管理しずらそう
+   - file
+   - redis
+1. Create Migration File
+   - `id`
+   - `user_id`: NULL for the user who isn't logged in
+   - `ip_address`
+   - `user_agent`: OS and Browser versions
+   - `payload`: base64-encoded text
+   - `last_activity`: Unix Timestamp の整数値
+1. Migrate with artisan
+1. Access to session inside app
+    - `session()->put('test','セッションにデータ追加');`
+
 
 ### 使用手順
 
@@ -420,16 +487,14 @@ Route::resource('users', 'AdminUserController')
 1. ``
 1. ``
 
-
 ## Maintenance
 
 - `composer dump-autoload` なぜか大体これをやれば解決
-- `composer update` composer.jsonを更新した時にやる？
-
-
+- `composer update` composer.json を更新した時にやる？
 
 ## Bootstrap
-- 
+
+-
 
 ## Composer View:
 
@@ -440,38 +505,38 @@ Route::resource('users', 'AdminUserController')
 ## View Composer
 
 - What's this?
-    - Viewがレンダリングされるとき（つまりコントローラでview()が実行される時）に呼び出されるコールバック関数かクラスメソッドのこと
-    - viewがrenderされるたびに情報を変数として結合する
-    - View Composerはサービスプロバイダを通じて登録する
+
+  - View がレンダリングされるとき（つまりコントローラで view()が実行される時）に呼び出されるコールバック関数かクラスメソッドのこと
+  - view が render されるたびに情報を変数として結合する
+  - View Composer はサービスプロバイダを通じて登録する
 
 - View Composer vs Controller
-    - DBへのアクセス、日付の挿入などを行えるという点で両者は共通している？？？
-    - じゃあどう使い分けるのか？
+
+  - DB へのアクセス、日付の挿入などを行えるという点で両者は共通している？？？
+  - じゃあどう使い分けるのか？
 
 - Advantage:
-    - MVCを徹底できる； View logicをコントローラに書かず、またBlade template側にもロジックを入れないようにする
-    - 
-    
+  - MVC を徹底できる； View logic をコントローラに書かず、また Blade template 側にもロジックを入れないようにする
+  -
+
 ### View Creator
 
-
-
 ### Service Container / Service Provider / Dependency Injection
-- サービスとは、メールの送信、暗号化、ファイル操作、などLaravelにおける操作の単位。サービスの実体はクラスのインスタンス。
-- サービスコンテナは名前のごとく、サービスの容れ物。つまりクラスのインスタンスを管理する。「管理」というのはサービスの受け入れや取り出しに加えて、サービス同士の依存関係（クラスAがインスタンス化される前にクラスBがインスタンス化されている必要がある、など）を解決することも含む。
-    - bind(): コンテナに新しいサービスを登録する。実行するたびに新しいインスタンスを生成する
-    - singleton(): コンテナに新しいサービスを登録する。何度実行しても同じインスタンスを使いまわす
-    - app(): コンテナ内のサービス一覧を確認
-    - make(): コンテナからサービスを取り出す
-- サービスプロバイダは、サービスをサービスコンテナにサービスを登録するのが仕事。
 
+- サービスとは、メールの送信、暗号化、ファイル操作、など Laravel における操作の単位。サービスの実体はクラスのインスタンス。
+- サービスコンテナは名前のごとく、サービスの容れ物。つまりクラスのインスタンスを管理する。「管理」というのはサービスの受け入れや取り出しに加えて、サービス同士の依存関係（クラス A がインスタンス化される前にクラス B がインスタンス化されている必要がある、など）を解決することも含む。
+  - bind(): コンテナに新しいサービスを登録する。実行するたびに新しいインスタンスを生成する
+  - singleton(): コンテナに新しいサービスを登録する。何度実行しても同じインスタンスを使いまわす
+  - app(): コンテナ内のサービス一覧を確認
+  - make(): コンテナからサービスを取り出す
+- サービスプロバイダは、サービスをサービスコンテナにサービスを登録するのが仕事。
 
 ## MVC vs ADR
 
 ## DB Facade vs Eloquent
 
-- StackOverflowを見る限り、DB Classを使うことを推す人が結構いる。速度がEloquentよりずっと速いとか
-- ただし、自分みたいに使うデータがめちゃくちゃ少ない場合にはEloquentでORMの使い方に慣れるほうが良さそう
+- StackOverflow を見る限り、DB Class を使うことを推す人が結構いる。速度が Eloquent よりずっと速いとか
+- ただし、自分みたいに使うデータがめちゃくちゃ少ない場合には Eloquent で ORM の使い方に慣れるほうが良さそう
 
 ## Laravel + Vue.js
 
@@ -488,9 +553,20 @@ Route::resource('users', 'AdminUserController')
 1. `npm run watch`
 1. `php artisan serve`
 
+## Useful Tips
 
-## Laravel実行環境の選択肢
+### Debug inside app
+- `dd()`
+- `var_dump()`
+    - PHP built-in
+- `print_r()`
+    - PHP built-in
+
+
+
+## Laravel 実行環境の選択肢
+
 - ローカルにインストール：　一番普通だけど、ローカル環境汚染が嫌なのと、複数パソコンで同一環境を再現するのが面倒
-- Laradock：　王道のDocker。一番実用的な気がする。日本語のネット情報も豊富
-- Homestead：　VirtualBox + Vagrant。公式が推奨してるけど、本当にそんなに使われているのか？
-- Laravel Valet：　Mac専用だから自分には関係ない
+- Laradock：　みんな大好き Docker。一番実用的な気がする。日本語のネット情報も豊富
+- Homestead：　 VirtualBox + Vagrant。公式が推奨してるけど、本当にそんなに使われているのか？
+- Laravel Valet：　 Mac 専用だから自分には関係ない
