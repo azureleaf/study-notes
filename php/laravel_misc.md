@@ -6,8 +6,6 @@
 
 1. [Setup](#setup-project)
 
-
-
 ## Laravel での基本的な処理手順
 
 1. `public/index.php` Laravel App の入り口。nginx や Apache 側から最初に投げられる場所
@@ -169,62 +167,63 @@ abstract class Facade{
 1. Add facade to config/app.php
 1. Try to run the facade
 
-## Queue
+## Job & Queue & Worker
 
-## Routing
+- 実行待ちの Job のリストが Queue
+- Job を処理するのが Worker
 
-- routes/web.php で定義するのが基本
-- コントローラからルートを定義することもある
+## Mail
 
-### 基本の Routing
+- ウェブサイトからのパスワード再発行などをテストするには、ダミーの SMTP サーバが必要
+- Mailtrap というオンラインサービスが便利。これを使うと fake の SMTP サーバが使える
+  - You need to create account
+- Sending & Receiving the mail can be done inside Mailtrap
 
-- `Route::get('/user', 'UserController@index');`
+### How to send emails:
 
-Route Parameters
+- A. Using `Mail::send`
+- B. Using `Mailable` class
+- C. Using Gmail
 
-- `Route::get('user/{id}', 'UserController@show');`
-- Regular Expression
+### Set up
 
-```php
-Route::get('user/{id}/{name}', function ($id, $name) {
-    // 処理
-})->where(['id' => '[0-9]+', 'name' => '[a-z]+']);
-```
+1. Edit .env
+   ```
+   MAIL_DRIVER=smtp
+   MAIL_HOST=smtp.mailtrap.io
+   MAIL_PORT=2525
+   MAIL_USERNAME=XXXXXXX
+   MAIL_PASSWORD=XXXXXXX
+   MAIL_FROM_ADDRESS=from@example.com
+   MAIL_FROM_NAME=Example
+   ```
+1. `php artisan make:cokntroller MailSendController` and edit it
 
-Routing に middleware を組み合わせる
+   ```php
+   namespace App\Http\Controllers;
 
-- `Route::get('profile', 'UserController@show')->middleware('auth');`: 外部に書く
-- `Route::post($uri, $callback);`
+   use Illuminate\Http\Request;
 
-Named Route
+   use Mail;
 
-- 作成：`Route::get('articles', 'ArticlesController@index')->name('articles.index');`
-- 利用：`return redirect()->route('articles.index');`
-- URL に別名を与える機能
-- URL が変更になったときに、それが記述される場所を全て変更するのは面倒
-- name route にしておけば、その別名の定義部分を一箇所変更するだけでその別名を使っている箇所に全て反映できる。
+   class MailSendController extends Controller
+   {
+       public function index(){
 
-### Resource Controller
+           $data = [];
 
-`php artisan make:controller PhotoController --resource --model=Photo`: CRUD に則ったルーティングが自動で一括生成される
+           Mail::send('emails.welcome', $data, function($message){
+               $message->to('abc987@example.com', 'Test')
+               ->subject('This is a test mail');
+           });
+       }
 
-`Route::resource()`
+   }
+   ```
 
-```php
-Route::resource('users', 'AdminUserController')
-->parameters([
-    'users' => 'admin_user'
-]);
-```
-
-### Routing MISC
-
-- `php artisan route:list`
-  - List all the routing inside the project
-
-
-
-
+1. Edit web.php
+   - `Route::get('/mail', 'MailSendController@index');`
+1.
 
 ## Maintenance
 
@@ -238,7 +237,6 @@ Route::resource('users', 'AdminUserController')
 ## Composer View:
 
 ## Validator
-
 
 ## View Composer
 
@@ -259,16 +257,6 @@ Route::resource('users', 'AdminUserController')
 
 ### View Creator
 
-### Service Container / Service Provider / Dependency Injection
-
-- サービスとは、メールの送信、暗号化、ファイル操作、など Laravel における操作の単位。サービスの実体はクラスのインスタンス。
-- サービスコンテナは名前のごとく、サービスの容れ物。つまりクラスのインスタンスを管理する。「管理」というのはサービスの受け入れや取り出しに加えて、サービス同士の依存関係（クラス A がインスタンス化される前にクラス B がインスタンス化されている必要がある、など）を解決することも含む。
-  - bind(): コンテナに新しいサービスを登録する。実行するたびに新しいインスタンスを生成する
-  - singleton(): コンテナに新しいサービスを登録する。何度実行しても同じインスタンスを使いまわす
-  - app(): コンテナ内のサービス一覧を確認
-  - make(): コンテナからサービスを取り出す
-- サービスプロバイダは、サービスをサービスコンテナにサービスを登録するのが仕事。
-
 ## MVC vs ADR
 
 ## DB Facade vs Eloquent
@@ -279,13 +267,12 @@ Route::resource('users', 'AdminUserController')
 ## Useful Tips
 
 ### Debug inside app
+
 - `dd()`
 - `var_dump()`
-    - PHP built-in
+  - PHP built-in
 - `print_r()`
-    - PHP built-in
-
-
+  - PHP built-in
 
 ## Laravel 実行環境の選択肢
 
