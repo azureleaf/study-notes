@@ -6,15 +6,32 @@
 
 1. [Setup](#setup-project)
 
-## Laravel での基本的な処理手順
+## Data flow inside Laravel App
 
-1. `public/index.php` Laravel App の入り口。nginx や Apache 側から最初に投げられる場所
-1. `app/Http/Kerne.php`
+1. `public/index.php`
+
+   - Entry point of Laravel app
+   - nginx or Apache pass the data to this point
+
+   1. Register Autoloader (/vendor/autoload.php)
+   1. Bootstrap the framework (/bootstrap/app.php)
+   1. Take the kernel service out of service container
+   1. Run handle(\$request) and get response
+      - I guess this handle() includes all the app process (controller, middlewares, etc.)
+   1. Return response
+   1. Terminate the kernel
+
+1. `app/Http/Kernel.php`
 1. Service Provider
-1. `routers/web.php` ここで routing
-1. Middleware 認証、データ加工、redirect, etc.
-1. Controller 　 DB へのアクセス
-1. Middleware
+1. `routers/web.php`
+   - Routing
+1. Middleware (before)
+   - Modify request
+   - Auth, data processing, redirection, etc.
+1. Controller
+   - Access to DB, calculation, etc.
+1. Middleware (after)
+   - Modify response
 
 ## (Install Composer)
 

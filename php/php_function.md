@@ -2,14 +2,15 @@
 
 ## Typehinting of the args
 
-- You can limit the type of arg. So PHP is better than vanilla JS at this point
+- You can limit the type of arg
+- So PHP is better than vanilla JS at this point
 
 
 ```php
 $userList = ['user1', 'user2'];
 function test(array $list) 
 {
-    echo $list;
+  echo $list;
 }
 
 test($userList); // OK
@@ -24,4 +25,5 @@ test('hoge');    // Catchable fatal error: Argument 1 passed to test() must be o
   - int / float
   - bool
 
-- Sometimes, implicit type conversion happens: when you pass integer 1 to the function which arg type is string, it will be automatically converted into string "1"
+- Sometimes, implicit type conversion happens:
+  - when you pass numerical 1 to the function which arg type is string, it will be automatically converted into string "1"
