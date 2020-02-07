@@ -48,9 +48,9 @@
 | #   | TCP/IP Layer      | Protocol Examples          | PDU: Protocol Data Unit                                                                        | Device         |
 | --- | ----------------- | -------------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
 | 4   | Application       | HTTP, FTP, SMTP, POP3, SSH | HTTP Header + Data                                                                             |                |
-| 3   | Transport         | TCP, UDP                   | Segment = TCP Header <br> + HTTP Header <br> + Data                                            | Router         |
-| 2   | Internet          | IP                         | Packet = IP Header <br> + TCP Header <br> + HTTP Header <br> + Data                            | Swtich, Bridge |
-| 1   | Network Interface | Ethernet, PPP, ARP         | Frame = Ethernet Header <br> + IP Header <br> + TCP Header <br> + Data <br> + Ethernet Trailer | Hub, Cable     |
+| 3   | Transport         | TCP, UDP                   | Segment = <br>TCP Header <br> + HTTP Header <br> + Data                                            | Router         |
+| 2   | Internet          | IP                         | Packet = <br>IP Header <br> + TCP Header <br> + HTTP Header <br> + Data                            | Swtich, Bridge |
+| 1   | Network Interface | Ethernet, PPP, ARP         | Frame = <br>Ethernet Header <br> + IP Header <br> + TCP Header <br> + Data <br> + Ethernet Trailer | Hub, Cable     |
 
 - 一番大切なのが TCP と IP なので、この名前になった
 - Network Interface Layer を、OSI 第二層のように別名 Data Link Layer ということもあるらしい
@@ -239,11 +239,44 @@
 
 ## 1. Network Interface Layer (TCP/IP)
 
+
+### Keywords
+
+- NIC: Network Interface Card aka LAN Card / Network Adaptor
+- Data Link
+
+
+### 宛先の把握
+
+- Network Interface Layerでは、宛先のNICのMAC Addressに基づいて送る
+- しかし、Internet Layerから下りてきたデータにはIPしか載ってない
+- IPとMAC Addressを紐付ける処理が必要
+    - IPv4ではARPでこれを実現
+    - IPv6では、ICMPv6のNeighbor Discovery機能でこれを実現
+
+
+### Data Linkの種類
+
+- Token Ring
+- FDDI
+
 ### Ethernet
 
-- RJ-45
-- CAT 6
-- CAT 5
+- Connector
+    - RJ-45 Connector
+- Cable
+    - CAT 5 Cable
+    - CAT 5e Cable
+    - CAT 6 Cable
+    - CAT 6a Cable
+    - CAT 6e Cable
+    - CAT 7 Cable
+- Cable
+    - UTP Cable
+    - STP Cable
+- Cable
+    - 同軸ケーブル
+    - ツイストペアケーブル
 
 ### PPP
 
@@ -253,18 +286,23 @@
 
 ### ONU / MODEM
 
-### "hub"
+### "hub"はなにを指すのか
 
-- 普通Repeaterのことか？
-- しかし"Switching Hub"もハブと呼ばれていることがある気がする
+- 要するに、ポートがたくさんあるとHubと呼ばれてる気がする
+- Repeater Hubのことを指すことが多い。なお、RepeaterとRepeater Hubは別物
+- しかし"Switching Hub"もHubとついている以上はHubと呼ばれることもあるだろう
 
 ### Repeater 
 
-- **今では使われていない**
-- Regenerate the signal before it became too weak or too corrupted
-- However repeater doesn't amplify the signal
+- 信号が劣化する前に補正する
+- 信号を「増幅」するわけではない
+- 現在では、ハブがリピータの役割を果たす
 - CSMA/CD方式を採用
 - OSIのPhysical Layerしか見ない
+
+### Repeater Hub
+
+- 複数のポートを持っているRepeater
 
 #### CSMA/CD
 - 通信ケーブルにデータを流すためのルールである

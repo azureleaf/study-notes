@@ -19,12 +19,11 @@
    - Entry point of whole Laravel app
    - nginx or Apache pass the data to this point
 
-   1. Register Autoloader (/vendor/autoload.php)
-   1. Bootstrap the framework (/bootstrap/app.php)
-      - Bootstrap
+   1. Autoloaderを登録する `/vendor/autoload.php`
+   1. Bootstrap the framework `/bootstrap/app.php`
    1. Take the kernel service out of service container
-   1. Run handle(\$request) and get response
-      - I guess this handle() includes all the app process (controller, middlewares, etc.)
+   1. Run `handle(\$request)` and generate response
+      - このhandle()がappの全処理(controller, middlewares, etc.)を含んでいる？
    1. Return response
    1. Terminate the kernel
 
