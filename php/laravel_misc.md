@@ -16,7 +16,7 @@
 
 1. `public/index.php`
 
-   - Entry point of Laravel app
+   - Entry point of whole Laravel app
    - nginx or Apache pass the data to this point
 
    1. Register Autoloader (/vendor/autoload.php)
@@ -29,7 +29,11 @@
    1. Terminate the kernel
 
 1. `/vendor/autoload.php`
-  1. 
+  1. Require `/composer/autoload_real.php`
+1. `/composer/autoload_real.php`
+    1. 
+
+
 1. `/bootstrap/app.php`
   1. Instantiate $app from Illuminate\Foundation\Application
   1. Register `Http/Kernel` service to the service container

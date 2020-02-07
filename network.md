@@ -1,4 +1,4 @@
-# 通信プロトコルを制覇する
+# ネットワーク基礎の基礎
 
 ## 通信プロトコルって何？
 
@@ -7,7 +7,7 @@
 
 ## これを勉強するとなんの役に立つの？
 
-- HTTP 通信の背景がわかる。
+- HTTP 通信の背景がわかる
 - ネットワーク機器の役割を理解しやすい。ネットワークエンジニアなら必須。
 - 他のエンジニアと話しててもナメられない
 - 実際、全てを理解する必要はなさそう。自分が開発で関与する部分の前後（フロントエンジニアなら HTTP, TCP, IP）だけ理解していればたぶん問題ない。
@@ -91,7 +91,7 @@
 - DELETE
 - 他にも多数
 
-POST vs PUT
+#### POST vs PUT
 
 ### Structure of Request & Response
 
@@ -102,7 +102,7 @@ POST vs PUT
 |                                                               | (empty line)                       |                                                                     |
 | `bookId=123&author=Jane+Austen`                               | Request Body                       | `<HTML><HEAD>`<br>...                                               |
 
-### HTTP Status Code
+### Important HTTP Status Code
 
 - `200 OK` ウェブサイトがきちんと表示されるとき
 - `301 Moved Permanently` 「３０１リダイレクト」と呼ばれるもの。検索エンジンの評価を引き継げる。
