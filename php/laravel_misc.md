@@ -2,6 +2,12 @@
 
 - Laravel で勉強したことを記録することで、自分の学習モチベーションを高めたい
 
+## Glossary
+
+- IoC: 
+- Contract: 
+- Factory
+
 ## TOC
 
 1. [Setup](#setup-project)
@@ -15,11 +21,20 @@
 
    1. Register Autoloader (/vendor/autoload.php)
    1. Bootstrap the framework (/bootstrap/app.php)
+      - Bootstrap
    1. Take the kernel service out of service container
    1. Run handle(\$request) and get response
       - I guess this handle() includes all the app process (controller, middlewares, etc.)
    1. Return response
    1. Terminate the kernel
+
+1. `/vendor/autoload.php`
+  1. 
+1. `/bootstrap/app.php`
+  1. Instantiate $app from Illuminate\Foundation\Application
+  1. Register `Http/Kernel` service to the service container
+  1. Register `Http/Kernel` service to the service container
+  1. Register `Http/Kernel` service to the service container
 
 1. `app/Http/Kernel.php`
 1. Service Provider
@@ -87,7 +102,6 @@
 - `composer require --dev phpunit/phpunit ^6.2`
 - `composer install`
 
-## Set up Blade
 
 ## Event Broadcasting
 
@@ -121,68 +135,8 @@
    }
    ```
 
-### Directive
 
-Vue.js を使うなら、Blade のディレクティブはそんなに覚えなくて問題ないけど。以下くらいは抑えるべき
 
-- @if
-- @for
-- @foreach
-
-## Facade
-
-### What's Facade?
-
-- Facade を使うと、Laravel 内部の機能に簡単にアクセスできる
-  - 記述量を減らすことができる
-- デザインパターンの一つ
-- Laravel といえば Facade というくらい有名
-- Facade は本来は「建物の正面」の意味
-
-### Look into `Route::get()`
-
-- You use `Route::get()`. This `Route` is a Facade
-- `Route` is the alias for `Illuminate\Support\Facades\Route::class`. This alias is defined in `config/app.php`
-- This `Route` class inherits from `Illuminate\Support\Facades\Facade`. However, `get()` isn't defined here;
-
-```php
-namespace Illuminate\Support\Facades;
-
-class Route extends Facade
-{
-    protected static function getFacadeAccessor()
-    {
-        return 'router';
-    }
-}　　　
-```
-
-- This `Facade` class doesn't have `get()` either. `__callStatic()` is the fallback method when the called method (now `get()`) isn't defined.
-
-```php
-abstract class Facade{
-    // 途中省略
-    public static function __callStatic($method, $args)
-    {
-        $instance = static::getFacadeRoot();
-
-        if (! $instance) {
-            throw new RuntimeException('A facade root has not been set.');
-        }
-
-        return $instance->$method(...$args);
-    }
-}
-```
-
-- これ以降まだよくわかってない
-
-### User-defined Facade
-
-1. Create Service Provider
-1. Create Facade file
-1. Add facade to config/app.php
-1. Try to run the facade
 
 ## Job & Queue & Worker
 
@@ -251,9 +205,7 @@ abstract class Facade{
 
 -
 
-## Composer View:
 
-## Validator
 
 ## View Composer
 

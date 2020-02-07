@@ -25,8 +25,8 @@
 - `git revert HEAD~3`
 - `git stash`
 - `git stash list`
-- `git switch`
-- `git restore`
+- `git switch` (new)
+- `git restore` (new)
 
 ### `git fetch` vs `git pull`
 
