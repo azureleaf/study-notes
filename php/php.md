@@ -9,10 +9,13 @@ $foo = $bar ?? 'something';
 $foo = isset($bar) ? $bar : 'something';
 ```
 
-## Using externals
+## Read external files
 
 - `require`
+- `include`
+  - requireとほぼ同じだが、requireがインポート失敗時にプログラム全体を中止するのに対して、includeの場合は失敗時にも警告を出すだけで継続する。基本的には、requireを使えばいい気がする（ていうかincludeってあんまみない）
 - `require_once`
+  - そのファイルが既に読み込まれている場合には何もしない。Cの#PRAGMA ONCEとか#ifndefみたいなもんと同じ発想か
 
 ## Scopes
 
@@ -30,6 +33,17 @@ class Goodbye {
 
 echo Goodbye::LEAVING_MESSAGE;
 ?>
+```
+
+`::class`は特殊（php5.5以降のわりと新しいsyntax）
+
+```php
+namespace foo {
+    class bar {
+    }
+
+    echo bar::class; // foo\bar
+}
 ```
 
 - `::` vs `->`
