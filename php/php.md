@@ -1,5 +1,13 @@
 # PHP Syntax MISC
 
+## Running php casually
+
+- `php -f hello.php`
+  - Run php on terminal
+- `php -a`
+  - Interactive shell
+
+
 ## Coalescing Operator `??`
 
 Both lines below have the identical meaning:
