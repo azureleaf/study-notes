@@ -2,6 +2,7 @@
 
 1. v-bind
 1. v-on
+    - @click, @submit, @keyup
 1. v-for
    - `v-bind:key`が必須！
 1. v-model
@@ -31,4 +32,8 @@
 ### data: vs props:
 
 
-### methods: vs computed:
+### methods: vs computed: vs watched:
+
+- computed:は依存する変数が変更されない限りキャッシュから値を返す
+- methods:は常に再計算する
+- computed内部からdata:の変数などを書き換えてはいけない！（Unexpected side effectのエラーなどが返る）

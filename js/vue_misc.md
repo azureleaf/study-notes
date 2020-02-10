@@ -22,19 +22,7 @@
 
 
 
-## 重要なプロパティ
 
-1. data:
-   - 基本的な変数はここに書く
-   - Vue インスタンスの場合は、変数を直接オブジェクトリテラルで書く
-   - Vue Component の場合は、「オブジェクトリテラルを return する関数」
-1. computed:
-1. methods:
-1. props:
-1. watch:
-   - data:はもともと監視されているので、watch する必要はない（？）
-1. components:
-   - 別の場所で定義されたコンポーネントを利用するときに記述する
 
 ## Vue 使いとして重要な関連ツール群（重要度順）
 
@@ -136,7 +124,7 @@ Vue.Component('コンポーネント名', {コンポーネント内容のオブ�
 1. Install VS Code Extensions:
    - Vetur
    - ESLint
-   - (Prettier) Seemingly, this extension isn't necessary? Installing Prettier node package may be enough
+   - ~~Prettier~~ Seemingly, this extension isn't necessary. Installing Node package will be enough
 1. workspace file setting (or global `setting.json` of vscode)
     ```js
     "editor.formatOnSave": true,
