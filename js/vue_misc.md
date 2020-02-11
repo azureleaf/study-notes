@@ -118,6 +118,7 @@ Vue.Component('コンポーネント名', {コンポーネント内容のオブ�
 
 ## Vue Dev Procedure
 
+
 ### Prepare Requirements
 
 1. `npm install eslint babel-eslint eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue eslint-loader prettier -D`
