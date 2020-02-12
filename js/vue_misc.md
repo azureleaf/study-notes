@@ -119,6 +119,48 @@ Vue.Component('コンポーネント名', {コンポーネント内容のオブ�
 ## Vue Dev Procedure
 
 
+
+## Vueに関係する設定ファイルたち
+
+### VS code
+- setting.json
+   - VS code自体のセッティング
+   - formatterの設定とか、フォントの設定とかをやる
+   - ここを改変してしまうと、全てのプロジェクトに影響する。なので、本当にいつも必要な設定以外はcode-workspaceに書くほうがよさげ
+- blahblah.code-workspace
+   - 意味的には
+### node.js
+- package.json
+   - `dependencies:`
+      - `npm install --save`したパッケージはここに追加される
+   - `devDependencies:`
+      - `npm install --save-dev`したパッケージはここに追加される
+      - ここのパッケージは、`npm install --production`したときにインストール**されない**
+      - ユニットテスト関係など、開発のときにのみ必要なパッケージは--save-devをつけてインストールすべき。productionではウェブサイト全体のサイズを軽くしたいので、本番でいらない機能は切りたい。
+- packaege-lock.json
+
+### Linter
+- .prettierrc.json
+- .eslintrc.js
+
+### testing
+- jest.config.js
+- cypress.json
+
+### processing
+- babel.config.js
+- postcss.config.js
+- .browserslistrc
+   - CSSにおいてどのVendor Prefixを自動で付加するか、を指定するファイル
+   - BabelやAutoprefixerは、このファイルを参考にする
+   - Vendor Prefixはこういうやつ。３つともCSS3のtransitionをやるためのものだが、ブラウザごとに記法がずれているので何種類も書かないといけない
+      - -webkit-transition:all 0.2s ease 0s;
+      - -moz-transition:all 0.2s ease 0s;
+      - -o-transition:all 0.2s ease 0s;
+   - このファイルはとても小さい。「少なくとも各ブラウザの最新２バージョンは対応できるようにする」「ここ１年以内にリリースされたブラウザのバージョンに対応できるようにする」のように、何％のブラウザをカバーするのか指定する
+   
+
+
 ### Prepare Requirements
 
 1. `npm install eslint babel-eslint eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue eslint-loader prettier -D`
@@ -165,3 +207,6 @@ Vue.Component('コンポーネント名', {コンポーネント内容のオブ�
     ```
 
 1. `.prettierrc` (or .prettierc.json)
+
+
+
