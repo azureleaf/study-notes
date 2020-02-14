@@ -50,6 +50,12 @@ Route::resource('users', 'AdminUserController')
 ]);
 ```
 
+## `route()` and `action()`
+
+- いずれもURLを作成するための関数
+- route('sample.index');　　//こちらは、routes/web.phpでnameを指定する必要があります。
+- action('SampleController@index');
+
 ## Routing MISC
 
 - `php artisan route:list`
