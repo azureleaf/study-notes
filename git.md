@@ -58,6 +58,9 @@
 - `git config --global credential.helper 'cache --timeout 3600'`
 - `git config credential.helper store`
   - remote に push/pull するときに、パスワードやメールアドレスを毎度打たずに済むよう記憶する
+- `git config --global --unset credential.helper`
+  - Forget stored credentials
+  - You need to run this command when you changed your password
 - `git config --global user.name "John Doe"`
   - Git をインストールした直後に設定
 - `git config --global user.email johndoe@example.com`
