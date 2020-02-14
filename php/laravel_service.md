@@ -5,6 +5,7 @@
 - サービスとは、メールの送信、暗号化、ファイル操作、など Laravel における操作の単位
     - Middlewareも一定の操作をまとめてやる仕組みだが、何が違うのか？
 - サービスの実体はクラスのインスタンス
+- 複数のコントローラから
 
 ## What's Service Container?
 
@@ -18,7 +19,7 @@
         - つまりクラス A がインスタンス化される前にクラス B がインスタンス化されている必要がある
         - サービスコンテナなしだと...自分でクラスAとクラスBのインスタンス化を順に定義する
         - サービスコンテナありだと...`app()->bind('myclass', \MyNamespace\classB::class);`と書くと、classAのインスタンス化などは自動で行われる。自分で明示的に記述する必要はない
-`
+
 
 ### Implementation
 - `app()`
@@ -46,4 +47,10 @@
 - 
 
 ## What's DI (Dependency Injection)?
+
+
+## misc
+
+- IoC: Inversion of Control
+
 

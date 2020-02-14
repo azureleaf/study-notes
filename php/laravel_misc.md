@@ -2,15 +2,13 @@
 
 - Laravel で勉強したことを記録することで、自分の学習モチベーションを高めたい
 
-## Glossary
+## misc
 
 - IoC:
 - Contract:
 - Factory
-
-## TOC
-
-1. [Setup](#setup-project)
+- `Illuminate`
+   - namespace which contains all components of Laravel framework
 
 ## Data flow inside Laravel App
 
@@ -210,41 +208,27 @@
 
 -
 
-## View Composer
 
-- What's this?
-
-  - View がレンダリングされるとき（つまりコントローラで view()が実行される時）に呼び出されるコールバック関数かクラスメソッドのこと
-  - view が render されるたびに情報を変数として結合する
-  - View Composer はサービスプロバイダを通じて登録する
-
-- View Composer vs Controller
-
-  - DB へのアクセス、日付の挿入などを行えるという点で両者は共通している？？？
-  - じゃあどう使い分けるのか？
-
-- Advantage:
-  - MVC を徹底できる； View logic をコントローラに書かず、また Blade template 側にもロジックを入れないようにする
-  -
-
-### View Creator
-
-## MVC vs ADR
 
 ## DB Facade vs Eloquent
 
 - StackOverflow を見る限り、DB Class を使うことを推す人が結構いる。速度が Eloquent よりずっと速いとか
 - ただし、自分みたいに使うデータがめちゃくちゃ少ない場合には Eloquent で ORM の使い方に慣れるほうが良さそう
 
-## Useful Tips
 
-### Debug inside app
+## Debug inside app
 
-- `dd()`
-- `var_dump()`
-  - PHP built-in
-- `print_r()`
-  - PHP built-in
+- 変数やクラスインスタンスの中身がどうなっているのか覗くための関数がいくつか用意されている
+- ちなみにプログラミングにおけるdumpとは、メモリなどの記憶媒体からデータをコピーして画面やプリンタに表示することである。これによりデバッグを行う。
+
+### `dd()`
+- Laravel function
+### `var_export()`
+- PHP built-in
+### `var_dump()`
+- PHP built-in
+### `print_r()`
+- PHP built-in
 
 ## Laravel 実行環境の選択肢
 
