@@ -9,3 +9,4 @@
 - Axios
 - Websocket
 - Socket.io
+- jQuery
