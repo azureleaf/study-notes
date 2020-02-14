@@ -14,9 +14,13 @@
 - ls
 - ls *.txt
 - ls vue*
+- `ls -a`
+  - show hidden files as well
 - `ls -a | grep app`
 - `sudo apt update`
 - `sudo apt upgrade`
+- ctrl + C
+  - 現在実行中のコマンドを強制終了する
 
 ## ★★
 - touch hello.txt
@@ -28,6 +32,9 @@
   - ファイルのバックアップなどに活躍する
 - mkdir -p hello/src
   - 階層を一気につくる
+- ps
+- top
+
 
 ## bashとは
 

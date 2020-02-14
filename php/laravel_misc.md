@@ -4,8 +4,8 @@
 
 ## Glossary
 
-- IoC: 
-- Contract: 
+- IoC:
+- Contract:
 - Factory
 
 ## TOC
@@ -19,36 +19,34 @@
    - Entry point of whole Laravel app
    - nginx or Apache pass the data to this point
 
-   1. Autoloaderを登録する `/vendor/autoload.php`
+   1. Autoloader を登録する `/vendor/autoload.php`
    1. Bootstrap the framework `/bootstrap/app.php`
    1. Take the kernel service out of service container
    1. Run `handle(\$request)` and generate response
-      - このhandle()がappの全処理(controller, middlewares, etc.)を含んでいる？
+      - この handle()が app の全処理(controller, middlewares, etc.)を含んでいる？
    1. Return response
    1. Terminate the kernel
 
 1. `/vendor/autoload.php`
-  1. Require `/composer/autoload_real.php`
-1. `/composer/autoload_real.php`
-    1. 
+1. Require `/composer/autoload_real.php`
+1. `/composer/autoload_real.php` 1.
 
+1) `/bootstrap/app.php`
+1) Instantiate \$app from Illuminate\Foundation\Application
+1) Register `Http/Kernel` service to the service container
+1) Register `Http/Kernel` service to the service container
+1) Register `Http/Kernel` service to the service container
 
-1. `/bootstrap/app.php`
-  1. Instantiate $app from Illuminate\Foundation\Application
-  1. Register `Http/Kernel` service to the service container
-  1. Register `Http/Kernel` service to the service container
-  1. Register `Http/Kernel` service to the service container
-
-1. `app/Http/Kernel.php`
-1. Service Provider
-1. `routers/web.php`
+1) `app/Http/Kernel.php`
+1) Service Provider
+1) `routers/web.php`
    - Routing
-1. Middleware (before)
+1) Middleware (before)
    - Modify request
    - Auth, data processing, redirection, etc.
-1. Controller
+1) Controller
    - Access to DB, calculation, etc.
-1. Middleware (after)
+1) Middleware (after)
    - Modify response
 
 ## (Install Composer)
@@ -68,10 +66,18 @@
 
 1. `laravel new myapp`
 1. `cd myapp`
-1. `npm install`
 1. `composer install`
 1. `cp .env.sample .env`
+1. Edit DB name and password at `.env`
 1. `php artisan key:generate`
+1. `composer require laravel/ui`
+   - laravel/ui offers commands for JS build & CSS preprocessing
+1. `php artisan ui vue --auth`
+   - This command requires laravel/ui
+   - This generates HomeController
+1. `php artisan migrate`
+1. `npm install`
+1. `npm run dev`
 
 ## Set up the DB
 
@@ -105,7 +111,6 @@
 - `composer require --dev phpunit/phpunit ^6.2`
 - `composer install`
 
-
 ## Event Broadcasting
 
 ### What is "event" in the first place?
@@ -137,9 +142,6 @@
        use Dispatchable, InteractsWithSockets, SerializesModels;
    }
    ```
-
-
-
 
 ## Job & Queue & Worker
 
@@ -207,8 +209,6 @@
 ## Bootstrap
 
 -
-
-
 
 ## View Composer
 
