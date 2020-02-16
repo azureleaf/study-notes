@@ -43,9 +43,13 @@
 ## What's Service Provider?
 
 - サービスプロバイダは、サービスをサービスコンテナにサービスを登録するのがお仕事
-- 
+- Application Bootstrappingの時に様々なものを登録する：
+    - Service Container Binding
+    - Event Listeners
+    - Middlewares
+    - Routes
+    
 
-### Middleware vs Service Provider
 
 
 ## What's DI (Dependency Injection)?
