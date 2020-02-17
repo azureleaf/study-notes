@@ -72,7 +72,9 @@ Set initial actions which will be executed in the beginning of the entire app. I
   - Starting file of the entire framework (?)
 - bootstrap/cache/ - Caches are important to accerelate entire framework
 
-## config/ Config files directory
+## config/ 
+
+Config files directory
 
 - config/broadcasting.php
   - Config Broadcast
@@ -82,7 +84,9 @@ Set initial actions which will be executed in the beginning of the entire app. I
   - Config DB
 - config/session.php - Config Session
 
-## database/ You put DB migrations, model factories, and seeds You don't put the DB itself
+## database/ 
+
+Put DB migrations, model factories, and seeds. (Doesn't has the DB itself here)
 
 - database/migrations/
   - `php artisan make:migration`
