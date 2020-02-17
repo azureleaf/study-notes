@@ -28,24 +28,23 @@
 
 1. `/vendor/autoload.php`
 1. Require `/composer/autoload_real.php`
-1. `/composer/autoload_real.php` 1.
+1. `/composer/autoload_real.php` 
+1. `/bootstrap/app.php`
+1. Instantiate \$app from Illuminate\Foundation\Application
+1. Register `Http/Kernel` service to the service container
+1. Register `Http/Kernel` service to the service container
+1. Register `Http/Kernel` service to the service container
 
-1) `/bootstrap/app.php`
-1) Instantiate \$app from Illuminate\Foundation\Application
-1) Register `Http/Kernel` service to the service container
-1) Register `Http/Kernel` service to the service container
-1) Register `Http/Kernel` service to the service container
-
-1) `app/Http/Kernel.php`
-1) Service Provider
-1) `routers/web.php`
+1. `app/Http/Kernel.php`
+1. Service Provider
+1. `routers/web.php`
    - Routing
-1) Middleware (before)
+1. Middleware (before)
    - Modify request
    - Auth, data processing, redirection, etc.
-1) Controller
+1. Controller
    - Access to DB, calculation, etc.
-1) Middleware (after)
+1. Middleware (after)
    - Modify response
 
 ## (Install Composer)
@@ -61,22 +60,6 @@
 1. `sudo /etc/init.d/mysql start`
 1. `sudo apt install php-mysql` Install DB Extension
 
-## Set up the project <a name="setup-project"></a>
-
-1. `laravel new myapp`
-1. `cd myapp`
-1. `composer install`
-1. `cp .env.sample .env`
-1. Edit DB name and password at `.env`
-1. `php artisan key:generate`
-1. `composer require laravel/ui`
-   - laravel/ui offers commands for JS build & CSS preprocessing
-1. `php artisan ui vue --auth`
-   - This command requires laravel/ui
-   - This generates HomeController
-1. `php artisan migrate`
-1. `npm install`
-1. `npm run dev`
 
 ## Set up the DB
 
