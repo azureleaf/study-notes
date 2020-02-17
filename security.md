@@ -74,6 +74,15 @@
 
 ### Rootkit
 
+### Mass Assignment
+
+- 脆弱性
+- HTTP Requestでvalue列（name=john&email=john@example.com）を送ってアカウントを作成するとする
+- これに「app側で内部では使っているが、ユーザーから送信されることを想定していない値」を推測して埋め込む（&isAdmin=true）を追加
+- これにより、攻撃者はadmin権限つきでユーザー登録できてしまう
+- app側では、カラムのそれぞれについていちいち判定条件をつけず、一括で値を変更してしまうのでこのような脆弱性が生まれる
+- Laravelでは、$guardと$fillableによってカラム毎のmass assignmentの可否を制限することでこの脆弱性を防ぐ
+
 ### Clickjacking
 
 - ページの中に`<iframe> <frame>`などを使って別のサイトのサービスを埋め込む時に起きる

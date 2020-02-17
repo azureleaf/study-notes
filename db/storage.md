@@ -11,7 +11,18 @@
     - Disadvantage:
         - Lack "Durability" of ACID
         - Expensive
-
+- Connection
+    - You can't access to the DB without Open & Available connection
+    - To create connection, you have to addressing info:
+        - Server name (if any)
+        - DB name
+        - User ID
+        - Password
+- Connection Pool
+- Transaction
+- CRUD
+- Rollback
+- cursor
 
 ## SQL DBs
 
