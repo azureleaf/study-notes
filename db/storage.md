@@ -5,53 +5,74 @@
 - DBMS: Database Management System
 - BaaS: Backend as a Service
 - In-memory DB
-    - Store in the memories instead of HDD/SSD
-    - Advantage
-        - Fast af
-    - Disadvantage:
-        - Lack "Durability" of ACID
-        - Expensive
+  - Store in the memories instead of HDD/SSD
+  - Advantage
+    - Fast af
+  - Disadvantage:
+    - Lack "Durability" of ACID
+    - Expensive
 - Connection
-    - You can't access to the DB without Open & Available connection
-    - To create connection, you have to addressing info:
-        - Server name (if any)
-        - DB name
-        - User ID
-        - Password
+  - You can't access to the DB without Open & Available connection
+  - To create connection, you have to addressing info:
+    - Server name (if any)
+    - DB name
+    - User ID
+    - Password
 - Connection Pool
 - Transaction
 - CRUD
 - Rollback
 - cursor
 
-## SQL DBs
+## Index
+- カラム単位で作成する
+- カラムの内容を検索するため、B-TREEという構造にしてデータ本体とは別に保存
+- INSERT / DELETEの際には、Indexも更新する
+- Advantage of Index
+    - Fast search
+- Disadvantage of Index
+    - Additional storage consumption
+    - Slow UPDATE / DELETE
 
-- MySQL
-- PostgreSQL
 
-## No-SQL DBs
-### Document Databases
-- JSONのような形式保存
-- MongoDB
-### Key-value Database
-- Redis: in-memory
-- memcached: in-memory
-### Graph Database
-- Nodeで保存
-- Neo4j
-### Wide COlumn Stores
-- Cassandra
+### DB Parts
 
-1. ファイル
+- Database
+- Table
+- Record
+  - One item of the table
+- Field
+  - A element in the record
+- Column
+- Collection (MongoDB)
+  - Equivalent to Table
+- Document (MongoDB)
+  - Equivalent to Record
+
+## DBs Categorization
+
+- SQL DBs
+  - MySQL
+  - PostgreSQL
+- No-SQL DBs
+  - Document Databases: JSON のような形式保存
+    - MongoDB
+  - Key-value Database
+    - Redis: in-memory
+    - memcached: in-memory
+  - Graph Database
+    - Node で保存
+    - Neo4j
+  - Wide COlumn Stores
+    - Cassandra
+
+## Cloud DB
 
 - Server-less Service
-    - Firebase
-
+  - Firebase
 - Cloud Storage Service
-    - AWS S3
-
-
+  - AWS S3
 - File hosting Service
-    - Google Drive
-    - Microsoft OneDrive
-    - DropBox
+  - Google Drive
+  - Microsoft OneDrive
+  - DropBox
