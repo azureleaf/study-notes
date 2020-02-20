@@ -51,5 +51,9 @@
 
 ## ARM Processor
 
+## TPU: Tensor Processing Unit
+- Machine Learning
+- Googleが開発
 
+## ASIC: Application-Specific Integration Circuit
 

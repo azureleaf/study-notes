@@ -13,6 +13,8 @@ Vue.js を使うなら、Blade のディレクティブはそんなに覚えな�
 - @if
 - @for
 - @foreach
+- @method('delete')
+- @csrf
 
 
 ## View Composer

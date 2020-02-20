@@ -10,6 +10,9 @@
 - Factory
 - `Illuminate`
    - namespace which contains all components of Laravel framework
+- View Composer
+- Broadcasting
+
 
 ## Data flow inside Laravel App
 

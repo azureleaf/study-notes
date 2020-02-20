@@ -1,7 +1,32 @@
 # Laravel Authentication & Authorization
+- Authentication 認証
+   - 本人確認すること
+- Authorization 認可
+   - 権限を与えること。Authenticate されたら、だいたい同時に authorize もされる（個人ページを見る権限とか）
 
-- Authentication: 認証。本人確認すること
-- Authorization: 認可。権限を与えること。Authenticate されたら、だいたい同時に authorize もされる（個人ページを見る権限とか）
+### misc
+- "localhost:8000/login"などのルートは web.php ではなく、`Illuminate\Routing\Router.php`にある
+- `@if(Auth::user()->id === $post->user_id)`
+   - bladeにこう書くと、「今ログインしているユーザのIDと、投稿者のIDが一致している時（つまり本人のとき）」という条件分岐になる
+- `Auth::routes();`
+
+
+## Authentication
+
+- `config/auth.php`
+
+  - authentication 関係の設定は大体ここ
+
+- Laravel での認証の種類
+
+  - ログイン認証: ユーザ名＋パスワード
+  - Laravel Passport：
+  - API 認証
+
+- ログインを要求するページとログイン不要の公開ページをどのようにして一括登録するのか？
+  - おそらく middleware group だと思うが
+- ログインページをどのようにしてカスタマイズするのか？
+
 
 ## Set up project with auth
 
@@ -20,23 +45,7 @@
 1. `npm install`
 1. `npm run dev`
 
-## Authentication
 
-- `config/auth.php`
-
-  - authentication 関係の設定は大体ここ
-
-- Laravel での認証の種類
-
-  - ログイン認証
-  - Laravel Passport
-  - API 認証
-
-- ログインを要求するページとログイン不要の公開ページをどのようにして一括登録するのか？
-  - おそらく middleware group だと思うが
-- ログインページをどのようにしてカスタマイズするのか？
-
-- `Auth::routes();`
 
 ### Add auth to your project
 
@@ -59,14 +68,15 @@
 - API Guard: token による認証
 
 ## Authorization
+- 認証済みのユーザのそれぞれに対してどのような権限を付加するのかを決定したい
+- Gate, Policyのいずれも認可を与える機能
+- Policyは「特定のモデルに対するアクションを認可するか」を制御
+- Gateは「特定のモデルに関係していないユーザのアクションを認可するか」を制御
 
 ### Gate による認可
 
 ### Policy による認可
 
-### misc
-
-- "localhost:8000/login"などのルートは web.php ではなく、`Illuminate\Routing\Router.php`にある
 
 ### 他の便利機能
 
