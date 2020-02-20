@@ -7,7 +7,7 @@
 - IoC:
 - Contract:
 - Reflection:
-- Factory
+- Model Factory
 - `Illuminate`
    - namespace which contains all components of Laravel framework
 - View Composer

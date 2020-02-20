@@ -1,12 +1,25 @@
 # Databases
 
-## Overview
+## Overview & Keywords
+
+- Migration
+    - Table Schemaの定義をする。Laravelに限らずどこでも使う用語
+    - 単なるスキーマ定義だけでなく、その変更をバージョン管理できるのがMigrationの利点？DBは整合性が大切だから？
+- Seeder
+    - Migration Fileを変更しスキーマを変えるたびにSeederも編集しないといけないのがちょっと面倒
+- Factory
+    - Seederと同じようにテストデータを用意するための機能
+    - 一定のルールに従って、データを自動生成する
+- Pagination
+    - DBの取得結果の件数次第で変わるという点から、PaginatioはDBと深いつながりがある
+    - Eloquentであれ、Query Builderであれ、アクセスして持ってきたデータの塊に`->paginate(15)`のようにつけたすのが基本
 
 ## Two ways to access DB:
-- Eloquient
-    - More convenient than Query Builder
+- Eloquent
+    - DBをクラスのように扱うためのORM
+    - 基本的にQuery Builderよりも直感的な操作が可能で、ツールも多い感じ
 - Query Builder
-    - Faster: Speed matters only when your DB is very large
+    - Eloquentよりも高速（データが非常に多い時以外はEloquentの方が良さそう）
 
 
 
@@ -26,4 +39,7 @@
 
 
 ## Query Builder
+
+
+## Seeder
 
