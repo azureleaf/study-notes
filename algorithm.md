@@ -11,18 +11,6 @@
 - コードが短くなる
 - 高度なプログラミング知識が理解できるようになる
 
-## Keywords List
-
-### ★★★
-- Bubble Sort
-- Quick Sort
-- Merge Sort
-- Heap Sort
-
-- Dynamic Programming (動的計画法)
-
-
-
 
 
 ## Sort
@@ -40,6 +28,9 @@
 
 ## Search
 
+- Breadth First Search: BFS(幅優先探索)
+- DFS: Depth First Search(深さ優先探索)
+
 - Beam Search
 - Binary Search
 - Linear Search
@@ -52,19 +43,20 @@
 - Queue
 - Linked Lists
 - Stacks
+- Map
 
 ## Big-O Notation
 
 
 ## Dynamic Programming (動的計画法)
 
-### Longest Common Subsequence
-### Longest Increasing Subsequence
-### Edit Distance
-### Minimum Partition
-### Way to Cover Distance
-### Longest Path in Matrix
-### 
+- Longest Common Subsequence
+- Longest Increasing Subsequence
+- Edit Distance
+- Minimum Partition
+- Way to Cover Distance
+- Longest Path in Matrix
+- 
 
 
 ## MISC Algorithms
@@ -82,8 +74,9 @@
 - Binary Exponentiation
 - Exponentiation by Squaring
 - Primary Testing
+- String Pattern Matching
 
-## MISC
+## MISC Keywords
 
 - P≠NP
 - Hanoi's Tower
@@ -102,3 +95,7 @@
     - 
 - 近似アルゴリズム
     - 組み合わせ最適化問題の近似解（計算可能で、問題を一定程度クリアするが、厳密解ではない）を求めるアルゴリズムの総称
+- RANSAC
+- Viterbi Algorithm
+- Recursion
+- Backtracking
