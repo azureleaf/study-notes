@@ -12,6 +12,7 @@
    - namespace which contains all components of Laravel framework
 - View Composer
 - Broadcasting
+- Event & Listener
 
 
 ## Data flow inside Laravel App

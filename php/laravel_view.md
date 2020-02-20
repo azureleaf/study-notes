@@ -4,18 +4,6 @@
 ## Blade Template
 
 
-## Viewの返し方
-
-### Directive
-
-Vue.js を使うなら、Blade のディレクティブはそんなに覚えなくて問題ないけど。以下くらいは抑えるべき
-
-- @if
-- @for
-- @foreach
-- @method('delete')
-- @csrf
-
 
 ## View Composer
 

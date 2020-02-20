@@ -9,24 +9,29 @@
 - `@if(Auth::user()->id === $post->user_id)`
    - bladeにこう書くと、「今ログインしているユーザのIDと、投稿者のIDが一致している時（つまり本人のとき）」という条件分岐になる
 - `Auth::routes();`
-
+   - Written in web.php
+   - この記述により、`/login /register /password/reset`などのroutingがセット
+- `if(Auth::check());`
+   - Return true when the user is logged in
 
 ## Authentication
-
 - `config/auth.php`
-
   - authentication 関係の設定は大体ここ
-
 - Laravel での認証の種類
-
   - ログイン認証: ユーザ名＋パスワード
-  - Laravel Passport：
-  - API 認証
-
+  - Laravel Passport：　OAuth2.0に沿ったログイン
+  - API 認証：
 - ログインを要求するページとログイン不要の公開ページをどのようにして一括登録するのか？
   - おそらく middleware group だと思うが
 - ログインページをどのようにしてカスタマイズするのか？
 
+### Laravel Passport
+
+- 以下の認証方式を利用できる
+   - Authorization Code Grant
+   - Implicit Grant
+   - Password Grant
+   - Client Credential Grant
 
 ## Set up project with auth
 
@@ -45,10 +50,7 @@
 1. `npm install`
 1. `npm run dev`
 
-
-
 ### Add auth to your project
-
 1. Set DB up by editting .env
    - `MAIL_DRIVER=smtp` パスワード再設定メール
 1. `php artisan config:cache`
@@ -63,7 +65,6 @@
    - `auth` MW is defined in `app\Http\Kernel.php`
 
 ### Guard
-
 - Web Guard: session による認証
 - API Guard: token による認証
 
@@ -81,5 +82,4 @@
 ### 他の便利機能
 
 `Route::redirect('/here', '/there', 301);`
-
 `Route::view('/welcome', 'welcome', ['name' => 'Taylor']);`
