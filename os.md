@@ -20,6 +20,16 @@
 
 ## System Call
 
+
+## 実行様式
+
+
+## 実行制御
+
+- 排他制御
+- セマフォ
+- 
+
 ### Services offered by System Call
 - Process creation and management
 - Main mamory management
