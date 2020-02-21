@@ -16,6 +16,13 @@
 - `git branch`
 - `git branch NEW_BRANCH_NAME`
 - `git checkout BRANCH_NAME`
+- `git reset --hard 1234abcdblahblahblah`
+- `git reset --soft HEAD^`
+  - 最後のコミットを取り消すが、ファイル内容はそのまま
+- `git reset --hard HEAD^`
+  - 最後のコミットを取り消し、なおかつローカルのファイル内容も戻す
+
+
 
 ## ★★
 
