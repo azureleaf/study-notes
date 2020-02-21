@@ -44,10 +44,18 @@
 - REST: REpresentational State Transfer とは、分散型システムにおける複数のソフトウェアを連携させるための設計原則のこと
 - REST は 4 原則からなる
     - Addressability
+        - 全ての情報はURIで表現される一意なアドレスをもつ
     - Stateless
+        - 同じURLやパラメータでHTTP Requestしたら、常に同じ結果が返ってくる
+        - Sessionなどは使わない
     - Connectivity
+        - ある情報から別の情報へ、またある情報の状態から別の状態へ、のリンク情報を情報内部に埋め込める
     - Uniform Interface
-- RESTful API とは、REST の原則に則って構築された Web システムの HTTP での呼び出しインターフェース
+        - 情報の操作は全てHTTP Method(GET POST PUT DELETE)を使い、それ以外を使わない
+- RESTful API とは、REST の原則に則って構築された Web システムの HTTP での呼び出しインターフェースのこと
+- 以上からすると、以下はRESTfulではない？
+    - Sessionに依存するAPI
+    - WebSocketなどを利用するAPI
 
 ## GraphQL API
 
