@@ -15,7 +15,7 @@
 - Event & Listener
 
 
-## Data flow inside Laravel App
+## Lifecycle
 
 1. `public/index.php`
 
