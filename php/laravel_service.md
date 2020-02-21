@@ -19,9 +19,11 @@
   - サービスコンテナなしだと...自分でクラス A とクラス B のインスタンス化を順に定義する
   - サービスコンテナありだと...`app()->bind('myclass', \MyNamespace\classB::class);`と書くと、classA のインスタンス化などは自動で行われる。自分で明示的に記述する必要はない
 
-### What's DI (dependency injection)?
+### What's DI (dependency injection) Pattern?
 
-- When you type hint in the constructor , 
+- あるクラスAのType Hintingに別のクラスBを記述することで、クラスAがクラスBに依存することを明示すること
+- これにより実際にClass b
+
   ```php
   Class SomeClass
   {
@@ -31,6 +33,34 @@
   }
   }
   ```
+
+    - 例としてテキストエディタのソースプログラム中でスペルチェックの機能を実装することを考える
+    - DI を使わないで書くと以下のようになる
+
+    ```js
+    public class TextEditor {
+
+    private SpellChecker checker;
+
+    public TextEditor() {
+        this.checker = new SpellChecker();
+    }
+    }
+    ```
+
+    - TextEditorの中でSpellCheckerをnewしている、つまりTextEditorはSpellCheckerに「依存している」
+
+    ```js
+    public class TextEditor {
+
+    private IocSpellChecker checker;
+
+    public TextEditor(IocSpellChecker checker) {
+        this.checker = checker;
+    }
+    }
+    ```
+
 
 
 ### Implementation
@@ -54,9 +84,6 @@
     - `$name = resolve('myName');`
     - `$name = App::make('myName');`
 
-
-
-
 ## What's Service Provider?
 
 - サービスプロバイダは、サービスをサービスコンテナにサービスを登録するのがお仕事
@@ -69,7 +96,10 @@
   - `bind()`
   - `register()`
 
-
 ## misc
 
 - IoC: Inversion of Control
+  - 「制御の反転」と呼ばれる
+  - 伝統的なプログラムの書き方での「呼び出し元」「呼び出し先」の関係が逆転するようなプログラムの流れのこと
+  - Dependency Injection は、IoC の一種
+  - Service Containe が IoC Container と呼ばれることもある
