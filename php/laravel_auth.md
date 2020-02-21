@@ -19,7 +19,7 @@
   - authentication 関係の設定は大体ここ
 - Laravel での認証の種類
   - ログイン認証: ユーザ名＋パスワード
-  - Laravel Passport：　OAuth2.0に沿ったログイン
+  - Laravel Passport：　OAuth2.0に沿ったログイン。公式で推奨されている
   - API 認証：
 - ログインを要求するページとログイン不要の公開ページをどのようにして一括登録するのか？
   - おそらく middleware group だと思うが
