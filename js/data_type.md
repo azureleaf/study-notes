@@ -1,15 +1,18 @@
 # Data Types of JS
 
-## Classification
+困ったら`typeof()`
 
-## Primitive
+
+## Primitive vs Object
+
+### Primitive
 
 - Object ではないもの。メソッドもない
 - Primitive は immutable である
   - したがって、`myStr.toUppercase()`は文字列を変更しない。あくまで、改変したものをコピーとして返すだけ
   - 一方で、配列は mutable なので、`myArr.push(1)`は元の配列を改変する
   - 値を代入して変えているように見えるが、実際には違うらしい（？）
-- 以下の６種類
+- 以下の６種類がprimitive
   - string
   - number
   - bigint
@@ -18,7 +21,7 @@
   - undefined
   - symbol
 
-## Object
+### Object
 
 - 以下は object である
   - Class を new したもの
@@ -26,7 +29,7 @@
   - Object literal
   - function
 
-## Primitive のデータ型
+## Primitive のデータ型７つ
 
 - Undefined
 - Null
@@ -54,7 +57,7 @@ undefined;
 NaN;
 ```
 
-- 逆に、上記以外は全て truthy。たとえば以下は truthy
+- 上記以外は全て truthy。たとえば以下は truthy
 
 ```js
 [];
@@ -62,7 +65,7 @@ NaN;
 }
 ```
 
-- 以下のような状態になる
+## truthy, falsyを抑えても、まだ紛らわしいことが起こる
 
 ```js
 1 == "1"; // true
@@ -82,17 +85,18 @@ NaN;
 91 - "1"; // 90 (9ではない)
 
 typeof(NaN); // Number (!?)
+NaN == NaN; // false (!?)
 ```
 
 - このような紛らわしさは、if文などで致命的になる
-- 実用上は、以下のようにすべき
+- 基本的には、strict equality`===`で解決
+- 実用上は、以下を覚えておく
 
 ```js
+if (x == false) // xがfalse, 0, '', []のときtrue
+if (!x) // xがfalse, 0, '', NaN, null, undefinedのときtrue
 
-
+if (x === y) // xとyが完全に同じときtrue。ただし、いずれもNaNの場合はfalse
+if (!!x === !!y) // xとyが完全に同じときtrue。いずれもNaNの場合もtrue
 ```
 
-
-## misc
-
-- `typeof()`

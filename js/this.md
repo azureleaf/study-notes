@@ -1,12 +1,12 @@
 # JavaScript における this
 
-- JavaScript における this が何を指すのか？はわかりにくいことで有名
+- JavaScript における this が何を指すのか？は初学者の壁
 
-## thisがオブジェクトになる場合
+## this がオブジェクトになる場合
 
 ほぼ説明不要だと思うが
 
-- Class
+- Class だと
 
 ```js
 class Person {
@@ -19,7 +19,7 @@ class Person {
 }
 ```
 
-- Object Literal
+- Object Literal だと
 
 ```js
 var person = {
@@ -30,7 +30,9 @@ var person = {
 };
 ```
 
-## thisがGlobal Variableになる場合
+## this が Global Variable になる場合
+
+- これは基本的にやってはいけないことに該当する（いわゆるグローバル汚染）
 
 ```js
 function show() {
@@ -38,17 +40,17 @@ function show() {
   this.value1 = 999; //　global objectにvalueを設定する、つまりglobal変数になっている
   value2 = 111;
 }
-show(); 
+show();
 
-console.log(value1) // 999。value1はグローバル変数なので
-console.log(value2) // undefined。value2はshow()内部をスコープとするローカル変数なので
+console.log(value1); // 999。value1はグローバル変数なので（グローバル汚染）
+console.log(value2); // undefined。value2はshow()内部をスコープとするローカル変数なので
 ```
 
 ## `= this`
 
 ```js
 function Note() {
-  var self = this;
+  var self = this; // global object
 ```
 
 ##
@@ -56,7 +58,7 @@ function Note() {
 ```js
 // thisの中身を表示する
 function test() {
-  console.log(this); // Google Chrome Consoleだと Windowオブジェクトになる
+  console.log(this); // Google Chrome Console上だと Global ObjectはWindow Object
 }
 
 var obj = { name: "obj", test: test };
@@ -85,27 +87,42 @@ console.log(obj2.value); // undefined. なぜなら、this.valueのthisはグロ
 console.log(value); // 999
 ```
 
-## thisを使ってMethod Chainをつくる
+## this を使って Method Chain をつくる
 
-- `A.B`という表現
+- JSのbuit-in関数でも`.toUpperCase`や`reverse()`などをたくさんつけて順に処理できる
+- これをmethod chainなしで実装しようとすると、callback地獄となる
+- 同様の機能は自分でも作成できる
+- `return this`でオブジェクト自身を返すことがポイント
 
 ```js
-var textObj = {
-    capitalize: str => {
-        str = str.toUpperCase();
-        return this;
-    },
-    deleteFirst: str => {
-        str = str.substr(1);
-        return this;
-    },
-   
+class StringModifier {
+  constructor(str) {
+    this.str = str;
+  }
+  capitalize() {
+    this.str = this.str.toUpperCase();
+    return this;
+  }
+  append(newStr) {
+    this.str += newStr;
+    return this;
+  }
+  deleteChar() {
+    this.str = this.str.substr(0, this.str.length - 1);
+    return this;
+  }
 }
 
+var mod = new StringModifier("Hello");
+mod
+  .capitalize()
+  .append(", ")
+  .append("World!!")
+  .deleteChar()
+  .deleteChar(); // HELLO, world
 ```
 
-
-## apply(), call()によってthisの中身を自由に設定する
+## apply(), call()によって this の中身を自由に設定する
 
 ```js
 var myObject = {

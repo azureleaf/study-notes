@@ -96,6 +96,8 @@ console.log("filterをかけた結果：", filteredNumbers);
 
 ## 配列のソート
 
+- sort()は破壊的メソッド
+
 ```js
 // 要素の並び替え
 let greeting = ["r", "e", "d", "r", "u", "m"];
@@ -130,6 +132,20 @@ console.log("最小の数は", numbers[0]);
 let numbers = [11, 9, 23, 910, 3];
 console.log("最大の数は", Math.max(...numbers));
 console.log("最小の数は", Math.min(...numbers));
+```
+
+- 配列の中身がオブジェクトリテラルになってる場合とかも同様
+
+```js
+let cities = [
+  { name: "Naha", temp: "30" },
+  { name: "Sendai", temp: "20" },
+  { name: "Tokyo", temp: "25" }
+];
+
+cities.sort((a, b) => {
+  return a.temp - b.temp;
+}); // Sendai->Tokyo->Nahaの順になった配列になる
 ```
 
 ## 配列へのアクセスと改変

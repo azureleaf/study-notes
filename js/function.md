@@ -69,7 +69,9 @@ var greet = ({ country, age, name }) => {
 greet({ name: "John", country: "USA", age: 20 });
 ```
 
-## 可変長引数というか Rest parameters
+## Spread Operator
+
+- 可変長引数
 
 ```js
 // Spread Operatorを使って配列を展開する
@@ -83,6 +85,9 @@ function sum(...nums) {
 
 sum([1, 2, 3]); // 6
 ```
+
+## Rest Parameter
+function(...nums)
 
 ## Callback
 
