@@ -16,6 +16,7 @@
 - `git branch`
 - `git branch NEW_BRANCH_NAME`
 - `git checkout BRANCH_NAME`
+- `git merge FETCH_HEAD`
 
 ## ★★
 
@@ -27,6 +28,13 @@
 - `git stash list`
 - `git switch` (new)
 - `git restore` (new)
+- `git reset --soft HEAD^`
+  - 最新のコミットを取り消す。ファイルは変更しない
+- `git reset --hard HEAD^`
+  - 最新のコミットを取り消す。その一つ前のコミット状態まで、ファイルも戻す
+  - これは恐らくやりなおしできない操作
+
+
 
 ### `git fetch` vs `git pull`
 
