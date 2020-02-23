@@ -6,7 +6,7 @@
 
 ほぼ説明不要だと思うが
 
-- Class Version
+- Class
 
 ```js
 class Person {
@@ -19,7 +19,7 @@ class Person {
 }
 ```
 
-- Object Literal Version
+- Object Literal
 
 ```js
 var person = {
