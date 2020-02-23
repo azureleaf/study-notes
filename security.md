@@ -218,7 +218,7 @@
 - パスワードを保存する時には、salt（ランダムに生成した文字列）を付け加えて文字数を増やすべき(Salting)
 - Key Stretching: ハッシュ値をさらに何度もハッシュ関数にかけて、総当り攻撃の難度を上げること
 
-- Libraryを使うと、SaltingやKey Stretchingなどを自動でやってくれる
+- パスワードの暗号化ライブラリを使うと、SaltingやKey Stretchingなどを自動でやってくれる
   - BCrypt
   - SCrypt
     - BCryptよりも安全
