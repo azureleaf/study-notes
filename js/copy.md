@@ -1,7 +1,7 @@
 # JS での正しいコピー
 
-- コピーしたつもりで、参照になってしまっているという罠の話し
-- 結論としては、一度バラバラにしてからコピーすればよい
+- コピーしたつもりで、参照になってしまっている罠
+- 一度バラバラにしてからコピーすれば、ちゃんと独立したコピーを作れる
 
 ## 単体の数値のコピーは、うまくいく
 
@@ -14,7 +14,9 @@ console.log(val1); // 0
 console.log(val2); // 1
 ```
 
-## 配列の値をコピーしたつもりで、配列の参照を作っている例
+## 配列のコピー
+
+- 配列のそれぞれの値をコピーしたつもりで、配列の参照を作ってしまう
 
 ```js
 var arr1 = [1, 2, 3];
@@ -38,7 +40,7 @@ console.log(arr2); // 1, 2, 3
 
 ## Object のコピー
 
-- 配列と同様、オブジェクトもコピーしたように見えて参照を作っている
+- 配列と同様、オブジェクトもコピーしたように見えて参照を作っている（というか配列もオブジェクトだが）
 
 ```js
 var person1 = {
@@ -46,14 +48,14 @@ var person1 = {
   origin: "UK"
 };
 
-var person2 = person1; // コピーではない
+var person2 = person1;
 
 person1.name = "Mike";
 console.log(person1); // {name: "Mike", origin: "UK"}
 console.log(person2); // {name: "Mike", origin: "UK"}
 ```
 
-- Object.assign()によりコピーできる
+- `Object.assign()`によりコピーできる
 
 ```js
 var person1 = {
@@ -92,7 +94,8 @@ console.log(person2.name); // John
 console.log(person1.location.city); //　Liverpool
 console.log(person2.location.city); //　Liverpool
 ```
-- 正しくはJSONを経由すればよい
+
+- 正しくは JSON を経由すればよい
 
 ```js
 var person1 = {
@@ -114,10 +117,8 @@ console.log(person1.location.city); //　Liverpool
 console.log(person2.location.city); //　London
 ```
 
-
-
-- ちなみに、Object.assign()は第一引数が材料となる object、第二引数が付加する object となる
-- 返ってくる値は、２つのオブジェクトを合わせたもの
+- `Object.assign(基準のobject literal, 追加するobject literal)`という書式
+- 返ってくる値は、２つの object literal を合わせたもの
 - なので、第一引数を空っぽ Obj にするとコピーになる
 - 同じキーのペアについては、第二引数の方の値で上書きされる
 
@@ -141,13 +142,4 @@ var alias = echo; // echo()ではない。カッコはつけない
 
 alias("hello");
 echo("hello");
-```
-
-```js
-```
-
-```js
-```
-
-```js
 ```
