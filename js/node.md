@@ -29,12 +29,37 @@
 - `npm update PACKAGE_NAME`
     - Update the specified package
 
-## Node.jsにデフォルトで付属するpackages
+## Node project内部でしょっちゅうrequireするpackages
 
 ### `require('http')`
 
+- minimum app.js
+- これを`node app.js`すればサーバーが起動する
+```js
 
-## Node.jsデフォルトではないが、一般的によく使われるpackages
+const http = require('http');
+
+const hostname = '127.0.0.1';
+const port = 3000;
+
+// Instantiate the server
+const server = http.createServer((req, res) => {
+  res.statusCode = 200; // 200 OK
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello World');
+});
+
+// Listen to the request
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
+```
+
+### `require('cookie-parser')`
+
+
+
+## Node.js管理のためのpackages
 
 ### nodemon
 ### node-check-updates

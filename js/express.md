@@ -16,17 +16,22 @@
 
 ## 全体のデータフロー
 
-![MVC_of_express](./express_mvc.png)
-
 - HTTP Reqを受け取って、それに対応したHTTP Resを作り上げていくのがExpressのお仕事。
-- 
+
+
+![MVC_of_express](./express_mvc.png)
 
 ## それぞれのファイル同士を追ってみる
 
-MozillaのExpress Tutorialでの例
 
-1. `npm run` すると `node bin/www/`　が実行される(defined at package.json)
-1. `bin/www` calls `/app.js`
+1. `npm run` すると `node bin/www/`　が実行される
+    - この動作はpackage.jsonで定義
+1. `bin/www`
+    1. app.jsからappをインポート
+    1. appのポート番号を設定
+        - `process.env.PORT`というのは、Node内部の環境変数
+    1. httpモジュールを使ってserverをインスタンス化し、listenする
+        - `var server = http.createServer(app);`
 1. `/app.js` calls:
    - `/routes/`
    - `/public/`
@@ -37,7 +42,11 @@ MozillaのExpress Tutorialでの例
    - `/views/`
 1. `/models/` calls MongoDB (actual data interaction)
 
-# ファイル構造
+## 依存ライブラリ
+
+### cookie-parser
+
+
 
 ## Files Overview
 
