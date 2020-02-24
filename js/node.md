@@ -57,19 +57,65 @@ server.listen(port, hostname, () => {
 });
 ```
 
-- serverにイベントリスナーをくっつける
-
 ```js
-server.on('request', (request, response) => {
-  // the same kind of magic happens here!
-});
+const http = require("http");
+
+http
+  .createServer((request, response) => {
+    // requestから情報を取り出す
+    // methodはGET, POSTとか
+    // headersはobject literalになっている
+    const { headers, method, url } = request;
+
+    let body = [];
+
+    // .on()というのはserver.on(), request.on()などあっちこちででてくる
+    // これはEventEmitterクラスのメソッド
+    // つまり、requestもserverもEventEmitter class
+    // emitter.on(eventName, listener)の書式
+    request
+      .on("error", err => {
+        console.error(err);
+      })
+      .on("data", chunk => {
+        // "data" event
+        body.push(chunk);
+      })
+      .on("end", () => {
+        // "end" event
+        body = Buffer.concat(body).toString();
+        // BEGINNING OF NEW STUFF
+
+        response.on("error", err => {
+          // "error" event
+          console.error(err);
+        });
+
+        // Note: the 2 lines below could be replaced with this next one:
+        // response.writeHead(200, {'Content-Type': 'application/json'})
+        response.statusCode = 200;
+        response.setHeader("Content-Type", "application/json");
+
+        const responseBody = { headers, method, url, body };
+
+        // Note: the 2 lines below could be replaced with this next one:
+        // response.end(JSON.stringify(responseBody))
+        response.write(JSON.stringify(responseBody));
+        response.end();
+      });
+  })
+  .listen(8080);
 ```
 
-- requestからmethod(GET, POST..)とURLを取り出す
-- Destructuring Assginemntの書式を利用
+- server にイベントリスナーをくっつける
+- これに限らず、on はイベントリスナーをくっつける際にどこでも使われるっぽい
+  - server.on
+  - request.on
 
 ```js
-const { method, url } = request;
+server.on("request", (request, response) => {
+  // the same kind of magic happens here!
+});
 ```
 
 
