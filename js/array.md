@@ -204,6 +204,45 @@ console.log(elements.join("-"));
 // expected output: "Fire-Air-Water"
 ```
 
+## 配列の要素が特定の条件を満たすかどうか調べる
+
+- `every()`は、callbackでチェックした結果、配列の要素が全てtrueになる場合にtrueを返す
+- `some()`は、callbackでチェックした結果、配列の要素のうちtrueになるものが一つでもあればtrueを返す
+
+```js
+myArr1 = [1, 2, 3];
+myArr2 = [1, 2, -1];
+myArr3 = [-1, -2, -3];
+
+// Callback
+var checkPositive = element => element > 0; // callbackはtrueかfalseを返す
+
+console.log(myArr1.some(checkPositive)); // true
+console.log(myArr1.every(checkPositive)); // true
+
+console.log(myArr2.some(checkPositive)); // true
+console.log(myArr2.every(checkPositive)); // false
+
+console.log(myArr3.some(checkPositive)); // false
+console.log(myArr3.every(checkPositive)); // false
+
+```
+
+- なお、`in` operatorは特定の値が存在するかを調べる
+
+```js
+myArr = [1, 2, 3];
+
+console.log(1 in myArr); // true
+console.log(6 in myArr); // false
+
+myObj = {a: 1, b: 2};
+
+console.log("a" in myObj); // true
+console.log("x" in myObj); // false
+
+```
+
 ## Objectに順番にアクセスする
 
 ```js

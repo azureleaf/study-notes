@@ -6,17 +6,17 @@
 
 ### CORS:
 
-- Same-origin policyに反してresource sharingすること
+- Same-origin policy に反して resource sharing すること
 
 ### Same-origin Policy
 
 - あるページを開いた時に、その同じ origin からしかリソース（画像とか、JS とか）を取得しないというルール
-- SOPに則ってるかどうかを判断するのはブラウザ側である（最近のブラウザなら対応してる）
+- SOP に則ってるかどうかを判断するのはブラウザ側である（最近のブラウザなら対応してる）
 - same-origin の意味
   - Protocol が同じ： http://sample.com と https://sample.com は別物
-  - Hostが同じ
-  - Portが同じ： http://sample.com と http://sample.com:88 は別物(httpはデフォルトで80番なので)
-  - path(.com以降とか)が違うかどうかは無関係
+  - Host が同じ
+  - Port が同じ： http://sample.com と http://sample.com:88 は別物(http はデフォルトで 80 番なので)
+  - path(.com 以降とか)が違うかどうかは無関係
 - ただし、HTML の全ての要素についてこのルールが適用されるわけではない
 - SOP が適用されないもの
   - `<script>`　なので、CDN などの外部 JS を読み込むサイトは普通に存在している
@@ -45,8 +45,7 @@
   - 操作を完了するにあたり、予測不能な値がない
     - ex. パスワード変更を偽装するときに、現在のパスワードを入力させない
 - sea-surf のように発音する場合がある
-- 攻撃の手順
-  1.
+- 攻撃の手順 1.
 - CSRF Token とは
   - Laravel の Blade でさんざん`{{ csrf-token}}`とか書いてるのはこれ
 
@@ -79,11 +78,11 @@
 ### Mass Assignment
 
 - 脆弱性
-- HTTP Requestでvalue列（name=john&email=john@example.com）を送ってアカウントを作成するとする
-- これに「app側で内部では使っているが、ユーザーから送信されることを想定していない値」を推測して埋め込む（&isAdmin=true）を追加
-- これにより、攻撃者はadmin権限つきでユーザー登録できてしまう
-- app側では、カラムのそれぞれについていちいち判定条件をつけず、一括で値を変更してしまうのでこのような脆弱性が生まれる
-- Laravelでは、$guardと$fillableによってカラム毎のmass assignmentの可否を制限することでこの脆弱性を防ぐ
+- HTTP Request で value 列（name=john&email=john@example.com）を送ってアカウントを作成するとする
+- これに「app 側で内部では使っているが、ユーザーから送信されることを想定していない値」を推測して埋め込む（&isAdmin=true）を追加
+- これにより、攻撃者は admin 権限つきでユーザー登録できてしまう
+- app 側では、カラムのそれぞれについていちいち判定条件をつけず、一括で値を変更してしまうのでこのような脆弱性が生まれる
+- Laravel では、$guardと$fillable によってカラム毎の mass assignment の可否を制限することでこの脆弱性を防ぐ
 
 ### Clickjacking
 
@@ -209,21 +208,21 @@
   - 元データが少しでも違ったら、ハッシュ値はがらっと変わる。でないと改ざんしやすい
 - 改竄防止だけでなく、誤り訂正系技術とも関係が深い
 - ダウンロードしたソフトウェアが改竄されていないか、ハッシュ値を計算することもある。正解のハッシュ値は公式ウェブサイトにある。（サイト自体も改竄されてたら元も子もなさそうだが）
-- ハッシュの敵はBrute-force Attachである
+- ハッシュの敵は Brute-force Attach である
 - hush ではなく hash。hash は本来、調理した肉を刻んで、それを再度料理の一部に使うこと。これが由来っぽい
 
-### Hashとパスワードの保存
+### Hash とパスワードの保存
 
 - データベースにユーザログイン情報を格納する時、情報漏洩防止のため、パスワード本体ではなくそのハッシュ値を保存すべきである
 - パスワードを保存する時には、salt（ランダムに生成した文字列）を付け加えて文字数を増やすべき(Salting)
 - Key Stretching: ハッシュ値をさらに何度もハッシュ関数にかけて、総当り攻撃の難度を上げること
 
-- パスワードの暗号化ライブラリを使うと、SaltingやKey Stretchingなどを自動でやってくれる
+- パスワードの暗号化ライブラリを使うと、Salting や Key Stretching などを自動でやってくれる
   - BCrypt
   - SCrypt
-    - BCryptよりも安全
+    - BCrypt よりも安全
   - Argon2
-    - Scryptよりもさらに安全らしい
+    - Scrypt よりもさらに安全らしい
   - PBKDF2
     - もう死んだ？
 
@@ -240,25 +239,72 @@
   - Dead
 
 ## Messeage Authentication Code (MAC)
+
 - 送られたメッセージが改竄されていないかを保証するための仕組み
   - メッセージを暗号化するわけではないので、機密情報を守ることはできない？
-- Hashと同じように、データを入れるとアルゴリズムによって（MAC Algorithm）一定の長さの値（MAC）を返す
-- Hashと違うのは、MACではデータと一緒にSecret Keyを入れて値を取り出す点
-- MACの種類
+- Hash と同じように、データを入れるとアルゴリズムによって（MAC Algorithm）一定の長さの値（MAC）を返す
+- Hash と違うのは、MAC ではデータと一緒に Secret Key を入れて値を取り出す点
+- MAC の種類
   - HMAC (Hash-based MAC): ハッシュ関数でデータと鍵を処理する
   - AES-CMAC（Advanced Encryption Standard - Cipher-based MAC）：　ブロック暗号によって
 - 手順
   1. 共通鍵を生成する
   1. 送信者と受信者が共通鍵を共有する
-  1. 送信者側でMAC AlgorithmによりMACを得る
-  1. MACとメッセージ本体を送る
-  1. 受信者は、共通鍵とメッセージを使ってMACを計算する
-  1. 自分で計算したMACと、送信されたMACが一致することを確認する
-
-
+  1. 送信者側で MAC Algorithm により MAC を得る
+  1. MAC とメッセージ本体を送る
+  1. 受信者は、共通鍵とメッセージを使って MAC を計算する
+  1. 自分で計算した MAC と、送信された MAC が一致することを確認する
 
 ## 認証
 
 ### OAuth2.0
 
 - OAuth とは
+
+## apt システムにおける package の認証
+
+- 例として、MongoDB だと以下のようにする
+
+1. `wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -`
+
+   - `wget -q`: "Quietly", not to show the messages if not error
+   - `wget -O`: set the location of output
+   - `|`: Pipeline. Result output of the wget is sent to `apt-key add` command
+   - `apt-key add`: Add package key to the list
+   - You can use `apt-key list` to show the all the keys added so far
+   - この URL のファイルそのものは以下の通り
+
+   ```
+   -----BEGIN PGP PUBLIC KEY BLOCK-----
+   Version: GnuPG v1.4.11 (GNU/Linux)
+
+   mQINBFrXrqYBEACscLj2qgPpHBCQtgW1Yh29Ddgv6jssyWLAYmj0qngFLKoQMMbt
+   SNBZylIKxfS+pUD9J5xfRZwfZOmtMIOFVWS9tcpeQXsiwC126tRyoFCIpoTmH7+R
+   8/FfPrCYyXLP+ftEZfRV60wTwr5drR0S5pVIST3oaXXGkHkFC35U++udUG2Tl4Cs
+   OPSCp1tsK6UOTjHFDH8PnasImJgD37QC8OOMIJS0jCtDZywJW6OCdpIRbuTWPK3P
+   P48NLwGUJHixhVCmOgPPu9kDAfG3wLxiN85S2UbaaSXsdA4fF4SSwWNHTIYAg0yT
+   xGepVyW4lkfcvng4jva24rQ9j1cm1b7bWeOkMH1aAcSyFzKCeNCNxbVOYVrcWNP4
+   zrSUvsTKhwX8rPFMq9LkcKirDL9bRILvn/24VU6NdJfGbRjR6+Q7ooj7hYKLXtO5
+   q0Q4nhjigpTWIoU6jdfbM9YqpKSELNnkDRAU+bRYSrNaFuizYgDZQvcVT6gbq26f
+   JbgihoeJogEfim3kqRRJ3EUhE+EaVijl9iLDKkpurod26P2QSq9RKSuOCeauPjQv
+   3BIiEMXco8O3v8W1y4TbnSQ3d28W9pN28IgAhmN2EU2sKqWPzNeG0V+L6mE5pA4o
+   nD3z3JRpxAUFw08+9LnLRZ4D1u54OrHADsU8UpYZJCm1xw6T0e4dlxW6rQARAQAB
+   tDdNb25nb0RCIDQuMiBSZWxlYXNlIFNpZ25pbmcgS2V5IDxwYWNrYWdpbmdAbW9u
+   Z29kYi5jb20+iQI+BBMBAgAoBQJa166mAhsDBQkJZgGABgsJCAcDAgYVCAIJCgsE
+   FgIDAQIeAQIXgAAKCRBLfFSaBY+LaxdXEACJMvkgr3Nt2xme9/6brGMbrEy6mQn7
+   DZP98DXuS0tWvO5vkEO5IfRIvzG3zA0pATSBDVA0BvGnebQrGXZZ7Xfh0gz+zxlt
+   TXv4eCyb6T4gRJuuQSFPTyDnZ3MbPESqj0UpIALmcLDJ01nqvbNPKxx5r08XQOtE
+   i44Kcwc1Px5cPcYP9nmpDNLZjz3gkTm+zBygdE9beP02qXq7WcyghFmQZoLBW53e
+   TqNPnMrrm5+6vgq+r/ttyiYTo7Zw8MrifN5okevzB0JhhSAW9g+4ZOp1QYbV8u8V
+   pksJQDOIaBWIw8zosIQJTCVyd4hOyl8Ib2s2R0/grT51RgLYCNbUG6WTpKGgYBtr
+   Mng10gozyDrnA3B+RiDx5uq+dNzuuMXWMit2nbcdanXdKNkaPmC6WVeU0rG5K1Wz
+   jQMDvAInTszLcqH6zfEsjCoXj0z8UwcC4jahFDNMDBk3OhjMSL+fnvIhW84nKVHf
+   AWL5jjSQdkrM/M8QRpRqls5apuIYHQwo6Oyd2Nk0n9T/GOMJ1jilxiPw9ihusf+k
+   DfU0JI7T8fgxIv/wHNXUg7FOaaDJIfgGlCPUgtsNUDZZ9lFq+Zc5H8Wff3LNo7Se
+   2xnzzoy2e+C3tsxAmVUTs+q0lyIzEK24lf71cp074KVV7rIYBELYtO2hAlJYjXJU
+   bscTTjCKLf9leA==
+   =UXPP
+   -----END PGP PUBLIC KEY BLOCK-----
+   ```
+
+1. `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list`

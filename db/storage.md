@@ -109,6 +109,7 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
 - Field
   - A element in the record
 - Column
+  - a
 - Collection (MongoDB)
   - Equivalent to Table
 - Document (MongoDB)
@@ -142,3 +143,27 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
   - Google Drive
   - Microsoft OneDrive
   - DropBox
+
+
+## ORM/ODM
+
+- ORM: Object Relation Model
+- ODM: Object Data Model
+
+- TypeORM
+  - MYSQL, Postgres, SQLite3, MongoDB, MariaDB, MSSQL, Oracle
+- Mongoose
+  - MongoDB
+- Waterline
+  - MySQL, Postgres, MongoDB, LDAP, Redis
+- Sequelize
+  - MySQL, Postgres, SQLite3, MariaDB, MSSQL
+- Loopback
+- Node ORM2
+  - MySQL, SQLite3, Progress
+- GraphQL
+- Bookshelf
+  - MySQL, Postgres, SQLite3
+- Objection
+  - MySQL, Postgres, SQLite3
+

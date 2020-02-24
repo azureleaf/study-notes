@@ -1,4 +1,4 @@
-# Mongooseの勉強メモ
+# MongoとMongooseの勉強メモ
 
 ## 超要約
 
@@ -7,6 +7,34 @@
 ## 全体の流れ
 
 - 
+
+## Install MongoDB @ Ubuntu 18.04
+
+1. Import Public Key
+  - `wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -`
+1. Create the List File (/etc/apt/sources.list.d/mongodb-org-4.2.list)
+  - `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list`
+1. `sudo apt update`
+1. `sudo apt-get install -y mongodb-org`
+
+## MongoDB Community Server
+
+### Files
+
+- `/var/lib/mongodb`: data dir
+- `/var/log/mongodb`: log dir
+- `/etc/mongod.conf`: config firle
+
+### Commands
+
+- `mongo`
+  - start interactive shell
+- `sudo systemctl start mongod`
+- `sudo systemctl stop mongod`
+- `sudo systemctl restart mongod`
+- `sudo systemctl daemon-reload`: for error
+- `sudo systemctl status mongod`
+  - Check Status
 
 ## Connect to mongoDB
 
