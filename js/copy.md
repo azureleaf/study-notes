@@ -19,15 +19,24 @@ console.log(val2); // 1
 - 配列のそれぞれの値をコピーしたつもりで、配列の参照を作ってしまう
 
 ```js
+// 浅い配列
 var arr1 = [1, 2, 3];
 var arr2 = arr1;
 
 arr1[0] = 0;
 console.log(arr1); // 0, 2, 3
 console.log(arr2); // 0, 2, 3
+
+// 深い配列
+let deepArr1 = [1, [2], [3, [4]], 5];
+let deepArr2 = deepArr1;
+
+deepArr1[2][1][0] = 99;
+console.log(deepArr1); // [1, [2], [3, [99]], 5];
+console.log(deepArr2); // [1, [2], [3, [99]], 5];
 ```
 
-- 以下のように Spread Operator を使うと意図通りになる
+- 浅い配列については、以下のように Spread Operator を使うと意図通りになる
 
 ```js
 var arr1 = [1, 2, 3];
@@ -36,6 +45,30 @@ var arr2 = [...arr1];
 arr1[0] = 0;
 console.log(arr1); // 0, 2, 3
 console.log(arr2); // 1, 2, 3
+```
+
+- 深い配列については、JSON を経由するか、lodash を使う（object と同様）
+
+```js
+// 深い配列
+let deepArr1 = [1, [2], [3, [4]], 5];
+let deepArr2 = JSON.parse(JSON.stringify(deepArr1));
+
+deepArr1[2][1][0] = 99;
+console.log(deepArr1); // [1, [2], [3, [99]], 5];
+console.log(deepArr2); // [1, [2], [3, [4]], 5];
+```
+
+```js
+// requires "npm i -S lodash"
+var _ = require("lodash");
+
+let deepArr1 = [1, [2], [3, [4]], 5];
+let deepArr2 = _.cloneDeep(deepArr1);
+
+deepArr1[2][1][0] = 99;
+console.log(deepArr1); // [1, [2], [3, [99]], 5];
+console.log(deepArr2); // [1, [2], [3, [4]], 5];
 ```
 
 ## Object のコピー
