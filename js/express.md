@@ -3,28 +3,35 @@
 このプロジェクトは`express generator`で生成した。https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs のチュートリアルを実行したもの。
 
 ## Create Project
+1. Generate template
+    1. `npm install express-generator -g`
+    1. `express express-locallib --view=pug`
+    1. `cd express-locallib`
+    1. `npm install`
+    1. `npm install --save-dev nodemon`
+    1. `DEBUG=express-locallibrary-tutorial:* npm start`
+        - Try to run
+1. 
 
-1. `mkdir myexpress`
-1. `cd myexpress`
-1. `npx express-generator`
-  - Generate express app skeleton
-  - `npx`はnpm packageを直に実行するコマンド。ローカルにインストールしていないpackageも実行できるのか？
-1. ``
 
 ## 全体のデータフロー
 
-![MVC_of_express](./express_mvc.png)
-
 - HTTP Reqを受け取って、それに対応したHTTP Resを作り上げていくのがExpressのお仕事。
-- 
+
+
+![MVC_of_express](./express_mvc.png)
 
 ## それぞれのファイル同士を追ってみる
 
-MozillaのExpress Tutorialでの例
 
-1. `npm run` すると `node bin/www/`　が実行される(defined at package.json)
-  - 
-1. `bin/www` calls `/app.js`
+1. `npm run` すると `node bin/www/`　が実行される
+    - この動作はpackage.jsonで定義
+1. `bin/www`
+    1. app.jsからappをインポート
+    1. appのポート番号を設定
+        - `process.env.PORT`というのは、Node内部の環境変数
+    1. httpモジュールを使ってserverをインスタンス化し、listenする
+        - `var server = http.createServer(app);`
 1. `/app.js` calls:
    - `/routes/`
    - `/public/`
@@ -35,13 +42,37 @@ MozillaのExpress Tutorialでの例
    - `/views/`
 1. `/models/` calls MongoDB (actual data interaction)
 
-# ファイル構造
+## 依存ライブラリ
+
+### cookie-parser
+
+
+
+## Files Overview
+
+- `/app.js`
+- `/node_modules`
+- `/package.json`
+- `/package-lock.json`
+- `/bin/`
+    - www
+- `/public/`
+    - images/
+    - javascripts/
+    - stylesheets/
+- `/views/`
+    - error.pug
+    - index.pug
+    - layout.pug
+- `/routes/`
+    - index.js
+    - users.js
 
 ## app.js
 
 1. `require` で必要なパッケージ（npm でインストールした外部のやつ）を宣言する
 1. `require` で必要なパッケージ（プロジェクト内で自分で作ったやつ）を宣言する
-1. express をインスタンス化する
+1. express をインスタンス化
 1. Mongoose を設定する
    - mongoose を require する
    - `mongoose.connect(データベースのURI, オプション`)で MongoDB に接続する
@@ -59,13 +90,8 @@ MozillaのExpress Tutorialでの例
 - server のインスタンス化
 - server の listen の設定（ポート番号、リッスンに失敗した時のエラー処理とか）
 
-## package.json
 
-- List of packages required for this project. Names of the packages, and minimum versions of them.
-- この package.json にしたがってパッケージをインストールするには run `npm install`
-- "dependencies": 本番環境で使うパッケージのリスト。`npm install --save blahblah`　の結果はここに追加される。
-- "devDependencies": 開発環境で使うパッケージのリスト。 `npm install --save-dev blahblah`　の結果はここに追加される。
-- 注意：`--save` や `--save-dev` のオプションなしで`npm install blahblah` したパッケージは package.json には追加されない
+
 
 ## /populatedb.js
 
