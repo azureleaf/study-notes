@@ -1,4 +1,4 @@
-# 配列
+# 配列と Object Literal
 
 ## 配列に繰り返しアクセスして何か操作する方法たち
 
@@ -27,7 +27,7 @@ console.log(numbers); // 20, 40, 60
 ```js
 let numbers = [10, 20, 30];
 let doubled = [];
-for (number of numbers) {
+for (let number of numbers) {
   doubled.push(number * 2);
 }
 console.log(doubled); // 20, 40, 60
@@ -92,7 +92,6 @@ filteredNumbers = numbers.filter((value, index) => {
 });
 console.log("filterをかけた結果：", filteredNumbers);
 ```
-
 
 ## 配列のソート
 
@@ -175,7 +174,8 @@ console.log("先頭に追加", stations);
 stations.shift();
 console.log("先頭から削除", stations);
 ```
-- spliceを使うと、挿入や削除を複数個自由にできる
+
+- splice を使うと、挿入や削除を複数個自由にできる
 - `.splice(開始位置のindex, 既存の配列から削除する要素数, 新たに挿入する要素))`
 
 ```js
@@ -187,4 +187,40 @@ console.log("任意の位置から複数削除", stations);
 
 stations.splice(2, 2, "勾当台公園駅", "広瀬通駅");
 console.log("任意の位置から複数削除し、同数を挿入（つまり置換）", stations);
+```
+
+## 配列の結合
+
+```js
+const elements = ["Fire", "Air", "Water"];
+
+console.log(elements.join());
+// expected output: "Fire,Air,Water"
+
+console.log(elements.join(""));
+// expected output: "FireAirWater"
+
+console.log(elements.join("-"));
+// expected output: "Fire-Air-Water"
+```
+
+## Objectに順番にアクセスする
+
+```js
+var fruits = {
+  apple: "りんご",
+  banana: "バナナ",
+  mandarin: "みかん"
+};
+
+for (key in fruits) {
+  console.log(`${key}は日本語で ${fruits[key]}です`);
+}
+
+for (let [key, value] of Object.entries(fruits)) {
+  console.log(`${key}は日本語で ${value}です`);
+}
+
+Object.keys(fruits); // ["apple", "banana", "mandarin"]
+Object.values(fruits); // ["りんご", "バナナ", "みかん"]
 ```

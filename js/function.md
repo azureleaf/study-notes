@@ -119,21 +119,24 @@ console.log(rest); // [30,40,50]
 ## オブジェクトの分割代入
 
 ```js
+// 変数の宣言時に分割代入する場合
 var obj1 = { a: 10, b: 20 };
-var { a, b } = myobj1; // 変数の初期化時に分割代入
+var { a, b } = myobj1;
 
 console.log(a); // 10
 console.log(b); // 20
 
-var obj2 = { a: "hello", b: "world" };
-({ a, b } = obj2); // 変数の初期化時以外の場合、外側にカッコをつけないとエラーになる
+// 変数の初期化時以外で分割代入する場合
+// 外側にカッコをつけないとエラーになる
+var obj2 = { name: "John", nationality: "UK", city: "London", age: 20 };
+({ city, name } = obj2); // objectの場合は、keyを使って取り出すので順序は無関係
 
-console.log(a);
-console.log(b);
+console.log(name);
+console.log(city);
 
 // 異なる名前として代入する
 var o = { p: 10, q: 20 };
-var { p: foo, q: bar, r: blah = 99 } = o; // 代入する方が２つしかないので、３つめは既定値となる
+var { p: foo = 99, q: bar = 99, r: blah = 99 } = o; // 代入元に存在しないkeyについて既定値を設定
 
 console.log(foo); // 10
 console.log(bar); // 20

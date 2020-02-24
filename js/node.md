@@ -57,6 +57,22 @@ server.listen(port, hostname, () => {
 });
 ```
 
+- serverにイベントリスナーをくっつける
+
+```js
+server.on('request', (request, response) => {
+  // the same kind of magic happens here!
+});
+```
+
+- requestからmethod(GET, POST..)とURLを取り出す
+- Destructuring Assginemntの書式を利用
+
+```js
+const { method, url } = request;
+```
+
+
 ### `require('cookie-parser')`
 
 ## Node.js 管理のための packages
