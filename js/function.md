@@ -69,7 +69,9 @@ var greet = ({ country, age, name }) => {
 greet({ name: "John", country: "USA", age: 20 });
 ```
 
-## Spread Operator
+## Spread Operator vs Rest Parameters
+
+- 見た目は同じ（...を使う）だが何が違う？
 
 - 可変長引数
 
@@ -86,8 +88,57 @@ function sum(...nums) {
 sum([1, 2, 3]); // 6
 ```
 
-## Rest Parameter
-function(...nums)
+## 配列の分割代入（Destructuring Assignment）
+
+```js
+// 左辺が２つしかないので、右辺の３つめ以降は捕捉されない
+let [a, b] = [10, 20, 30];
+console.log(a); // 10
+console.log(b); // 20
+// 興味がない値を無視する
+let [s, , t] = [10, 20, 30];
+console.log(s); // 10
+console.log(t); // 30
+// 既定値の設定
+let [x, y, z = 99] = [10, 20];
+console.log(x); // 10
+console.log(y); // 20
+console.log(z); // 99
+```
+
+- Spread 構文（...で配列やオブジェクトリテラルを展開するやつ）と分割代入を組み合わせる
+
+```js
+let a, b, rest;
+
+[a, b, ...rest] = [10, 20, 30, 40, 50];
+
+console.log(rest); // [30,40,50]
+```
+
+## オブジェクトの分割代入
+
+```js
+var obj1 = { a: 10, b: 20 };
+var { a, b } = myobj1; // 変数の初期化時に分割代入
+
+console.log(a); // 10
+console.log(b); // 20
+
+var obj2 = { a: "hello", b: "world" };
+({ a, b } = obj2); // 変数の初期化時以外の場合、外側にカッコをつけないとエラーになる
+
+console.log(a);
+console.log(b);
+
+// 異なる名前として代入する
+var o = { p: 10, q: 20 };
+var { p: foo, q: bar, r: blah = 99 } = o; // 代入する方が２つしかないので、３つめは既定値となる
+
+console.log(foo); // 10
+console.log(bar); // 20
+console.log(blah); // 99
+```
 
 ## Callback
 
