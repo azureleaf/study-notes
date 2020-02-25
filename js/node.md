@@ -118,6 +118,35 @@ server.on("request", (request, response) => {
 });
 ```
 
+## `Event`
+
+- `require("http")`すると、その内部でEventが使われている
+- Event Emitterは特定のタイミングでイベントをemitする
+  - Event emitter `net.Server` emits 
+  - Event emitter `fs.ReadStream` emits when the file is opend
+  - Event emitter `stream` emits when the data is ready to be read
+- Event Listenerは紐付けられたEventがemitされると実行される
+
+```js
+const EventEmitter = require('events');
+
+// All the Event Emitters inherit EventEmitter class
+class MyEmitter extends EventEmitter {} 
+
+// Instantiate event emitter
+const myEmitter = new MyEmitter();
+
+// Define Event name & Event listener
+myEmitter.on('event', (a, b) => {
+  console.log("Event occured! ", a, b, this); // a b {}
+});
+
+// Emit the event with args
+myEmitter.emit('event', 'a', 'b');
+
+```
+
+
 
 ### `require('cookie-parser')`
 
