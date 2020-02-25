@@ -1,12 +1,12 @@
-# Mongo と Mongoose の勉強メモ
+# Mongo & Mongoose
 
-## 超要約
+## MongoDB Overview
 
-- aaa
-
-## 全体の流れ
-
--
+- You don't have to remember many queries of MongoDB as long as you use Mongoose
+  - Survival Commands will be: 
+    - .find()
+    - create and dropping DB
+    - create and dropping Collection
 
 ## Install MongoDB @ Ubuntu 18.04
 
@@ -20,6 +20,7 @@
 
 1. `sudo apt update`
 1. `sudo apt-get install -y mongodb-org`
+
 
 ## MongoDB Community Server Files
 
@@ -119,9 +120,70 @@ var SomeModelSchema = new Schema({
 var SomeModel = mongoose.model('SomeModel', SomeModelSchema );
 ```
 
-## Schema Types
 
+
+## Mongoose
+
+### Overview
+
+
+1. Define Schema
+1. Create Model from the schema
+1. `new` the model
+1. Save the model
+
+### Install Mongoose
+
+- `npm install mongoose`
+
+### MISC
+
+- Virtual Properties
+  - Document properties which can get and set, but will not be saved in MongoDB
+
+### Connection Setup
+
+```js
+//Import the mongoose module
+var mongoose = require('mongoose');
+
+//Set up default mongoose connection
+// .connect(DB URI, OPTIONS)
+var mongoDB = 'mongodb://127.0.0.1/my_database';
+mongoose.connect(mongoDB, { useNewUrlParser: true }); 
+
+//Get the default connection
+var db = mongoose.connection;
+
+//Bind connection to error event (to get notification of connection errors)
+// .on(EVENT NAME, EVENT LISTENER)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 ```
+
+### Define Schema & Model
+
+- Model can be created from Schemas
+
+```js
+//Require Mongoose
+var mongoose = require('mongoose');
+
+//Define a schema
+var Schema = mongoose.Schema;
+
+var SomeModelSchema = new Schema({
+  a_string: String,
+  a_date: Date
+});
+
+// Compile model from schema
+// .model(NAME OF COLLECTIONS TO BE CREATED, BASE SCHEMA)
+var SomeModel = mongoose.model('SomeModel', SomeModelSchema );
+```
+
+### Available Schema Types
+
+```js
 var schema = new Schema(
 {
   name: String,
@@ -136,3 +198,9 @@ var schema = new Schema(
   nested: { stuff: { type: String, lowercase: true, trim: true } }
 })
 ```
+
+### Validation
+
+- Check if the update / new data is compatible with schema
+
+

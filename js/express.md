@@ -3,35 +3,33 @@
 このプロジェクトは`express generator`で生成した。https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs のチュートリアルを実行したもの。
 
 ## Create Project
-1. Generate template
-    1. `npm install express-generator -g`
-    1. `express express-locallib --view=pug`
-    1. `cd express-locallib`
-    1. `npm install`
-    1. `npm install --save-dev nodemon`
-    1. `DEBUG=express-locallibrary-tutorial:* npm start`
-        - Try to run
-1. 
 
+1. Generate template
+   1. `npm install express-generator -g`
+   1. `express express-locallib --view=pug`
+   1. `cd express-locallib`
+   1. `npm install`
+   1. `npm install --save-dev nodemon`
+   1. `DEBUG=express-locallibrary-tutorial:* npm start`
+      - Try to run
+1.
 
 ## 全体のデータフロー
 
-- HTTP Reqを受け取って、それに対応したHTTP Resを作り上げていくのがExpressのお仕事。
-
+- HTTP Req を受け取って、それに対応した HTTP Res を作り上げていくのが Express のお仕事。
 
 ![MVC_of_express](./express_mvc.png)
 
 ## それぞれのファイル同士を追ってみる
 
-
 1. `npm run` すると `node bin/www/`　が実行される
-    - この動作はpackage.jsonで定義
+   - この動作は package.json で定義
 1. `bin/www`
-    1. app.jsからappをインポート
-    1. appのポート番号を設定
-        - `process.env.PORT`というのは、Node内部の環境変数
-    1. httpモジュールを使ってserverをインスタンス化し、listenする
-        - `var server = http.createServer(app);`
+   1. app.js から app をインポート
+   1. app のポート番号を設定
+      - `process.env.PORT`というのは、Node 内部の環境変数
+   1. http モジュールを使って server をインスタンス化し、listen する
+      - `var server = http.createServer(app);`
 1. `/app.js` calls:
    - `/routes/`
    - `/public/`
@@ -46,27 +44,32 @@
 
 ### cookie-parser
 
-
-
 ## Files Overview
 
-- `/app.js`
+- `/app.js` (created by generator)
 - `/node_modules`
 - `/package.json`
 - `/package-lock.json`
-- `/bin/`
-    - www
-- `/public/`
-    - images/
-    - javascripts/
-    - stylesheets/
-- `/views/`
-    - error.pug
-    - index.pug
-    - layout.pug
-- `/routes/`
-    - index.js
-    - users.js
+- `/bin/` (created by generator)
+  - www
+- `/public/` (created by generator)
+  - images/
+  - javascripts/
+  - stylesheets/
+- `/views/` (created by generator)
+  - error.pug
+  - index.pug
+  - layout.pug
+- `/routes/` (created by generator)
+  - index.js
+  - users.js
+- `/models/` (created by me) Note that each file has only one schema & model
+    - author.js
+    - book.js
+    - bookinstance.js
+    - genre.js
+
+
 
 ## app.js
 
@@ -90,9 +93,6 @@
 - server のインスタンス化
 - server の listen の設定（ポート番号、リッスンに失敗した時のエラー処理とか）
 
-
-
-
 ## /populatedb.js
 
 ## /package-lock.json
@@ -113,7 +113,6 @@
 
 ## /views
 
-
 ### views/layout.pug
 
 - 全てのページに共通する部分。サイドのメニューや
@@ -128,8 +127,11 @@
 - layout.pug を拡張している。継承などにより、共通部分を何度も書くことを防いでいるっぽい。今回でいうと、HTML のヘッダ部分は共通なので、何度も書かないために拡張機能を利用している。
 
 ### views/blahblah_detale.pug
+
 ### views/blahblah_detail.pug
+
 ### views/blahblah_form.pug
+
 ### views/blahblah_list.pug
 
 ## public ディレクトリ
@@ -139,15 +141,13 @@
 ## models ディレクトリ
 
 1. Define Schema
-1. 
+1.
 
 ### models/book.js
 
 - Schema:
-    - title, summary, isbn
-    - author, genre はそれぞれ外部のモデルと関連付ける
-
-
+  - title, summary, isbn
+  - author, genre はそれぞれ外部のモデルと関連付ける
 
 ### models/bookinstance.js
 
@@ -156,48 +156,52 @@
 
 ### models/author.js
 
-- 
+-
 
 ### models/genre.js
 
 ## controllers/
 
-modelからデータを、viewからUIのテンプレートを引っ張ってきて結合するのがコントローラの役割。
+model からデータを、view から UI のテンプレートを引っ張ってきて結合するのがコントローラの役割。
 
 ### controllers/authorController.js
 
-8つの関数をexportする。
+8 つの関数を export する。
 
 - author_list()
-    1. Authorモデルから全ての著者を
-    1. res.render() to embed the list values into "author_list" view
+
+  1. Author モデルから全ての著者を
+  1. res.render() to embed the list values into "author_list" view
 
 - author_detail()
-    1. 
 
-- author_reate_get: ユーザーが新たなauthorを登録するためのフォームを表示する
-    1. res.render() to embed the page title into "author_form" view
+  1.
+
+- author_reate_get: ユーザーが新たな author を登録するためのフォームを表示する
+
+  1. res.render() to embed the page title into "author_form" view
 
 - author_reate_post
-    1. res.render() to embed the page title into "author_form" view
+
+  1. res.render() to embed the page title into "author_form" view
 
 - author_reate_get
-    1. res.render() to embed the page title into "author_form" view
+
+  1. res.render() to embed the page title into "author_form" view
 
 - author_reate_get
-    1. res.render() to embed the page title into "author_form" view
+
+  1. res.render() to embed the page title into "author_form" view
 
 - author_reate_get
-    1. res.render() to embed the page title into "author_form" view
+
+  1. res.render() to embed the page title into "author_form" view
 
 - author_reate_get
-    1. res.render() to embed the page title into "author_form" view
-
-
+  1. res.render() to embed the page title into "author_form" view
 
 ### controllers/bookController.js
 
 ### controllers/bookinstanceController.js
-
 
 ### controllers/genreController.js
