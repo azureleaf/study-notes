@@ -1,0 +1,61 @@
+html(lang="en")
+  head
+    title= pageTitle
+    script(type='text/javascript').
+    style(type='text/css').
+      .blue { color: blue; }
+      #footer {text-align: center;}
+      .anon { color: red; }
+      .member { color: green; }
+  body
+    h1 Pug - node template engine
+    
+    h2 Using JS expression
+    - var authed = true
+    div(class=authed? "member" : "anon") Welcome
+
+    h2 Apply class    
+    div When the content is short, put the tag and content in a line
+    div.blue.
+      When the content is long, you can put the content and tag in the different lines. 
+      Don't forget to put "." at the end of the tag name. 
+      Line break inside the block text will be just ignored.
+    div.blue
+      | Pug is a terse and simple templating language with a 
+      | strong focus on performance and powerful features.
+      br
+      | This is great
+
+    h2 Style attributes
+    a(style={color: 'red', background: 'yellow'}) Style Applied Here
+
+    h2 Write the attributes in the multiple lines
+    p Radio button
+      input(
+        type='checkbox'
+        name='agreement'
+        checked
+      )
+    p You can use Boolean to remove/show attributes with no value
+      input(
+        type='checkbox'
+        name='agreement'
+        checked=false
+     )
+      
+
+    h2 Whitespace Control
+    a(href='google.com') Google
+    |
+    |
+    a(class='button' href='google.com') Google
+    |
+    |
+    a(class='button', href='google.com') Google
+
+    h2 Escaping in the Attributes
+    div(escaped="<code>")
+    div(unescaped!="<code>")
+
+    h2 Apply ID
+    div#footer MIT Licence

@@ -24,18 +24,4 @@
 
 ## Basic
 
-```pug
-doctype html
-html(lang="en")
-  head
-    title= pageTitle
-    script(type='text/javascript')
-  body
-    h1 Pug - node template engine
-    #container.col
-    div.
-      Pug is a terse and simple templating language with a
-      strong focus on performance and powerful features.
-
-
-```
+Refer to `sample.pug`
