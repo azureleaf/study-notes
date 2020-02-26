@@ -3,6 +3,32 @@
 ## Basics
 
 ```js
+class Person {
+  constructor(name, height, weight){
+    this.name = name;
+    this.height = height;
+    this.weight = weight;
+  }
+
+  getBMI(){
+    return this.weight / (this.height * this.height);
+  }
+
+  greet(){
+    console.log("私は" + this.name + "です。BMIは" + this.getBMI() + "です");
+  }
+}
+
+var suzuki = new Person("suzuki", 0.172, 65);
+suzuki.greet();
+
+
+var yoshida = new Person("yoshida", 0.180, 60);
+yoshida.greet();
+
+```
+
+```js
 class Animal {
   constructor(type) {
     this.type = type;
@@ -34,7 +60,6 @@ class Dog extends Animal {
 
 // 実際にオブジェクトをインスタンス化する
 var sparkie = new Dog("Sparkie", "Border Collie");
-
 ```
 
 ## Getter & Setter

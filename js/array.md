@@ -108,20 +108,20 @@ prefs.sort();
 console.log(prefs);
 
 let numbers = [11, 9, 23, 910, 3];
-numbers.sort(); // これは失敗する。数字が辞書的にソートされてしまうので
+numbers.sort(); // これは数字の大きさに従って並べてくれない。数字が辞書的にソートされてしまうので
 console.log("数字の辞書的なソート：", numbers); // 11, 23, 3, 9, 910
 
 // 降順ソート
 numbers.sort((a, b) => {
   return b - a;
 });
-console.log("降順ソート：", numbers);
+console.log("降順ソート：", numbers); // 910, 23, 11, 9, 3
 
 // 昇順ソート
 numbers.sort((a, b) => {
   return a - b;
 });
-console.log("昇順ソート：", numbers);
+console.log("昇順ソート：", numbers); // 3, 9, 11, 23, 910
 
 // ソートすると、最大の数や最小の数を見つけることもできる
 console.log("最大の数は", numbers[numbers.length - 1]);
