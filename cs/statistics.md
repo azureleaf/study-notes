@@ -23,6 +23,8 @@
 - 因子分析
 - 多変量解析
 
+- Least Square Method
+
 ## Terminology: Topics
 
 - Operations Research
