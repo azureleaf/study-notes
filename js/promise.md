@@ -1,4 +1,6 @@
-# Promise とは何なのか？（未完成：async awaitをまだ書いてない）
+# Promise と Async/Await と友達になる
+
+## Promise とは何なのか？
 
 - Promise は、オブジェクトである
 - Promise は、「Promise オブジェクトを new して返すような関数」の中で中身を定義する
@@ -7,6 +9,9 @@
   - その関数の第一引数は成功時のコールバック、第二引数は失敗時のコールバック
   - `resolve()`が呼ばれると、その Promise が成功したとみなされる。さらに、`resolve()`の引数が次の.then 内部の関数の引数として渡される。
   - `reject()`が呼ばれると、その Promise は失敗したとみなされる。失敗した箇所以降にある`.then()`は全て中止され、`reject()`の引数がエラー内容として投げられる。これを`catch()`で捕捉すべき。
+- Promise は ES6(ES2015)で採用
+- Async/Await は ES8 で採用
+- Async/Await は Promise の進化系であるが、Promise を内部で普通に使っているのでそれを理解するのが前提となる
 
 ## Promise を使うとどんないいことがある？
 
@@ -14,12 +19,50 @@
 - ただし、callback を使うと、順序を指定して実行できる。関数 A が終わったら関数 B を実行、それが終わったら関数 C を実行...のようにできるということ。しかし、これは**コールバック地獄と呼ばれ、コードの可読性が大幅に低下してしまう**。
 - そこで Promise が発明された。これにより、可読性を維持しつつ、順序指定ができる。
 - ただし、なんでも同期的にやればいいというわけではない。そもそもなぜ JavaScript が非同期なのかというと、**複数の関数を並行して進めることにより全体の終了速度を早くできるから**である。Promise で同期的にやると全体の処理時間は長くなっていく。そして、それは Web 開発では致命的。ページの読み込みや動作が遅いとユーザはすぐ逃げていってしまうから。なので、Promise で同期処理する部分は最小に抑えつつ、非同期処理と組み合わせて全体が最大限の速度となるようにする仕組みもある：
-  - `Promise.all([promise1, promise2])`: promise1, promise2は非同期に開始するが、両方が終わった時点でreturn 
-  - `Promise.race([promise1, promise2])`: promise1, promise2のうちどちらか一方が終わった時点でreturn。もう一方も実行自体は続行するが、それが終わってもPromise.race()に影響しない。
+  - `Promise.all([promise1, promise2])`: promise1, promise2 は非同期に開始するが、両方が終わった時点で return
+  - `Promise.race([promise1, promise2])`: promise1, promise2 のうちどちらか一方が終わった時点で return。もう一方も実行自体は続行するが、それが終わっても Promise.race()に影響しない。
 - そもそもどういう時に複数の関数を**同期的に**実行したいのか？(この部分要加筆)
   - 外部へのサーバーへのデータ取得をするとき（画像、API の JSON、その他）
   - 実行しようとする関数にデータ依存関係があるとき（HTML ファイルが用意できていない状態で CSS ファイルを適用しようとしても、対象が存在しないのでバグってしまう）
   - ファイルの書き出しや読み込みをするとき
+
+## Promise: これだけは覚えて帰る
+
+- こういう状況を仮定しよう
+  - 処理 A, 処理 B, 処理 C を順番に(つまり同期的に)実行したい
+    - 例えば、A、B、C のそれぞれでデータを読み込み、その３つを揃えて表示するウェブサイトとか
+  - この３つの処理のいずれも成功するときと失敗するときの両方のケースがある
+    - ファイルが存在しないでエラー、API サーバが落ちている、とか
+  - ３つのうちどこかで失敗したら、全体が意味消失するとする
+
+```javascript
+// 疑似コード
+// これは処理Aについて。処理B、処理Cも同様に書く
+function doA() {
+  return new Promise((resolve, reject) => {
+    // 処理A
+    if (err) {
+      reject("失敗した時に投げる値"); // 失敗したときに、その合図として呼ぶ
+    }
+    resolve("成功した時に次のPromiseに渡す値"); // 成功したときに、その合図として呼ぶ
+  });
+}
+
+doA()
+  .then(arg => {
+    return doB(arg);
+  })
+  .then(arg => {
+    return doC(arg);
+  });
+```
+
+- つまり
+  1. 順番にやりたい処理の１ステップが終わった箇所に`resolve()`を書く
+  1. （省略可）失敗したときの処理を書き、最後に`reject()`を書く
+  1. それを Promise オブジェクトのコンストラクタとして書く
+  1. その Promise オブジェクトを new して return するような関数を書く
+  1. その関数と`.then()`を使ってつなげていく
 
 ## 実例：ひとつの値をリレーしていく場合
 
@@ -188,7 +231,7 @@ promiseStart
 ## 実例： Promise.all()、Promise.race()の並列（入れ子）
 
 - Promise 同士をネストさせることができる。
-- 下では、c2_1 の実行後に c2_2 を実行するようにしているが、その合計時間が c1 よりも遅い場合（then して長くなっている分、だいたいc2の方が遅いだろうが）は親のPromise.all()はc2が終了したかどうかを気にしない。
+- 下では、c2_1 の実行後に c2_2 を実行するようにしているが、その合計時間が c1 よりも遅い場合（then して長くなっている分、だいたい c2 の方が遅いだろうが）は親の Promise.all()は c2 が終了したかどうかを気にしない。
 
 ```javascript
 var startTime, endTime;
@@ -262,12 +305,11 @@ promiseStart
   });
 ```
 
-## 実例：Promise.all()のresolve()内容を確認する
+## 実例：Promise.all()の resolve()内容を確認する
 
 - `Promise1`, `Promise2`はそれぞれ内部で`resolve(value1)`,`resolve(value2)`するとする。
-- このとき、`Promise.all([Promise1, Promise2]).then((i)=>{console.log(i)})`のiには一体何が入るのか？という疑問が生じる。通常のPromiseとthen()は一対一だが、このPromise.all()の場合はresolve()が複数呼ばれるので。
-- 答えからいうと`[ value1, value2]`のように配列が入る。このresolve()の結果の配列内部の順序は、最初のPromise.allで書いた順序そのままである。各Promise終了の先着順になるのかと思ったら、そうじゃなかった。
-
+- このとき、`Promise.all([Promise1, Promise2]).then((i)=>{console.log(i)})`の i には一体何が入るのか？という疑問が生じる。通常の Promise と then()は一対一だが、この Promise.all()の場合は resolve()が複数呼ばれるので。
+- 答えからいうと`[ value1, value2]`のように配列が入る。この resolve()の結果の配列内部の順序は、最初の Promise.all で書いた順序そのままである。各 Promise 終了の先着順になるのかと思ったら、そうじゃなかった。
 
 ```javascript
 function returnPromise(name, delay) {
@@ -315,4 +357,241 @@ Promise.all(
 ).then(function(data) {
   console.log(data);
 });
+```
+
+## async の登場
+
+- async/await を使う利点
+
+  - then, resolve, reject キーワードをあまり書かずにすむ
+  - Promise のように.then のチェーンでキツキツにつなげなくても、ゆったりと書ける
+  - Promise では一つ一つの段階の区切りを示すために関数で分けていたのに対して、await はキーワードを目印と書くだけで同期タイミングを示せるので、書く量が少ない
+
+- await を使わないと Promise とあまりかわらず、恩恵もあまりない
+
+```js
+// async functionはPromiseを返す
+async function returnPromise(i) {
+  // ランダムに成功・失敗する
+  if (Math.random() < 0.6) {
+    console.log(i + "回目はセーフ！");
+    return i + 1; // resolveの代わりにreturn。これによりfulfilledなPromiseが返る
+  } else {
+    console.log(i + "回目でアウト！");
+    throw new Error(i + "回目でアウトでしたね。"); // rejectの代わりにthrow。これによりrejectedなPromiseが返る
+  }
+}
+
+returnPromise(1)
+  .then(val => {
+    return returnPromise(val);
+  })
+  .then(val => {
+    return returnPromise(val);
+  })
+  .then(val => {
+    return returnPromise(val);
+  })
+  .catch(err => {
+    console.log("エラー：", err);
+  });
+```
+
+## await の登場
+
+- `await FUNCTION_WHICH_RETURNS_PROMISE()`という構文になる
+- Promise が返るまでは、そこで停止して待つ
+
+```js
+// なんの変哲もない、単なるPromiseの関数
+// つまり、async / awaitを使ったからといってPromiseとおさらばできるわけでもない
+function sampleResolve(value) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      console.log("受け取った値：", value);
+      resolve(value * 2);
+    }, 1000);
+  });
+}
+
+async function wrapper(val) {
+  const result = await sampleResolve(val); // Promiseが返るまでに１秒かかる
+  console.log("１秒経過しました。結果は", result, "でした。");
+  return result; // この一行でreturn new Promise()内部のresolve(result)と同義
+}
+
+// wrapper()はasync functionなので、Promiseを返す。なのでthenableである
+wrapper(100)
+  .then(val => {
+    return wrapper(val);
+  })
+  .then(val => {
+    return wrapper(val);
+  })
+  .then(val => {
+    return wrapper(val);
+  })
+  .then(val => {
+    console.log("最終値は", val);
+  });
+```
+
+## async / await で実際に記述量が減ってありがたみを感じる書き方
+
+- then でずらずら羅列するのではなく、独立した行で書ける
+
+```js
+function sampleResolve(value) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      console.log("受け取った値：", value);
+      resolve(value * 2);
+    }, 1000);
+  });
+}
+
+// このwrapper関数そのものも、内部の個々の処理関数も、いずれもPromiseを返す
+// ただし、外側のwrapperは何も本質的な働きはしていない
+// あくまで、「awaitを使うためには、それがasync functionの内部になければならない」という形式を保つことだけが存在意義にみえる
+async function wrapper(val) {
+  let result;
+
+  result = await sampleResolve(val);
+  result = await sampleResolve(result);
+  result = await sampleResolve(result);
+  result = await sampleResolve(result);
+  return result; // return Promise
+}
+
+// Promiseではこの部分のthenが冗長でなんとなく見にくいが、この連続処理部分を
+// とはいえ、最終的なresolveの値を確認するためだけに、ここでthenを使う
+wrapper(100)
+  .then(finalVal => {
+    console.log("最終値は", finalVal);
+  })
+  .catch(err => {
+    console.error(err); // まあエラーは起きないけど
+  });
+```
+
+## await で書いた行は、普通の行と同じように for 文とか制御構造に組み込める
+
+- 上のコードを見れば、誰でも「同じことを繰り返してるなあ、for 文を使いたいなあ」と思うはず。実際、使える
+- 同期処理でこういうことができるのも、async / await で「.then メソッドの連鎖」から「独立した行の集まり」に書き換えられた恩恵である
+
+```js
+function sampleResolve(value) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      console.log("受け取った値：", value);
+      resolve(value * 2);
+    }, 1000);
+  });
+}
+
+// asyncキーワードがある場合も、このようにアロー関数を使った表記をしてもよい
+// async function wrapper(val){} と同義
+var wrapper = async val => {
+  for (var i = 0; i < 5; i++) val = await sampleResolve(val);
+};
+
+wrapper(100);
+```
+
+## async / await のエラー処理は、普通の try catch finally 構文で書ける
+
+- エラー処理などを総出演させると以下のようになる
+
+```js
+// これは普通のPromiseのときと同じ
+function returnPromise(i = 1) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // ランダムに成功・失敗する
+      if (Math.random() < 0.8) {
+        console.log(i + "回目はセーフ！");
+        resolve(i + 1);
+      } else {
+        console.log(i + "回目でアウト！");
+        reject(new Error(i + "回目でアウトでした。"));
+      }
+    }, 1000);
+  });
+}
+
+async function wrapper(count) {
+  try {
+    for (let i = 0; i < 3; i++) {
+      count = await returnPromise(count);
+    }
+    return count;
+  } catch (err) {
+    throw err;
+  }
+}
+
+wrapper()
+  .then(finalCount => console.log(`${finalCount - 1}回ともセーフでした。`))
+  .catch(err => console.error(new Error(err)))
+  .finally(() => console.log("終了します。お疲れ様でした！"));
+//.finally(console.log("終了します。お疲れ様でした！")); // ちなみに、これだとうまくいかない。finallyの中身は、関数でないといけないから
+```
+
+## 並列処理`Promise.all()`を await と使う
+
+- Promise.all()の部分はいつもどおりなので、そんなに特筆すべきこともないが。。。
+
+```js
+function wait(delay) {
+  return new Promise(resolve =>
+    setTimeout(() => {
+      console.log(delay + "ms待ちました。");
+      resolve("私は" + delay + "ms待ったやつのresolve値ですよ");
+    }, delay)
+  );
+}
+
+let wrapper = async () => {
+  // Promise.all()の返り値の配列を、このwrapperはresolveする
+  return await Promise.all([wait(2500), wait(1200), wait(400)]);
+};
+
+var startTime = Date.now();
+
+wrapper().then(results => {
+  let endTime = Date.now();
+
+  console.log("Promise.allの返り値はこんなんでした");
+  results.map(result => {
+    console.log(result);
+  });
+  console.log(
+    "全体の所要時間は大雑把にいうと" +
+      Math.round(endTime - startTime) +
+      "msでしたが、これは一番長い待ち時間とだいたい同じですよね！"
+  );
+});
+```
+
+## ちょっと実用的な疑似コード
+
+- APIへのアクセスなどの時間がかかる処理があり、なおかつそれを順番に処理しないといけない場合には活躍する
+
+```js
+async function getQuote() {
+  // 現在のサンタクロースの緯度経度情報を教えてくれるAPIからデータ取得
+  let santaPosResponse = await fetch("http://santa-no-position-desu.com")
+
+  // もってきたJSONファイルをobject literalにparse
+  let santaPos = await santaPosResponse.json()
+
+  // 緯度経度情報を投げて、その場所の天気を教えてくれるAPIからデータ取得
+  let weatherResponse = await fetch("http://tenki-desu.com/" + santaPos.longitude + "/" +  santaPos.latitude)
+
+  // parse
+  let weather = await weatherResponse.json()
+
+  // 最終的な成果物を表示
+  console.log("今サンタクロースがいる場所の天気は", weather.condition, "です！");
+}
 ```
