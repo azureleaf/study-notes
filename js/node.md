@@ -28,7 +28,11 @@
   - `--depth` option to omit the detailed dependencies of the each package
 - `npm update PACKAGE_NAME`
   - Update the specified package
-
+- `npx some-package`
+  - npx commands try to find the package in the local
+    - If found, `npx` execute the package while `npm` never execute the package
+    - If not found, `npx` directly execute the package without installing it(really?)
+  - Tips: after `npm i some-package`, you can't execute it by `some-package`. You need `./node_modules/.bin/some-package` to execute
 ## `require('http')`
 
 - Node.js のサーバー起動のコアとなるパッケージ

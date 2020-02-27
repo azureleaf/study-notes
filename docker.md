@@ -22,27 +22,26 @@
 - docker build
 
 ## commands (docker-composer)
+
 - docker-compose ps
   - List Containers
 - docker-compose images
   - List images
 - docker-compose build
   - Build Service Image
-- docker-compose restart	
-- docker-compose run	
-  - （※-dオプションでバックグランドで起動）
-- docker-compose up	
+- docker-compose restart
+- docker-compose run
+  - （※-d オプションでバックグランドで起動）
+- docker-compose up
 - docker-compose exec
-- docker-compose logs	
-- docker-compose stop	
-- docker-compose rm	
-  - docker-compose.ymlにかかれているコンテナを削除
+- docker-compose logs
+- docker-compose stop
+- docker-compose rm
+  - docker-compose.yml にかかれているコンテナを削除
 - docker-compose down
   - コンテナを停止＆削除
 
-## Dockerを使うとどんないいことがあるの？
-
-
+## Docker を使うとどんないいことがあるの？
 
 ## 用語集
 
@@ -64,11 +63,39 @@
 
 - Hyper-V
 - Virtual Machine
-- Hypervisor 
+- Hypervisor
 - VirtualBox
-  - VMを作る
+  - VM を作る
 - Vagrant
-  - VirtualBoxの設定を自動化してくれるツール
+  - VirtualBox の設定を自動化してくれるツール
 - VMWare
-  - VirtualBoxみたいなもん
-  - VirtualBoxが主流なので、あまり見ない気がする
+  - VirtualBox みたいなもん
+  - VirtualBox が主流なので、あまり見ない気がする
+
+## Run MySQL container
+
+1. Create `docker-compose.yml`
+
+```yml
+version: "3"
+
+services:
+  db:
+    image: mysql:5.7.27
+    restart: always
+    ports:
+      - "13306:3306"
+    volumes:
+      - ./.data/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+```
+
+1. `docker-compose up -d`
+   - Start the container
+1. `docker-compose ps`
+   - Check if the container is up
+1. `mysql -uroot -p -h 127.0.0.1 --port 13306`
+   - Connect to MySQL container

@@ -3,6 +3,15 @@
 ## 一般ツール
 
 - VS Code
+  - `ctrl ,`
+    - show setting
+  - `ctrl shift i`
+    - format
+  - `ctrl shift @`
+    - toggle display / hide terminal
+  - `ctrl shift p`
+  - `ctrl alt n`
+    - run code
 - git
 - SourceTree
 - Mac vs Windows vs Linux
