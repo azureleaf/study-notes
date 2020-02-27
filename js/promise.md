@@ -371,7 +371,7 @@ Promise.all(
 
 ```js
 // async functionはPromiseを返す
-async function returnPromise(i) {
+async function roulette(i) {
   // ランダムに成功・失敗する
   if (Math.random() < 0.6) {
     console.log(i + "回目はセーフ！");
@@ -382,15 +382,15 @@ async function returnPromise(i) {
   }
 }
 
-returnPromise(1)
+roulette(1)
   .then(val => {
-    return returnPromise(val);
+    return roulette(val);
   })
   .then(val => {
-    return returnPromise(val);
+    return roulette(val);
   })
   .then(val => {
-    return returnPromise(val);
+    return roulette(val);
   })
   .catch(err => {
     console.log("エラー：", err);
@@ -399,13 +399,13 @@ returnPromise(1)
 
 ## await の登場
 
-- `await FUNCTION_WHICH_RETURNS_PROMISE()`という構文になる
+- `await`キーワードの右に書くのは、Promise を返す関数（下でいうと double()）でないといけない
 - Promise が返るまでは、そこで停止して待つ
 
 ```js
 // なんの変哲もない、単なるPromiseの関数
 // つまり、async / awaitを使ったからといってPromiseとおさらばできるわけでもない
-function sampleResolve(value) {
+function double(value) {
   return new Promise(resolve => {
     setTimeout(() => {
       console.log("受け取った値：", value);
@@ -415,12 +415,13 @@ function sampleResolve(value) {
 }
 
 async function wrapper(val) {
-  const result = await sampleResolve(val); // Promiseが返るまでに１秒かかる
+  const result = await double(val); // Promiseが返るまでに１秒かかる
   console.log("１秒経過しました。結果は", result, "でした。");
   return result; // この一行でreturn new Promise()内部のresolve(result)と同義
 }
 
 // wrapper()はasync functionなので、Promiseを返す。なのでthenableである
+// 普通は、こういう風にasync関数自体をthenでつなげる書き方はしないだろうが...例なので
 wrapper(100)
   .then(val => {
     return wrapper(val);
@@ -441,7 +442,7 @@ wrapper(100)
 - then でずらずら羅列するのではなく、独立した行で書ける
 
 ```js
-function sampleResolve(value) {
+function double(value) {
   return new Promise(resolve => {
     setTimeout(() => {
       console.log("受け取った値：", value);
@@ -456,10 +457,10 @@ function sampleResolve(value) {
 async function wrapper(val) {
   let result;
 
-  result = await sampleResolve(val);
-  result = await sampleResolve(result);
-  result = await sampleResolve(result);
-  result = await sampleResolve(result);
+  result = await double(val);
+  result = await double(result);
+  result = await double(result);
+  result = await double(result);
   return result; // return Promise
 }
 
@@ -480,7 +481,7 @@ wrapper(100)
 - 同期処理でこういうことができるのも、async / await で「.then メソッドの連鎖」から「独立した行の集まり」に書き換えられた恩恵である
 
 ```js
-function sampleResolve(value) {
+function double(value) {
   return new Promise(resolve => {
     setTimeout(() => {
       console.log("受け取った値：", value);
@@ -492,19 +493,19 @@ function sampleResolve(value) {
 // asyncキーワードがある場合も、このようにアロー関数を使った表記をしてもよい
 // async function wrapper(val){} と同義
 var wrapper = async val => {
-  for (var i = 0; i < 5; i++) val = await sampleResolve(val);
+  for (var i = 0; i < 5; i++) val = await double(val);
 };
 
 wrapper(100);
 ```
 
-## async / await のエラー処理は、普通の try catch finally 構文で書ける
+## async / await のエラー処理は、普通の try catch 構文で書ける
 
 - エラー処理などを総出演させると以下のようになる
 
 ```js
 // これは普通のPromiseのときと同じ
-function returnPromise(i = 1) {
+function roulette(i = 1) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       // ランダムに成功・失敗する
@@ -522,17 +523,17 @@ function returnPromise(i = 1) {
 async function wrapper(count) {
   try {
     for (let i = 0; i < 3; i++) {
-      count = await returnPromise(count);
+      count = await roulette(count);
     }
     return count;
   } catch (err) {
-    throw err;
+    throw err; // catchしたエラーを投げる
   }
 }
 
 wrapper()
   .then(finalCount => console.log(`${finalCount - 1}回ともセーフでした。`))
-  .catch(err => console.error(new Error(err)))
+  .catch(err => console.error(new Error(err))) // catchされて投げられたエラーを、ここで再びcatchしている。エラーのバトンリレー的な
   .finally(() => console.log("終了します。お疲れ様でした！"));
 //.finally(console.log("終了します。お疲れ様でした！")); // ちなみに、これだとうまくいかない。finallyの中身は、関数でないといけないから
 ```
@@ -552,7 +553,8 @@ function wait(delay) {
 }
 
 let wrapper = async () => {
-  // Promise.all()の返り値の配列を、このwrapperはresolveする
+  // Promise.all()内部の複数のresolve()の結果は配列となって返ってくる
+  // その結果を、そのままreturnする、というか正確にはPromiseとして返却するが、その中に配列も含まれている
   return await Promise.all([wait(2500), wait(1200), wait(400)]);
 };
 
@@ -575,23 +577,34 @@ wrapper().then(results => {
 
 ## ちょっと実用的な疑似コード
 
-- APIへのアクセスなどの時間がかかる処理があり、なおかつそれを順番に処理しないといけない場合には活躍する
+- API へのアクセスなどの時間がかかる処理があり、なおかつそれを順番に処理しないといけない場合には活躍する
 
 ```js
-async function getQuote() {
+async function getSantaWeather() {
+  // URLはデタラメなので開けません
   // 現在のサンタクロースの緯度経度情報を教えてくれるAPIからデータ取得
-  let santaPosResponse = await fetch("http://santa-no-position-desu.com")
+  let santaPosResponse = await fetch("http://santa-no-position-desu.com");
 
   // もってきたJSONファイルをobject literalにparse
-  let santaPos = await santaPosResponse.json()
+  let santaPos = await santaPosResponse.json();
 
   // 緯度経度情報を投げて、その場所の天気を教えてくれるAPIからデータ取得
-  let weatherResponse = await fetch("http://tenki-desu.com/" + santaPos.longitude + "/" +  santaPos.latitude)
+  let weatherResponse = await fetch(
+    "http://tenki-desu.com/" + santaPos.longitude + "/" + santaPos.latitude
+  );
 
   // parse
-  let weather = await weatherResponse.json()
+  let weather = await weatherResponse.json();
 
-  // 最終的な成果物を表示
-  console.log("今サンタクロースがいる場所の天気は", weather.condition, "です！");
+  return weather;
 }
+
+getSantaWeather().then(weather => {
+  // 最終的な成果物を表示
+  console.log(
+    "今サンタクロースがいる場所の天気は",
+    weather.condition,
+    "です！"
+  );
+});
 ```

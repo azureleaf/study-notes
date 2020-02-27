@@ -154,14 +154,13 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
   - MYSQL, Postgres, SQLite3, MongoDB, MariaDB, MSSQL, Oracle
 - Mongoose
   - MongoDB
-- Waterline
-  - MySQL, Postgres, MongoDB, LDAP, Redis
 - Sequelize
   - MySQL, Postgres, SQLite3, MariaDB, MSSQL
+- Waterline
+  - MySQL, Postgres, MongoDB, LDAP, Redis
 - Loopback
 - Node ORM2
   - MySQL, SQLite3, Progress
-- GraphQL
 - Bookshelf
   - MySQL, Postgres, SQLite3
 - Objection
