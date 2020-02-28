@@ -257,7 +257,15 @@
 
 ## 認証
 
+- 認証方式はたくさんある
+
+### Username + Password
+
+- 基本中の基本
+
+### OpenID
 ### OAuth2.0
+### Social Login
 
 - OAuth とは
 
