@@ -36,21 +36,20 @@
 
 - Files generated will be as above
 - package.json will includes:
-    - ts-node
-        - 普通Babelで古いJSに変換するが、TSで型を扱う場合はts-nodeが必要
-    - @types/node
-        - パッケージ名の@は「Scoped Packages」で使われる
-        - @に団体名や個人名を付加することで、モジュール名の衝突を防ぐ
-    - typescript
-    - typeorm
-    - reflect-metadata
-    - mysql
-    - express
-    - body-parser
-        - Request Bodyを、JS内部で使えるObject Literalに変更しているんだと思う
+  - ts-node
+    - 普通 Babel で古い JS に変換するが、TS で型を扱う場合は ts-node が必要
+  - @types/node
+    - パッケージ名の@は「Scoped Packages」で使われる
+    - @に団体名や個人名を付加することで、モジュール名の衝突を防ぐ
+  - typescript
+  - typeorm
+  - reflect-metadata
+  - mysql
+  - express
+  - body-parser
+    - Request Body を、JS 内部で使える Object Literal に変更しているんだと思う
 
 ## Connection
-
 
 ```js
 import { createConnection, Connection } from "typeorm";
@@ -69,6 +68,82 @@ const connection = await createConnection({
 
 ## Relations
 
+- Related to FOREIGN KEY
+
+- One to One
+- One to Many
+- Many to One
+- Many to Many
+
+
 ## Entity Manager
 
+- Entity Manager
+
+  - Has methods for SELECT, INSERT, DELETE, UPDATE, etc.
+  - Returns Promise
+
+- Repository
+  - Almost same as Entity Manager
+  - `myRepository.find({OPTIONS_HERE})`
+    - SELECT equivalent
+    - options includes equivalents for WHERE, ORDER BY, LIMIT, etc.
+
 ## Query Builder
+
+- SELECT equivalent
+
+  ```ts
+  const user = await getConnection()
+    .createQueryBuilder()
+    .select("user")
+    .from(User, "user")
+    .where("user.id = :id", { id: 1 })
+    .getOne();
+  ```
+
+- INSERT equivalent
+
+  ```ts
+  await getConnection()
+    .createQueryBuilder()
+    .insert()
+    .into(User)
+    .values([
+      { firstName: "Timber", lastName: "Saw" },
+      { firstName: "Phantom", lastName: "Lancer" }
+    ])
+    .execute();
+  ```
+
+- UPDATE equivalent
+
+  ```ts
+  await getConnection()
+    .createQueryBuilder()
+    .update(User)
+    .set({ firstName: "Timber", lastName: "Saw" })
+    .where("id = :id", { id: 1 })
+    .execute();
+  ```
+
+- DELETE equivalent
+
+  ```ts
+  await getConnection()
+    .createQueryBuilder()
+    .delete()
+    .from(User)
+    .where("id = :id", { id: 1 })
+    .execute();
+  ```
+
+## Migration
+
+
+## Transaction
+
+
+## Index
+
+## Listener & Subscriber
