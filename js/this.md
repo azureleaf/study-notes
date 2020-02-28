@@ -1,6 +1,7 @@
 # JavaScript における this
 
 - JavaScript における this が何を指すのか？は初学者の壁
+- this が何を示すのかを自分で自由に変える手段として`call()`, `apply()`. `bind()`というのも登場する
 
 ## this がオブジェクトになる場合
 
@@ -89,8 +90,8 @@ console.log(value); // 999
 
 ## this を使って Method Chain をつくる
 
-- JSのbuit-in関数でも`.toUpperCase`や`reverse()`などをたくさんつけて順に処理できる
-- これをmethod chainなしで実装しようとすると、callback地獄となる
+- JS の buit-in 関数でも`.toUpperCase`や`reverse()`などをたくさんつけて順に処理できる
+- これを method chain なしで実装しようとすると、callback 地獄となる
 - 同様の機能は自分でも作成できる
 - `return this`でオブジェクト自身を返すことがポイント
 
@@ -139,4 +140,36 @@ myObject.show(); // 1
 
 myObject.show.apply(yourObject); // 3
 myObject.show.call(yourObject); // 3
+```
+
+- 以下のようなcarオブジェクトが存在する
+
+```js
+var car = {
+  registrationNumber: "GA12345",
+  brand: "Toyota",
+
+  displayDetails: function() {
+    console.log(this.registrationNumber + " " + this.brand);
+  }
+};
+```
+
+- そして、以下のような使い方をしたいとする
+
+```js
+// 通常の関数は、参照を作れる
+function logging(log) {console.log(log)};
+var loggingRef = logging;
+loggingRef("bonjour!");
+
+
+// carオブジェクトのメソッドの参照を作りたい
+var carDetail =  car.displayDetails;
+
+// これは失敗する
+// なぜなら、displayDetailsは内部でthisと書いているが、
+// 参照の関数のthisはglobal objectであり、carオブジェクトにはなっていないため
+carDetail();
+
 ```

@@ -2,14 +2,14 @@
 
 # ToC
 
-1. [Getting_Started](#Getting_Started)
+1. [Getting Started](#Getting%20Started)
 1. [Entity](#Entity)
 1. [Relations](#Relations)
-1. [Entity_Manager](#Entity_Manager)
-1. [Query_Builder](#Query_Builder)
+1. [Entity Manager](#Entity%20Manager)
+1. [Query Builder](#Query%20Builder)
 
 
-## Getting_Started
+## Getting Started
 ## Connection
 
 - 一言でいうと
@@ -31,5 +31,5 @@ const connection = await createConnection({
 ```
 ## Entity
 ## Relations
-## Entity_Manager
-## Query_Builder
+## Entity Manager
+## Query Builder

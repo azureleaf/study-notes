@@ -54,3 +54,5 @@ class Human implements Animal
     public function sleep() {echo "zzz";}
 }
 ```
+
+## Decorator

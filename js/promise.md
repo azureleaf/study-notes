@@ -65,7 +65,7 @@ doA()
   1. そのような関数を全ての処理段階についてそれぞれ作る
   1. `.then()`を使ってそれらを順番につなげていく
 
-## 実例：ひとつの値をリレーしていく場合
+## ひとつの値をリレーしていく場合
 
 ```javascript
 // 値を受け取って１秒待ってから２倍した値を返却するPromise...を返却する関数
@@ -89,7 +89,7 @@ returnPromise(100) // 現在の値は100
   });
 ```
 
-## 実例：複数の値をリレーしていく場合
+## 複数の値をリレーしていく場合
 
 `resolve(200, 2)`のように resolve に複数の値を渡すことはできない。したがって object literal や配列によってひとかたまりにして渡す必要がある。
 
@@ -115,7 +115,7 @@ returnPromise({ num: 100, i: 1 }) // 1回目です。現在の値は100
   });
 ```
 
-## 実例:　エラー処理を丁寧にやる場合
+## エラー処理を丁寧にやる場合
 
 onFulfilled / onRejected の場合分け、エラー処理などを全部やるとこうなる
 
@@ -159,7 +159,7 @@ returnPromise()
   });
 ```
 
-## 実例： Promise.all()と Promise.race()の直列
+##  Promise.all()と Promise.race()の直列
 
 - 通常の Promise、Promise.all()、Promise.race()を順に実行するだけ。
 - 思い通りの順序で実行されているのか確認するため、所要時間を計測している。
@@ -229,7 +229,7 @@ promiseStart
   });
 ```
 
-## 実例： Promise.all()、Promise.race()の並列（入れ子）
+##  Promise.all()、Promise.race()の並列（入れ子）
 
 - Promise 同士をネストさせることができる。
 - 下では、c2_1 の実行後に c2_2 を実行するようにしているが、その合計時間が c1 よりも遅い場合（then して長くなっている分、だいたい c2 の方が遅いだろうが）は親の Promise.all()は c2 が終了したかどうかを気にしない。
@@ -306,7 +306,7 @@ promiseStart
   });
 ```
 
-## 実例：Promise.all()の resolve()内容を確認する
+## Promise.all()の resolve()内容を確認する
 
 - `Promise1`, `Promise2`はそれぞれ内部で`resolve(value1)`,`resolve(value2)`するとする。
 - このとき、`Promise.all([Promise1, Promise2]).then((i)=>{console.log(i)})`の i には一体何が入るのか？という疑問が生じる。通常の Promise と then()は一対一だが、この Promise.all()の場合は resolve()が複数呼ばれるので。
@@ -336,7 +336,7 @@ Promise.resolve()
   });
 ```
 
-## 実例：Promise.all()の nest で配列を扱う
+## Promise.all()の nest で配列を扱う
 
 ```javascript
 var arr = [{ subarr: [1, 2, 3] }, { subarr: [4, 5, 6] }, { subarr: [7, 8, 9] }];
@@ -363,12 +363,8 @@ Promise.all(
 ## async の登場
 
 - async/await を使う利点
-
   - then, resolve, reject キーワードをあまり書かずにすむ
-  - Promise のように.then のチェーンでキツキツにつなげなくても、ゆったりと書ける
-  - Promise では一つ一つの段階の区切りを示すために関数で分けていたのに対して、await はキーワードを目印と書くだけで同期タイミングを示せるので、書く量が少ない
-
-- await を使わないと Promise とあまりかわらず、恩恵もあまりない
+  - Promise では一つ一つの段階の区切りを示すために.then()で分けていた。これに対して、await はキーワードを目印として同期のタイミングを示せるので、書く量が少ないし、改行も自由なのでゆったり書ける
 
 ```js
 // async functionはPromiseを返す
@@ -383,6 +379,7 @@ async function roulette(i) {
   }
 }
 
+// await を使わないと以下の部分は純 Promise の場合と変わらず、恩恵もあまりない
 roulette(1)
   .then(val => {
     return roulette(val);
@@ -422,7 +419,8 @@ async function wrapper(val) {
 }
 
 // wrapper()はasync functionなので、Promiseを返す。なのでthenableである
-// 普通は、こういう風にasync関数自体をthenでつなげる書き方はしないだろうが...例なので
+// 普通は、こういう風にasync関数自体をthenでつなげる書き方はしないだろうが...
+// async functionがPromiseを返すという例として書く
 wrapper(100)
   .then(val => {
     return wrapper(val);
@@ -465,14 +463,15 @@ async function wrapper(val) {
   return result; // return Promise
 }
 
-// Promiseではこの部分のthenが冗長でなんとなく見にくいが、この連続処理部分を
+// Promiseではこの部分のthenが連続して冗長で見にくいが
+// この連続処理部分をasync function内部に移動できるため、この部分はシンプルになる
 // とはいえ、最終的なresolveの値を確認するためだけに、ここでthenを使う
 wrapper(100)
   .then(finalVal => {
     console.log("最終値は", finalVal);
   })
   .catch(err => {
-    console.error(err); // まあエラーは起きないけど
+    console.error(err); // まあこの例だとエラーは起きないけど
   });
 ```
 
