@@ -1,11 +1,10 @@
 # Hands on TypeScript
 
-## こんな経験ありませんか？
+## JSとは
 
-- 関数に投入する変数などを間違えていた（型も不一致）だったが、そのバグを見つけるのに苦労した
-- 暗黙に型変換された結果、挙動がおかしくなった
-
-## TS とは
+- JSでは型に関係する問題が起こり得る
+    - 関数に投入する変数などを間違えていた（型も不一致）だったが、そのバグを見つけるのに苦労した
+    - 暗黙に型変換された結果、挙動がおかしくなった
 
 - array とか float とかポインタとかわからない初心者のレベルに合わせて動的な型付け方式を採用した結果、あまりにテキトーな型のあり方に苦しむことになったのが JS
 - TS では、変数のデータ型も、オブジェクトの構造も、入力必須な値も、全て定義できる
@@ -22,14 +21,22 @@ interface Person {
     lastName: string;
 }
 
+// 引数のオブジェクトがどのようなkey名、valueの型を持つのかを強制できる
 function greeter(person: Person) {
     return "Hello, " + person.firstName + " " + person.lastName;
 }
 
-let user = { firstName: "Jane", lastName: "User" };
+// OK
+console.log(greeter( { firstName: "Jane", lastName: "Smith" }));
 
-document.body.textContent = greeter(user);
-Classes #
+// Error: 型が一致しないため
+console.log(greeter( { firstName: "Jane", lastName: 20 }));
+
+// Error: 余計な属性があるため
+console.log(greeter( { firstName: "Jane", lastName: "Smith", age: 20 }));
+
+// Error: 必要なプロパティが不足しているため
+console.log(greeter( { firstName: "Jane"}));
 ```
 
 - 雑学：そもそも interface とは、「関数定義はないが、クラスのメソッドの名前を実装したもの」である

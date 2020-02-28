@@ -147,10 +147,8 @@ myObject.show.call(yourObject); // 3
 ```js
 var car = {
   registrationNumber: "GA12345",
-  brand: "Toyota",
-
   displayDetails: function() {
-    console.log(this.registrationNumber + " " + this.brand);
+    console.log(this.registrationNumber);
   }
 };
 ```
@@ -163,6 +161,12 @@ function logging(log) {console.log(log)};
 var loggingRef = logging;
 loggingRef("bonjour!");
 
+var car = {
+  registrationNumber: "GA12345",
+  displayDetails: function() {
+    console.log(this.registrationNumber);
+  }
+};
 
 // carオブジェクトのメソッドの参照を作りたい
 var carDetail =  car.displayDetails;
@@ -170,6 +174,25 @@ var carDetail =  car.displayDetails;
 // これは失敗する
 // なぜなら、displayDetailsは内部でthisと書いているが、
 // 参照の関数のthisはglobal objectであり、carオブジェクトにはなっていないため
-carDetail();
+carDetail(); // undefined
+
+```
+
+- 以下のように`bind()`を使うと解決
+
+```js
+var car = {
+  registrationNumber: "GA12345",
+  displayDetails: function() {
+    console.log(this.registrationNumber);
+  }
+};
+// carオブジェクトのメソッドの参照を作る
+var carDetail =  car.displayDetails.bind(car);
+
+// これは失敗する
+// なぜなら、displayDetailsは内部でthisと書いているが、
+// 参照の関数のthisはglobal objectであり、carオブジェクトにはなっていないため
+carDetail(); // "GA12345"
 
 ```
