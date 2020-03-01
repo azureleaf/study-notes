@@ -1,6 +1,6 @@
-																					
-#thermodynamics																									
-																									
+# Thermodynamics																									
+
+																				
 		気体分子運動論																							
 			平均自由行程																						
 			マクスウェル分布																						
@@ -43,13 +43,45 @@
 																									
 		加熱																							
 		過冷却																							
-																									
-		統計力学																							
-			正準集団																						
-			小正準集団																						
-			大正準集団																						
-																									
-																									
-			リウビルの定理																						
-																									
-			マクスウェルの速度分布																						
+
+
+## Classical Thermodynamics
+
+## Dieal Gas Equation of State
+
+## Specific Heat
+
+## Enthalpy
+
+
+## Maxwell–Boltzmann distribution
+
+- Boltzmann Constant
+
+## Liouville's theorem (Hamiltonian)
+
+- Stirling's approximation
+- Gamma Function
+
+
+## Boltzmann's Entropy Formula ボルツマンの関係式
+$$ S_a = k_B \log_e W $$ 
+- where $S_a$ is entropy, $k_B$ is Boltzmann constant, $W$ is quantity
+- ちなみに似たものに Boltzmann Transport Equationというのがあるが、これは別物。これは非平衡状態での統計的なふるまいを記述するもの。
+
+- 正準集団																						
+- 小正準集団																						
+- 大正準集団					
+
+$$ c^2 = a^2 + b^2 $$
+
+                                                                                        
+                                                                                        
+Liouville's theorem リウビルの定理																						
+                                                                                        
+マクスウェルの速度分布																						
+
+
+## Quantum Statistics
+
+## Multi-Phase Systems

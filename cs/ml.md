@@ -4,6 +4,9 @@
 
 - Supervised Learning
 - Unsupervised Learning
+- Swarm Intelligence
+- ACO: Ant Colony Optimization
+- Genetic Algorithm
 
 ## Autoencdoder
 
