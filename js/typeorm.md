@@ -7,6 +7,9 @@
 1. [Relations](#Relations)
 1. [Entity Manager](#Entity%20Manager)
 1. [Query Builder](#Query%20Builder)
+1. [Migration](#Query%20Builder)
+1. [Index](#Query%20Builder)
+1. [Listener & Subscriber](#Listener%20%26%20Subscriber)
 
 ## Getting Started
 
@@ -66,6 +69,65 @@ const connection = await createConnection({
 
 ## Entity
 
+### "@" Decorator for the Entity Column
+
+- `@Column()`
+- `@Column("varchar", { length: 200 })`
+  - You can write the type of the column as the first arg
+- `@Column({ type: "varchar", length: 200 })`
+  - You can write the type of the column inside the object as well
+- `@Column({ type: "varchar", length: 200, default: "undefined" })`
+- Using `enum`:
+
+  ```js
+  export enum UserRole {
+    ADMIN = "admin",
+    EDITOR = "editor",
+    GHOST = "ghost"
+  }
+
+  @Entity()
+  export class User {
+
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({
+        type: "enum",
+        enum: UserRole,
+        default: UserRole.GHOST
+    })
+    role: UserRole
+  }
+  ```
+
+- `@PrimaryColumn()`
+  - PRIMARY KEY
+  - Any types will be accepted (normally number, tho)
+- `@PrimaryGeneratedColumn()`
+  - PRIMARY KEY AUTO_INCREMENT, INT
+- `@PrimaryGeneratedColumn("uuid")`
+  - PRIMARY KEY AUTO_INCREMENT, INT
+  - UUID(Universally Unique IDentifier) is unique string ID
+- `@OneToOne`
+- `@OneToMany`
+- `@ManyToOne`
+- `@ManyToMany`
+- Options:
+
+  ```js
+  @ManyToMany(type => Category, category => category.questions, {
+    cascade: true
+  })
+  @JoinTable()
+  categories: Category[];
+  ```
+
+- `@joinColumn`
+- `@joinTable`
+- `@JoinColumn` vs `@joinTable`
+
+
 ## Relations
 
 - Related to FOREIGN KEY
@@ -74,7 +136,6 @@ const connection = await createConnection({
 - One to Many
 - Many to One
 - Many to Many
-
 
 ## Entity Manager
 
@@ -140,9 +201,7 @@ const connection = await createConnection({
 
 ## Migration
 
-
 ## Transaction
-
 
 ## Index
 
