@@ -20,37 +20,41 @@
   - `npx typeorm init --database mysql --express`
 - `npm install`
 
-```js
-.
-├── ormconfig.json
-├── package.json
-├── package-lock.json
-├── README.md
-├── src
-│   ├── controller
-│   │   └── UserController.ts
-│   ├── entity
-│   │   └── User.ts
-│   ├── index.ts
-│   ├── migration
-│   └── routes.ts
-└── tsconfig.json
-```
+- Files
+
+  ```js
+  .
+  ├── ormconfig.json
+  ├── package.json
+  ├── package-lock.json
+  ├── README.md
+  ├── src
+  │   ├── controller
+  │   │   └── UserController.ts
+  │   ├── entity
+  │   │   └── User.ts
+  │   ├── index.ts
+  │   ├── migration
+  │   └── routes.ts
+  └── tsconfig.json
+  ```
 
 - Files generated will be as above
-- package.json will includes:
-  - ts-node
-    - 普通 Babel で古い JS に変換するが、TS で型を扱う場合は ts-node が必要
-  - @types/node
-    - パッケージ名の@は「Scoped Packages」で使われる
-    - @に団体名や個人名を付加することで、モジュール名の衝突を防ぐ
-  - typescript
-  - typeorm
-  - reflect-metadata
-  - mysql
-  - express
-  - body-parser
-    - Request Body を、JS 内部で使える Object Literal に変更しているんだと思う
+
+### package.json will includes:
+
+- ts-node
+  - 普通 Babel で古い JS に変換するが、TS で型を扱う場合は ts-node が必要
+- @types/node
+  - パッケージ名の@は「Scoped Packages」で使われる
+  - @に団体名や個人名を付加することで、モジュール名の衝突を防ぐ
+- typescript
+- typeorm
+- reflect-metadata
+- mysql
+- express
+- body-parser
+  - Request Body を、JS 内部で使える Object Literal に変更しているんだと思う
 
 ## Connection
 
@@ -77,7 +81,7 @@ const connection = await createConnection({
 - `@Column({ type: "varchar", length: 200 })`
   - You can write the type of the column inside the object as well
 - `@Column({ type: "varchar", length: 200, default: "undefined" })`
-- Using `enum`:
+- `enum`を使って、入る値の種類を制限できる
 
   ```js
   export enum UserRole {
@@ -103,39 +107,232 @@ const connection = await createConnection({
 
 - `@PrimaryColumn()`
   - PRIMARY KEY
-  - Any types will be accepted (normally number, tho)
+  - INT とは限らない
 - `@PrimaryGeneratedColumn()`
-  - PRIMARY KEY AUTO_INCREMENT, INT
+  - INT PRIMARY KEY AUTO_INCREMENT
 - `@PrimaryGeneratedColumn("uuid")`
-  - PRIMARY KEY AUTO_INCREMENT, INT
+  - INT PRIMARY KEY AUTO_INCREMENT
   - UUID(Universally Unique IDentifier) is unique string ID
-- `@OneToOne`
-- `@OneToMany`
-- `@ManyToOne`
-- `@ManyToMany`
-- Options:
-
-  ```js
-  @ManyToMany(type => Category, category => category.questions, {
-    cascade: true
-  })
-  @JoinTable()
-  categories: Category[];
-  ```
-
-- `@joinColumn`
-- `@joinTable`
-- `@JoinColumn` vs `@joinTable`
-
 
 ## Relations
 
-- Related to FOREIGN KEY
+### Basics
 
-- One to One
-- One to Many
-- Many to One
-- Many to Many
+- Relationとは、FOREIGN KEY に相当する関係性
+- Relationsの定義の仕方だけでなく、Relationsがかかったデータをどのように編集・参照するのかも抑えること
+
+### `@OneToOne`
+
+- One-to-Oneだけだと対等関係っぽいが、便宜上どちらが親側なのかを決める（今回はUserが親）
+- 紐づく先がどの Entity なのかを指定するのに２箇所必要なのがなんか二度手間っぽい
+  - `type => Profile`
+  - `profile: Profile`
+
+```ts
+@Entity()
+export class Profile {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  gender: string;
+
+  @Column()
+  photo: string;
+}
+```
+
+```ts
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  // @JoinColumn()をつけることにより外部へのForeign Keyが設定される
+  // Profile tableのどのカラムに関連付けるのかは書かれていないが、何も書かないとPRIMARY KEYに紐づくのか？？？
+  @OneToOne(type => Profile)
+  @JoinColumn()
+  profile: Profile; // これだけ見るとprofileという名前のカラムが作られそうだが、実際に自動生成されるのはprofileIdという名前になる
+}
+```
+
+- 上記のUser / Profileにデータを挿入する
+
+```ts
+// 子側の表のデータをまず作成する
+// 子側の方では、両者の関係を意識せずただ設定する
+const profile = new Profile();
+profile.gender = "male";
+profile.photo = "me.jpg";
+await connection.manager.save(profile);
+
+// 親側
+const user = new User();
+user.name = 'Joe Smith';
+user.profile = profile; // この行で対応するProfileを代入する
+await connection.manager.save(user);
+```
+
+### `@OneToMany` と `@ManyToOne`
+
+- `@ManyToMany`と`@OneToOne`の表示は「親側」となる一方の Table にだけつければよかった
+- これに対して、`@OneToMany` と `@ManyToOne` は対応関係にある双方の Table につける
+- この例における関係性：
+  - 同一の User が多数のPhotoを所有する
+  - ただし一つの Photo が複数の User に紐づくことはない
+
+```js
+// Photo Side
+@Entity()
+export class Photo {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  url: string;
+
+  @ManyToOne(
+    type => User,
+    user => user.photos // ここでuserがカラム名のuserと一致しているのはたぶんたまたま。一致している必要はない？？？
+  )
+  user: User; // カラム名がusersでないのはこっちがOne側だから
+}
+```
+
+```js
+// User Side
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  // 「photo」は「Photo Entityにおけるデータ一つ分」を表す仮の変数でしかないと思われる（名前はなんでもよい）
+  //    「user」が実際のPhoto Entityのカラム名
+  @OneToMany(
+    type => Photo,
+    photo => photo.user
+  )
+  photos: Photo[]; // Manyになる側は配列にする。カラムの命名も複数形にする
+}
+```
+
+- 以上でつくったUser, Photoを編集する方法：
+
+```ts
+// 子側その１
+const photo1 = new Photo();
+photo1.url = "me.jpg";
+await connection.manager.save(photo1);
+
+// 子側その２
+const photo2 = new Photo();
+photo2.url = "me-and-bears.jpg";
+await connection.manager.save(photo2);
+
+// 親側
+const user = new User();
+user.name = "John";
+user.photos = [photo1, photo2]; // 子側を配列により一気に代入する
+await connection.manager.save(user);
+
+```
+- UserとPhotoのデータを参照する方法： その１ 
+
+```ts
+const userRepository = connection.getRepository(User);
+const users = await userRepository.find({ relations: ["photos"] });
+
+const photoRepository = connection.getRepository(Photo);
+const photos = await photoRepository.find({ relations: ["user"] });
+```
+
+- UserとPhotoのデータを参照する方法： その２　Query Builder利用
+
+```js
+const users = await connection
+    .getRepository(User)
+    .createQueryBuilder("user")
+    .leftJoinAndSelect("user.photos", "photo")
+    .getMany();
+
+const photos = await connection
+    .getRepository(Photo)
+    .createQueryBuilder("photo")
+    .leftJoinAndSelect("photo.user", "user")
+    .getMany();
+
+```
+
+### `@ManyToMany`
+
+- Many to Many の場合両者は対等な気がするが、片方を親と定義する
+  - 今回は Question 側が親とする
+  - 親側で`@ManyToMany`を定義し、さらに`@JoinTable()`のカラムを指定する
+- `@JoinTable`により、両者の PRIMARY KEY だけを集めた Table ができる
+  - `@OneToOne`につける`@JoinColumn()`と混同しない
+- なお、このテーブルの名前、カラム名は自動で生成されるっぽい
+  - ２つのテーブルの名前は親側が`question`、子側が`category`なので、合成したテーブル名は`question_categories_category`で、カラム名は`questionId`と`categoryId`
+    |questionId|categoryId|
+    |--|--|
+    |1|3|
+    |1|4|
+    |2|3|
+    |2|5|
+    |2|6|
+- この例における関係性：
+  - 一つの Question は、複数の Category に該当
+  - 一つの Category に、複数の Question がある
+
+```js
+// Category Entity:
+@Entity()
+export class Category {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+}
+```
+
+```ts
+// Question Entity
+@Entity()
+export class Question {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  title: string;
+
+  @Column()
+  text: string;
+
+  @ManyToMany(type => Category)
+  @JoinTable()
+  categories: Category[];
+}
+```
+
+```js
+//
+@ManyToMany(type => Question, question => question.categories)
+  questions: Question[];
+```
+
+```js
+@ManyToMany(type => Category, category => category.questions, {
+  cascade: true
+})
+@JoinTable()
+categories: Category[];
+```
 
 ## Entity Manager
 
