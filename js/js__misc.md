@@ -8,6 +8,9 @@
 - Polyfill
   - 標準となったメソッドが存在しない場合に、自分で供給してしまう方法
   - polyfillは隙間を埋める、という意味
+- Service Worker
+- V8 Engine
+
 
 ## JS Versions
 
