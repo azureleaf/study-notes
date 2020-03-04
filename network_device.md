@@ -1,17 +1,52 @@
 # Network Device
 
 ## ToC
-1. [ONU](#onu)
-1. [MODEM](#modem)
-1. [Wireless LAN](#wireless)
+1. [MISC](#MISC)
+1. [ONU](#ONU)
+1. [MODEM](#MODEM)
+1. [Layer 2 Switch](#switch2)
+1. [Layer 3 Switch](#Layer%203%20Switch)
+1. [Router](#Router)
+1. [Wireless LAN](#Wireless%20LAN)
 
 ## MISC
 
+### Network Types
+
+- WAN
+  - IP-VPN
+  - WAE: Widearea Ethernet
+- LAN
+
+### 大規模ネットワークでの構成
+
+1. Internet もしくは IP-VPN 　もしくは 広域イーサネット
+1. Router
+1. Firewall: ここで DMZ にも分岐する
+1. L3 Switch
+1. L2 Switch: LAN の数だけ複数ある。複数の L3 Switch に接続することもある。
+1. LAN
+1. Wireless Access Point や PC(Ethernet)
+
+### 小規模ネットワークでの構成
+
+1. Internet
+1. MODEM or ONU
+1. Router (Firewall, L3 Switch)
+1. PCs (Ethernet) / VoIP Phone / Wireless AP
+
+「WiFi ルータ」として売ってるものは、Router + L3 Switch + Wireless AP の全てを担っている？？？
+
+### VoIP 
 
 
 ## ONU
 
-## MODEM <a id="modem"></a>
+- 
+
+## MODEM
+
+- 
 
 ## "hub"はなにを指すのか
 
@@ -19,7 +54,7 @@
 - Repeater Hub のことを指すことが多い。なお、Repeater と Repeater Hub は別物
 - しかし"Switching Hub"も Hub とついている以上は Hub と呼ばれることもあるだろう
 
-## Repeater
+## Repeater 
 
 - 信号が劣化する前に補正する
 - 信号を「増幅」するわけではない
@@ -47,7 +82,7 @@
   - つまり、Bridge は内部でネットワーク毎の MAC アドレスの一覧（MAC Address Table）を学習する必要がある
 - Repeater が OSI 物理層しか見ないのにたいして、Bridge は Data Link Layer の情報も活用する
 
-## Layer 2 Switch
+## Layer 2 Switch <a id="switch2" name="switch2"></a>
 
 - 信号を中継する
 - 多数のイーサネットポートを持っている
@@ -133,9 +168,10 @@
   - Link State Algorithm： OSPF Protocol
   - Path Vector Algorithm
 
-## Router vs L3 Switch?
+### Router vs L3 Switch?
 
-- どっちも routing できる
+routing できる点では共通だが、違いを抑える
+
 - L3 Switch がハードウェア的に routing。その分高速
 - Router はソフトウェア的に routing する。Ethernet 以外の回線や、様々なプロトコルに対応できる
 
@@ -147,49 +183,24 @@
 
 - WiFi の動作範囲を拡大する
 
-## Network Types
 
-- WAN
-  - IP-VPN
-  - WAE: Widearea Ethernet
-
-## 大規模ネットワークでの構成
-
-1. Internet もしくは IP-VPN 　もしくは 広域イーサネット
-1. Router
-1. Firewall: ここで DMZ にも分岐する
-1. L3 Switch
-1. L2 Switch: LAN の数だけ複数ある。複数の L3 Switch に接続することもある。
-1. LAN
-1. Wireless Access Point や PC(Ethernet)
-
-## 小規模ネットワークでの構成
-
-1. Internet
-1. MODEM or ONU
-1. Router (Firewall, L3 Switch)
-1. PCs (Ethernet) / VoIP Phone / Wireless AP
-
-「WiFi ルータ」として売ってるものは、Router + L3 Switch + Wireless AP の全てを担っている？？？
-
-## VoIP
 
 ## Wireless LAN
 
-## Wireless LAN Network Types
+### Wireless LAN Network Types
 
 - A. Infrastructure Mode
   - 一番普通。アクセスポイントにみんなが接続
 - B. Ad Hoc Mode / Peer-to-peer Mode / IBSS (independent basic service set)
   - ゲーム機同士の接続とか。
 
-## Wireless LAN Devices
+### Wireless LAN Devices
 
 - Wireless LAN Client
 - Wireless LAN Controller
 - Wireless LAN Access Point
 
-## Wireless Networking Standards
+### Wireless Networking Standards
 
 - IEEE802.11b: 11 Mbps
 - IEEE802.11a: 54 Mbps
@@ -198,7 +209,7 @@
 - IEEE802.11ac (WiFi 5): 6.93 Gbps
 - IEEE802.11ax (WiFi 6): 次世代規格
 
-## Frequency
+### Frequency
 
 - 2.4 GHz
 - 5 GHz
@@ -206,7 +217,7 @@
 - Dual Band
 - Triband
 
-## CSMA/CA
+### CSMA/CA
 
 - **１つのアクセスポイントにアクセスできるのは、１台だけ**
 
@@ -216,24 +227,24 @@
 - MA: Multiple Access
 - CA: Collision Avoidance
 
-## Areas
+### Areas
 
 - Service Area
 - Cover Area
 - Coverage Area
 - Coverage Hole
 
-## Channel
+### Channel
 
-## Wireless LAN device  <a id="wireless"></a>
+### Wireless LAN device
 
-## Wireless LAN Security Protocols
+### Wireless LAN Security Protocols
 
 - WPA
 - WPA2:
 - WEP: もう使っちゃだめ。暗号化はするが脆弱
 
-## Wireless LAN Security Technology
+### Wireless LAN Security Technology
 
 - MAC Address Filtering
   - まあまあ意味ある
@@ -241,7 +252,7 @@
 - ## SSID
 - IEEE802.1X
 
-## Wireless LAN MISC
+### Wireless LAN MISC
 
 - Ekahau Site Survey: AP の電波強度を可視化するツール
 - Mesh WiFi
