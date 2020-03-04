@@ -46,9 +46,9 @@
 
 ## TCP/IP Model
 
-| #   | TCP/IP Layer      | Protocol Examples          | PDU: Protocol Data Unit                                                                        | Device         |
-| --- | ----------------- | -------------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
-| 4   | Application       | HTTP, FTP, SMTP, POP3, SSH | HTTP Header + Data                                                                             |                |
+| #   | TCP/IP Layer      | Protocol Examples          | PDU: Protocol Data Unit                                                                            | Device         |
+| --- | ----------------- | -------------------------- | -------------------------------------------------------------------------------------------------- | -------------- |
+| 4   | Application       | HTTP, FTP, SMTP, POP3, SSH | HTTP Header + Data                                                                                 |                |
 | 3   | Transport         | TCP, UDP                   | Segment = <br>TCP Header <br> + HTTP Header <br> + Data                                            | Router         |
 | 2   | Internet          | IP                         | Packet = <br>IP Header <br> + TCP Header <br> + HTTP Header <br> + Data                            | Swtich, Bridge |
 | 1   | Network Interface | Ethernet, PPP, ARP         | Frame = <br>Ethernet Header <br> + IP Header <br> + TCP Header <br> + Data <br> + Ethernet Trailer | Hub, Cable     |
@@ -240,23 +240,20 @@
 
 ## 1. Network Interface Layer (TCP/IP)
 
-
 ### Keywords
 
 - NIC: Network Interface Card aka LAN Card / Network Adaptor
 - Data Link
 
-
 ### 宛先の把握
 
-- Network Interface Layerでは、宛先のNICのMAC Addressに基づいて送る
-- しかし、Internet Layerから下りてきたデータにはIPしか載ってない
-- IPとMAC Addressを紐付ける処理が必要
-    - IPv4ではARPでこれを実現
-    - IPv6では、ICMPv6のNeighbor Discovery機能でこれを実現
+- Network Interface Layer では、宛先の NIC の MAC Address に基づいて送る
+- しかし、Internet Layer から下りてきたデータには IP しか載ってない
+- IP と MAC Address を紐付ける処理が必要
+  - IPv4 では ARP でこれを実現
+  - IPv6 では、ICMPv6 の Neighbor Discovery 機能でこれを実現
 
-
-### Data Linkの種類
+### Data Link の種類
 
 - Token Ring
 - FDDI
@@ -264,257 +261,24 @@
 ### Ethernet
 
 - Connector
-    - RJ-45 Connector
+  - RJ-45 Connector
 - Cable
-    - CAT 5 Cable
-    - CAT 5e Cable
-    - CAT 6 Cable
-    - CAT 6a Cable
-    - CAT 6e Cable
-    - CAT 7 Cable
+  - CAT 5 Cable
+  - CAT 5e Cable
+  - CAT 6 Cable
+  - CAT 6a Cable
+  - CAT 6e Cable
+  - CAT 7 Cable
 - Cable
-    - UTP Cable
-    - STP Cable
+  - UTP Cable
+  - STP Cable
 - Cable
-    - 同軸ケーブル
-    - ツイストペアケーブル
+  - 同軸ケーブル
+  - ツイストペアケーブル
 
 ### PPP
 
 ダイアルアップ接続や ADSL。
-
-## Network Device
-
-### ONU / MODEM
-
-### "hub"はなにを指すのか
-
-- 要するに、ポートがたくさんあるとHubと呼ばれてる気がする
-- Repeater Hubのことを指すことが多い。なお、RepeaterとRepeater Hubは別物
-- しかし"Switching Hub"もHubとついている以上はHubと呼ばれることもあるだろう
-
-### Repeater 
-
-- 信号が劣化する前に補正する
-- 信号を「増幅」するわけではない
-- 現在では、ハブがリピータの役割を果たす
-- CSMA/CD方式を採用
-- OSIのPhysical Layerしか見ない
-
-### Repeater Hub
-
-- 複数のポートを持っているRepeater
-
-#### CSMA/CD
-- 通信ケーブルにデータを流すためのルールである
-- CS: Carrier Sense
-- MA: Multiple Access
-- CD: Collision Detection
-    - 複数の装置が同時に送信を開始してしまった場合は、双方のデータが使えなくなる。それを検知したら再送することになる
-
-### Bridge
-
-- ２つの異なるネットワークのハブ同士を接続する
-- Collision Domainを小さくできるのが利点
-- データのMACアドレスを確認し、ブリッジの反対側のネットワーク宛でなかったら向こう側にはそのデータを流さない
-    - つまり、Bridgeは内部でネットワーク毎のMACアドレスの一覧（MAC Address Table）を学習する必要がある
-- RepeaterがOSI物理層しか見ないのにたいして、BridgeはData Link Layerの情報も活用する
-
-### Layer 2 Switch
-
-- 信号を中継する
-- 多数のイーサネットポートを持っている
-- ここでいう Layer 2 とは、OSI モデルの第二層（データリンク層）である。
-- 信号が来たら、それがどの宛先なのかを判断し、そのデバイスのみに送出する。
-
-#### 利点
-- 
-- VLAN分割が可能
-
-#### 欠点
-- 宛先を判別する作業などに一定の時間がかかるので、その分は遅くなる
-
-#### VLAN
-
-- 一つの物理的なネットワークを、複数の論理的ネットワークに分割する技術
-- 利点
-    - 
-    - Enhanced Security
-    - Broadcastによる帯域消費を最小限にできる
-
-- Trunk Link
-    - １本のケーブルに複数のVLAN Frameを流す
-    - VLANを実現するのに欠かせない機能
-- VLAN越え通信
-    - 
-- Static VLAN / Port VLAN
-- Dynamic VLAN
-
-#### Switch vs Bridge
-- 共通点
-    - どちらもフレームを解析
-    - どちらもOSI Data Link Layer
-    - どちらもMAC Address Tableを保持
-- 相違点
-    - Bridgeはソフトウェア処理
-    - Switchはハードウェア（ASIC）処理。したがって高速
-
-
-### Layer 3 Switch
-
-- OSI Model の第三層（）
-- Layer 2 Switch の機能に加えて、IP による宛先判別ができる
-
-
-### Router
-
-
-- OSIの第三層（Network Layer）
-- Connects LANs (switch) and WANs (internet)
-- ルータがないと、１つの外部回線に１台しか接続できない
-- １つのネットワークにルータ機能がONの機器が複数あると問題が起きる
-- Routing Table
-- 
-
-
-- Default Route
-    - 既定の動作では、Routing Tableに一致する宛先がない場合にはｓのパケットは破棄される
-    - Default Routeを設定すると、宛先不明パケットは全てそこに送られる
-
-#### 小規模拠点におけるルーターの機能
-- Routing
-- Firewall
-- VPN
-- NAT / NAPT
-- Packet Filtering
-
-
-#### 特殊なRouter
-- Core Router
-- Edge Router
-- Access Router
-- Multi-protocol Router
-#### Static Routing
-#### Dynamic Routing
-- "1 hop"
-- Algorithm
-    - Distance Vector Algorithm: RIP Protocol
-    - Link State Algorithm： OSPF Protocol
-    - Path Vector Algorithm
-
-### Router vs L3 Switch?
-
-- どっちも routing できる
-- L3 Switch がハードウェア的に routing。その分高速
-- Router はソフトウェア的に routing する。Ethernet 以外の回線や、様々なプロトコルに対応できる
-
-### Wireless Access Point
-
-- 多くの無線ルータは、Router + Wireless Access Pointを兼務。APモード（APとしての機能に専念）とRTモード（両者の役割）の切替ができる。
-
-
-### Range Extender / WiFi Booster / WiFi Extender （中継器）
-
-- WiFiの動作範囲を拡大する
-
-### Network Types
-
-- WAN
-  - IP-VPN
-  - WAE: Widearea Ethernet
-
-### 大規模ネットワークでの構成
-
-1. Internet もしくは IP-VPN 　もしくは 広域イーサネット
-1. Router
-1. Firewall: ここで DMZ にも分岐する
-1. L3 Switch
-1. L2 Switch: LAN の数だけ複数ある。複数の L3 Switch に接続することもある。
-1. LAN
-1. Wireless Access Point や PC(Ethernet)
-
-### 小規模ネットワークでの構成
-
-1. Internet
-1. MODEM or ONU
-1. Router (Firewall, L3 Switch)
-1. PCs (Ethernet) / VoIP Phone / Wireless AP
-
-「WiFiルータ」として売ってるものは、Router + L3 Switch + Wireless APの全てを担っている？？？
-
-## VoIP
-
-## Wireless LAN
-
-### Wireless LAN Network Types
-
-- A. Infrastructure Mode
-  - 一番普通。アクセスポイントにみんなが接続
-- B. Ad Hoc Mode / Peer-to-peer Mode / IBSS (independent basic service set)
-  - ゲーム機同士の接続とか。
-
-### Wireless LAN Devices
-
-- Wireless LAN Client
-- Wireless LAN Controller
-- Wireless LAN Access Point
-
-### Wireless Networking Standards
-
-- IEEE802.11b: 11 Mbps
-- IEEE802.11a: 54 Mbps
-- IEEE802.11g: 54 Mbps
-- IEEE802.11n: 600 Mbps
-- IEEE802.11ac (WiFi 5): 6.93 Gbps
-- IEEE802.11ax (WiFi 6): 次世代規格
-
-### Frequency
-
-- 2.4 GHz
-- 5 GHz
-
-- Dual Band
-- Triband
-
-### CSMA/CA
-
-- **１つのアクセスポイントにアクセスできるのは、１台だけ**
-
-  -
-
-- CS: Carrier Sense
-- MA: Multiple Access
-- CA: Collision Avoidance
-
-### Areas
-
-- Service Area
-- Cover Area
-- Coverage Area
-- Coverage Hole
-
-### Channel
-
-### Wireless LAN Security Protocols
-
-- WPA
-- WPA2:
-- WEP: もう使っちゃだめ。暗号化はするが脆弱
-
-### Wireless LAN Security Technology
-
-- MAC Address Filtering
-  - まあまあ意味ある
-  - 脆弱性：　 Wireless LAN カードの盗難、MAC Address の偽装
-- SSID
-  -
-- IEEE802.1X
-
-### Wireless LAN MISC
-
-- Ekahau Site Survey: AP の電波強度を可視化するツール
-- Mesh WiFi
-- AOSS
 
 ## Topics
 
@@ -537,46 +301,47 @@
   - ARP
   - ipconfig
 
-
 ## QoS: Quality of Service
+
 - ネットワーク上のサービス品質のこと
 - パケットの遅延やドロップにより損なわれる
-- DiffServ, IntServ, Best Effortの３つあり
+- DiffServ, IntServ, Best Effort の３つあり
 
 ### DiffServ (Differentiated Services)
+
 - 最も主流
-- 
+-
 
 ### IntServ (Integrated Services)
+
 ### Best Effort
 
-- QoSのdefault
-
+- QoS の default
 
 ## Queueing
 
-
 ## Delay 遅延
 
-- Pingで表示される時間はRTT: Round-trip Timeであり、以下の４つの遅延の合計値
+- Ping で表示される時間は RTT: Round-trip Time であり、以下の４つの遅延の合計値
 - Burst Traffic: 定常的に存在せず、突如現れるトラフィックの急激な上昇。
 
 ### Processing Delay プロセス遅延
 
-- 通信機器の入力インターフェースから、出力インターフェースのQueueに入るまでの時間
-- 「出力インターフェースから出るまでの時間」ではない（つまりQueueのPriorityによる遅れはプロセス遅延ではない）
+- 通信機器の入力インターフェースから、出力インターフェースの Queue に入るまでの時間
+- 「出力インターフェースから出るまでの時間」ではない（つまり Queue の Priority による遅れはプロセス遅延ではない）
 
 ### Queueing Delay 輻輳遅延
-- 出力インターフェースのQueueに入ってから、実際に出力処理されるまでの遅延
-- 出力よりも速いペースで出力すべきデータが溜まっていくと、Queueは肥大化していく
-- 
+
+- 出力インターフェースの Queue に入ってから、実際に出力処理されるまでの遅延
+- 出力よりも速いペースで出力すべきデータが溜まっていくと、Queue は肥大化していく
+-
 
 ### Serialization Delay 伝送遅延
+
 - パケットの最初のビットが送出されてから、最後のビットが送出されるまでの時間
 - 当然ながら、「パケットが大きいほど」「帯域幅が狭いほど」伝送遅延は大きくなる
 
-
 ### Propagation Delay 伝搬遅延
+
 - 通信路（光ケーブルであれ、銅線であれ）の長さに起因する遅れ
 - 通信装置の上で発生するものではない
-
