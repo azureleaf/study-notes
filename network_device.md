@@ -5,7 +5,7 @@
 1. [ONU](#ONU)
 1. [MODEM](#MODEM)
 1. [Layer 2 Switch](#switch2)
-1. [Layer 3 Switch](#Layer%203%20Switch)
+1. [Layer 3 Switch](#switch3)
 1. [Router](#Router)
 1. [Wireless LAN](#Wireless%20LAN)
 
@@ -82,7 +82,7 @@
   - つまり、Bridge は内部でネットワーク毎の MAC アドレスの一覧（MAC Address Table）を学習する必要がある
 - Repeater が OSI 物理層しか見ないのにたいして、Bridge は Data Link Layer の情報も活用する
 
-## Layer 2 Switch <a id="switch2" name="switch2"></a>
+## Layer 2 Switch <a name="switch2"></a>
 
 - 信号を中継する
 - 多数のイーサネットポートを持っている
@@ -125,7 +125,7 @@
   - Bridge はソフトウェア処理
   - Switch はハードウェア（ASIC）処理。したがって高速
 
-## Layer 3 Switch
+## Layer 3 Switch <a id="switch3"></a>
 
 - OSI Model の第三層（）
 - Layer 2 Switch の機能に加えて、IP による宛先判別ができる
