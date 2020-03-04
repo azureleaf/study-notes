@@ -7,6 +7,7 @@
 - `git push origin master`
   - `git push <remote> <branch>`という構造
 - `git pull origin master`
+- `git pull --all`
 - `git status`
 - `git mv`
   - Git 管理されているファイルを移動したり、名前を変更したりするときには必ずこれらを使う
@@ -39,7 +40,10 @@
 - `git reset --hard HEAD^`
   - 最新のコミットを取り消す。その一つ前のコミット状態まで、ファイルも戻す
   - これは恐らくやりなおしできない操作
-
+- `git branch -m NEW_BRANCH_NAME`
+  - rename current branch
+- `git branch -m OLD_BRANCH_NAME NEW_BRANCH_NAME`
+  - rename the branch which you're not on
 
 
 ### `git fetch` vs `git pull`
@@ -51,6 +55,7 @@
     - `master`: Local master branch. **Not** updated by `git fetch`
     - `origin/master`: Remote master branch. Updated by `git fetch`
   - `git pull` = `git fetch` + `git merge`
+- `git fetch --all`
 
 ### `git merge` vs `git rebase`
 
@@ -84,7 +89,7 @@
   - 新しい remote を追加（例：GitHub に上げてたリポジトリを、GitLab にも上げられるようにするとか）
 - `git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git`
 
-## Good Tutorial Websites
+## Good Tutorials
 
 - [サルでもわかる](https://backlog.com/ja/git-tutorial/)
 - [Atlassian](https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud)
@@ -126,3 +131,8 @@
 - テストして問題があれば、merge されない
 - 有名なツールは「Circle CI」「Jenkins」「GitLab」など
 - Continuous Deployment では、テストで問題なければ本番環境へのデプロイも自動で行う
+
+## Naming Branch
+
+
+## Commit Message Format
