@@ -39,19 +39,37 @@
 - View
 - Index
 
+## Migration
+
+- 日本語だと「マイグレーション」と表記されることが多い
+- 利点
+  - データベーススキーマの変更時に、SQL文を書かずにすむ
+    - これはMigrationの利点と言うよりORM全般の利点
+  - バージョン管理ができるので、複数人で開発しているときや、変更を元に戻すときに便利
+  - 既存のデータを保持したまま、スキーマを変更できる
+    - You can do this with ALTER TABLE without migration too, right?
+- 疑問：既存データとの整合性はどうとるのか???
+  - 新たにカラムを追加した時、それぞれの既存レコードにはそのカラムの既定値が設定される？
+  - カラムの名前を変更した時
+  - カラムを削除した時
+  - データ自体も巻き戻せないなら、スキーマだけバージョン管理しても利益は薄い気がする
+- マイグレーションは多くのORMで備えられているが、よく見られる関数
+  - `up()`
+  - `down()`
+
 ## RESTful API
 
 - REST: REpresentational State Transfer とは、分散型システムにおける複数のソフトウェアを連携させるための設計原則のこと
 - REST は 4 原則からなる
-    - Addressability
-        - 全ての情報はURIで表現される一意なアドレスをもつ
-    - Stateless
-        - 同じURLやパラメータでHTTP Requestしたら、常に同じ結果が返ってくる
-        - Sessionなどは使わない
-    - Connectivity
-        - ある情報から別の情報へ、またある情報の状態から別の状態へ、のリンク情報を情報内部に埋め込める
-    - Uniform Interface
-        - 情報の操作は全てHTTP Method(GET POST PUT DELETE)を使い、それ以外を使わない
+- Addressability
+    - 全ての情報はURIで表現される一意なアドレスをもつ
+- Stateless
+    - 同じURLやパラメータでHTTP Requestしたら、常に同じ結果が返ってくる
+    - Sessionなどは使わない
+- Connectivity
+    - ある情報から別の情報へ、またある情報の状態から別の状態へ、のリンク情報を情報内部に埋め込める
+- Uniform Interface
+    - 情報の操作は全てHTTP Method(GET POST PUT DELETE)を使い、それ以外を使わない
 - RESTful API とは、REST の原則に則って構築された Web システムの HTTP での呼び出しインターフェースのこと
 - 以上からすると、以下はRESTfulではない？
     - Sessionに依存するAPI
@@ -94,11 +112,13 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
 - カラム単位で作成する
 - カラムの内容を検索するため、B-TREE という構造にしてデータ本体とは別に保存
 - INSERT / DELETE の際には、Index も更新する
+- Primary Keyのカラムには、自動的にINDEXが作成される？
 - Advantage of Index
   - Fast search
 - Disadvantage of Index
   - Additional storage consumption
-  - Slow UPDATE / DELETE
+  - Slow UPDATE / DELETE because Index will be also altered as well as records
+
 
 ### DB Parts
 
@@ -150,12 +170,17 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
 - ORM: Object Relation Model
 - ODM: Object Data Model
 
+### 抑えるべきっぽい三大ORM
 - TypeORM
   - MYSQL, Postgres, SQLite3, MongoDB, MariaDB, MSSQL, Oracle
 - Mongoose
   - MongoDB
+  - No SQLとしては筆頭格でよく使われる
 - Sequelize
   - MySQL, Postgres, SQLite3, MariaDB, MSSQL
+  - 伝統があるが、TypeORMに乗り換えていっている人が多い印象
+
+### Node使いには重要じゃなさそうなORM
 - Waterline
   - MySQL, Postgres, MongoDB, LDAP, Redis
 - Loopback
@@ -165,4 +190,8 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
   - MySQL, Postgres, SQLite3
 - Objection
   - MySQL, Postgres, SQLite3
-
+- Eloquent ORM
+  - Laravel用
+- Active Record
+  - Ruby on Rails用
+  - Active RecordそのものがORMというか、Active Recordの中でORMも使っているという感じか？
