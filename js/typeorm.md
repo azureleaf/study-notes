@@ -7,8 +7,8 @@
 1. [Relations](#Relations)
 1. [Entity Manager](#Entity%20Manager)
 1. [Query Builder](#Query%20Builder)
-1. [Migration](#Query%20Builder)
-1. [Index](#Query%20Builder)
+1. [Migration](#Migration)
+1. [Index](#Index)
 1. [Listener & Subscriber](#Listener%20%26%20Subscriber)
 
 ## Getting Started
@@ -22,22 +22,22 @@
 
 - Files
 
-  ```js
-  .
-  ├── ormconfig.json
-  ├── package.json
-  ├── package-lock.json
-  ├── README.md
-  ├── src
-  │   ├── controller
-  │   │   └── UserController.ts
-  │   ├── entity
-  │   │   └── User.ts
-  │   ├── index.ts
-  │   ├── migration
-  │   └── routes.ts
-  └── tsconfig.json
-  ```
+```js
+.
+├── ormconfig.json
+├── package.json
+├── package-lock.json
+├── README.md
+├── src
+│   ├── controller
+│   │   └── UserController.ts
+│   ├── entity
+│   │   └── User.ts
+│   ├── index.ts
+│   ├── migration
+│   └── routes.ts
+└── tsconfig.json
+```
 
 - Files generated will be as above
 
@@ -83,27 +83,27 @@ const connection = await createConnection({
 - `@Column({ type: "varchar", length: 200, default: "undefined" })`
 - `enum`を使って、入る値の種類を制限できる
 
-  ```js
-  export enum UserRole {
-    ADMIN = "admin",
-    EDITOR = "editor",
-    GHOST = "ghost"
-  }
+```js
+export enum UserRole {
+  ADMIN = "admin",
+  EDITOR = "editor",
+  GHOST = "ghost"
+}
 
-  @Entity()
-  export class User {
+@Entity()
+export class User {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({
-        type: "enum",
-        enum: UserRole,
-        default: UserRole.GHOST
-    })
-    role: UserRole
-  }
-  ```
+  @Column({
+      type: "enum",
+      enum: UserRole,
+      default: UserRole.GHOST
+  })
+  role: UserRole
+}
+```
 
 - `@PrimaryColumn()`
   - PRIMARY KEY
@@ -470,6 +470,33 @@ await getConnection()
   .from(User)
   .where("id = :id", { id: 1 })
   .execute();
+```
+
+- Using QueryBuilder with Relations
+
+```ts
+// entity/Post.ts
+@entity()
+export class Post{
+  ...
+  // Post is the "Owning side", so this entity has ManyToMany definition
+  @ManyToMany(type => Category)
+  @JoinTable()
+  categories: Category[];
+}
+
+// entity/Category.ts
+@entity()
+export class Category{
+  ...// nothing about relation defined here
+}
+
+// controller
+await getConnection()
+  .createQueryBuilder()
+  .relation(Post, "categories") // .relation(Owning-side entity, Owned-side entity)
+  .of(post)
+  .add(category);
 ```
 
 ## Migration
