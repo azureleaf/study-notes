@@ -77,7 +77,7 @@ var str = arr.join(""); // shutdown
 
 ## Template Literal
 
--
+- 文字列の一部にJSの表現を埋め込む時、"+"による接続よりも柔軟に記述できる
 
 ```js
 var a = 1;
@@ -90,4 +90,18 @@ console.log(greet, "。結果は", a + b, "です");
 // template literalで表示
 // back quoteでかこむ（single quoteではない）
 console.log(`${greet}。結果は${a + b}です`);
+```
+
+- 以下のように、「変数の生成＋文字列への転換」をやることもできる
+
+```js
+export const UserPermissionSeed = [
+  {
+    name: "Create Post",
+    description: "Create Post",
+    createdAt: `${new Date()}`,
+    updatedAt: `${new Date()}`,
+    enabled: true
+  }
+];
 ```

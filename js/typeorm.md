@@ -118,12 +118,12 @@ const connection = await createConnection({
 
 ### Basics
 
-- Relationとは、FOREIGN KEY に相当する関係性
-- Relationsの定義の仕方だけでなく、Relationsがかかったデータをどのように編集・参照するのかも抑えること
+- Relation とは、FOREIGN KEY に相当する関係性
+- Relations の定義の仕方だけでなく、Relations がかかったデータをどのように編集・参照するのかも抑えること
 
 ### `@OneToOne`
 
-- One-to-Oneだけだと対等関係っぽいが、便宜上どちらが親側なのかを決める（今回はUserが親）
+- One-to-One だけだと対等関係っぽいが、便宜上どちらが親側なのかを決める（今回は User が親）
 - 紐づく先がどの Entity なのかを指定するのに２箇所必要なのがなんか二度手間っぽい
   - `type => Profile`
   - `profile: Profile`
@@ -159,7 +159,7 @@ export class User {
 }
 ```
 
-- 上記のUser / Profileにデータを挿入する
+- 上記の User / Profile にデータを挿入する
 
 ```ts
 // 子側の表のデータをまず作成する
@@ -171,7 +171,7 @@ await connection.manager.save(profile);
 
 // 親側
 const user = new User();
-user.name = 'Joe Smith';
+user.name = "Joe Smith";
 user.profile = profile; // この行で対応するProfileを代入する
 await connection.manager.save(user);
 ```
@@ -181,7 +181,7 @@ await connection.manager.save(user);
 - `@ManyToMany`と`@OneToOne`の表示は「親側」となる一方の Table にだけつければよかった
 - これに対して、`@OneToMany` と `@ManyToOne` は対応関係にある双方の Table につける
 - この例における関係性：
-  - 同一の User が多数のPhotoを所有する
+  - 同一の User が多数の Photo を所有する
   - ただし一つの Photo が複数の User に紐づくことはない
 
 ```js
@@ -222,7 +222,7 @@ export class User {
 }
 ```
 
-- 以上でつくったUser, Photoを編集する方法：
+- 以上でつくった User, Photo を編集する方法：
 
 ```ts
 // 子側その１
@@ -240,9 +240,9 @@ const user = new User();
 user.name = "John";
 user.photos = [photo1, photo2]; // 子側を配列により一気に代入する
 await connection.manager.save(user);
-
 ```
-- UserとPhotoのデータを参照する方法： その１ 
+
+- User と Photo のデータを参照する方法： その１
 
 ```ts
 const userRepository = connection.getRepository(User);
@@ -252,21 +252,20 @@ const photoRepository = connection.getRepository(Photo);
 const photos = await photoRepository.find({ relations: ["user"] });
 ```
 
-- UserとPhotoのデータを参照する方法： その２　Query Builder利用
+- User と Photo のデータを参照する方法： その２　 Query Builder 利用
 
 ```js
 const users = await connection
-    .getRepository(User)
-    .createQueryBuilder("user")
-    .leftJoinAndSelect("user.photos", "photo")
-    .getMany();
+  .getRepository(User)
+  .createQueryBuilder("user")
+  .leftJoinAndSelect("user.photos", "photo")
+  .getMany();
 
 const photos = await connection
-    .getRepository(Photo)
-    .createQueryBuilder("photo")
-    .leftJoinAndSelect("photo.user", "user")
-    .getMany();
-
+  .getRepository(Photo)
+  .createQueryBuilder("photo")
+  .leftJoinAndSelect("photo.user", "user")
+  .getMany();
 ```
 
 ### `@ManyToMany`
@@ -349,16 +348,55 @@ categories: Category[];
 
 ## Query Builder
 
-- SELECT equivalent
+- 名前が示すとおり、SQL のクエリをいちいち長ったらしく書かなくてもオブジェクト指向的に作成できる道具
+- As the name implies, with Query Builder you can
+- Seemingly, there're multiple equivalent ways to achieve the same goal:
 
   ```ts
-  const user = await getConnection()
+  // Maybe there's a hierarchy of: connection > manager > repository
+  // It's mysterious that you can omit higher entity (such as connection)
+
+  // Using entity manager
+  // Connection is omitted. Repository is omitted
+  // because entity name is specified as the first arg of the findOne()
+  var user = getManager().findOne(User, 1); // this one seems to be the shortest syntax
+  var user = getConnection().manager.findOne(User, 1); 
+
+  // Using repository
+  var user = getRepository(User).findOne(1);
+  var user = getConnection()
+    .getRepository(User)
+    .findOne(1);
+  var user = getManager()
+    .getRepository(User)
+    .findOne(1);
+
+  // Using query builer
+  var user = getConnection()
     .createQueryBuilder()
     .select("user")
     .from(User, "user")
-    .where("user.id = :id", { id: 1 })
+    .getOne();
+  var user = getManager()
+    .createQueryBuilder(User, "user")
+    .getOne();
+  var user = getRepository(User)
+    .createQueryBuilder("user")
     .getOne();
   ```
+
+````
+
+- SELECT equivalent
+
+```ts
+const user = await getConnection()
+  .createQueryBuilder()
+  .select("user")
+  .from(User, "user")
+  .where("user.id = :id", { id: 1 })
+  .getOne();
+````
 
 - INSERT equivalent
 
@@ -397,6 +435,10 @@ categories: Category[];
   ```
 
 ## Migration
+
+- Create migration file
+  - `typeorm migration:create -n SeedCategory`
+  - Run this command at the project root
 
 ## Transaction
 

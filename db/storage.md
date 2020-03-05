@@ -119,21 +119,14 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
   - Additional storage consumption
   - Slow UPDATE / DELETE because Index will be also altered as well as records
 
+## Parts of the DB
 
-### DB Parts
-
-- Database
-- Table
-- Record
-  - One item of the table
-- Field
-  - A element in the record
-- Column
-  - a
-- Collection (MongoDB)
-  - Equivalent to Table
-- Document (MongoDB)
-  - Equivalent to Record
+|RDBS|MongoDB|
+|---|---|
+|Database|Database|
+|Table|Collection|
+|Record|Document|
+|Field|Field|
 
 ## DBs Categorization
 

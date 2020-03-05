@@ -15,6 +15,8 @@
 - `git rm`
   - そのファイルを削除し、なおかつ git の index からも外す
 - `git branch`
+- `git branch -r`
+- `git branch --all`
 - `git branch NEW_BRANCH_NAME`
 - `git checkout BRANCH_NAME`
 - `git reset --hard 1234abcdblahblahblah`
