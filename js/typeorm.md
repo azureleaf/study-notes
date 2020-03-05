@@ -348,100 +348,142 @@ categories: Category[];
 
 ## Query Builder
 
-- 名前が示すとおり、SQL のクエリをいちいち長ったらしく書かなくてもオブジェクト指向的に作成できる道具
-- As the name implies, with Query Builder you can
+- As the name implies, with Query Builder you can avoid writing tedious SQL query
+- Most importantly, you don't have to the query syntax differences for every DB system
 - Seemingly, there're multiple equivalent ways to achieve the same goal:
 
-  ```ts
-  // Maybe there's a hierarchy of: connection > manager > repository
-  // It's mysterious that you can omit higher entity (such as connection)
+```ts
+// Maybe there's a hierarchy of: connection > manager > repository
+// It's mysterious that you can omit higher entity (such as connection, manager)
 
-  // Using entity manager
-  // Connection is omitted. Repository is omitted
-  // because entity name is specified as the first arg of the findOne()
-  var user = getManager().findOne(User, 1); // this one seems to be the shortest syntax
-  var user = getConnection().manager.findOne(User, 1); 
+// Using entity manager
+// Connection is omitted. Repository is omitted
+// because entity name is specified as the first arg of the findOne()
+var user = getManager().findOne(User, 1); // "connection" & "repository" omitted
+var user = getConnection().manager.findOne(User, 1); // "repository" omitted
 
-  // Using repository
-  var user = getRepository(User).findOne(1);
-  var user = getConnection()
-    .getRepository(User)
-    .findOne(1);
-  var user = getManager()
-    .getRepository(User)
-    .findOne(1);
+// Using repository
+var user = getRepository(User).findOne(1); // "connection" & "manager" omitted
+var user = getConnection() // "manager" omitted
+  .getRepository(User)
+  .findOne(1);
+var user = getManager()
+  .getRepository(User)
+  .findOne(1);
 
-  // Using query builer
-  var user = getConnection()
-    .createQueryBuilder()
-    .select("user")
-    .from(User, "user")
-    .getOne();
-  var user = getManager()
-    .createQueryBuilder(User, "user")
-    .getOne();
-  var user = getRepository(User)
-    .createQueryBuilder("user")
-    .getOne();
-  ```
-
-````
+// Using query builer
+var user = getConnection()
+  .createQueryBuilder()
+  .select("user")
+  .from(User, "user")
+  .getOne();
+var user = getManager()
+  .createQueryBuilder(User, "user")
+  .getOne();
+var user = getRepository(User)
+  .createQueryBuilder("user")
+  .getOne();
+```
 
 - SELECT equivalent
 
 ```ts
+// connection + SELECT + WHERE
 const user = await getConnection()
   .createQueryBuilder()
-  .select("user")
-  .from(User, "user")
-  .where("user.id = :id", { id: 1 })
+  .select("user") // select all the fields of the record with the alias
+  .from(User, "user") // giving alias
+  .where("user.id = :id", {
+    id: 1
+  }) // ":id" is a placeholder parameter to prevent SQL injection
   .getOne();
-````
+
+// repository + SELECT + WHERE
+const timber = await getRepository(User)
+  .createQueryBuilder("user") // giving alias here without .select("user")
+  .where("user.id = :id OR user.name = :name", { id: 1, name: "Timber" }) // Use of OR
+  .getOne();
+
+// getMany()
+const users = await getRepository(User)
+  .createQueryBuilder("user")
+  .getMany();
+
+// HAVING
+createQueryBuilder("user").having("user.name = :name", { name: "Timber" });
+
+// ORDER BY
+createQueryBuilder("user").orderBy("user.id");
+
+/*
+ * In the most cases, you want the entities as the result of the .get methods
+ * However, sometimes you want value / array instead of an object
+ */
+
+// getRawOne()
+const { sum } = await getRepository(User)
+  .createQueryBuilder("user")
+  .select("SUM(user.photosCount)", "sum")
+  .where("user.id = :id", { id: 1 })
+  .getRawOne(); // e.g. 25
+
+// getRawMany()
+const photosSums = await getRepository(User)
+  .createQueryBuilder("user")
+  .select("user.id")
+  .addSelect("SUM(user.photosCount)", "sum")
+  .where("user.id = :id", { id: 1 })
+  .getRawMany(); // e.g. [{ id: 1, sum: 25 }, { id: 2, sum: 13 }, ...]
+```
 
 - INSERT equivalent
 
-  ```ts
-  await getConnection()
-    .createQueryBuilder()
-    .insert()
-    .into(User)
-    .values([
-      { firstName: "Timber", lastName: "Saw" },
-      { firstName: "Phantom", lastName: "Lancer" }
-    ])
-    .execute();
-  ```
+```ts
+await getConnection()
+  .createQueryBuilder()
+  .insert()
+  .into(User)
+  .values([
+    { firstName: "Timber", lastName: "Saw" },
+    { firstName: "Phantom", lastName: "Lancer" }
+  ])
+  .execute();
+```
 
 - UPDATE equivalent
 
-  ```ts
-  await getConnection()
-    .createQueryBuilder()
-    .update(User)
-    .set({ firstName: "Timber", lastName: "Saw" })
-    .where("id = :id", { id: 1 })
-    .execute();
-  ```
+```ts
+await getConnection()
+  .createQueryBuilder()
+  .update(User)
+  .set({ firstName: "Timber", lastName: "Saw" })
+  .where("id = :id", { id: 1 })
+  .execute();
+```
 
 - DELETE equivalent
 
-  ```ts
-  await getConnection()
-    .createQueryBuilder()
-    .delete()
-    .from(User)
-    .where("id = :id", { id: 1 })
-    .execute();
-  ```
+```ts
+await getConnection()
+  .createQueryBuilder()
+  .delete()
+  .from(User)
+  .where("id = :id", { id: 1 })
+  .execute();
+```
 
 ## Migration
 
 - Create migration file
-  - `typeorm migration:create -n SeedCategory`
-  - Run this command at the project root
+- `typeorm migration:create -n SeedCategory`
+- Run this command at the project root
 
 ## Transaction
 
 ## Index
 
 ## Listener & Subscriber
+
+```
+
+```

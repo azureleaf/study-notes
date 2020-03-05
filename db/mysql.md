@@ -37,12 +37,6 @@
 
 ## SQL: misc
 
-- WHERE
-- MAX / min / avg / sum / COUNT
-- BETWEEN / NOT BETWEEN
-- LIKE / NOT LIKE
-- IN / NOT IN
-- NULL / NOT NULL
 - Index
 - `SHOW INDEX FROM users;`
   - List the index for the table
@@ -50,51 +44,110 @@
 - Inner Join
 - Left Outer Join
 - Right Outer Join
-- limit
-- offset
-- group by
-- having
 
-## SQL: FROM
-
-- `SELECT * from blahtable;`
-- ```sql
-  SELECT
-  user.id as userId,
-  user.firstName as userFirstName,
-  user.lastName as userLastName
-  FROM users user
-  WHERE user.id = 1
-  ```
-
-## SQL: AS
+## SQL: SELECT, FROM, AS, UNION
 
 - `AS` is used to give the alias for convenience:
   - you want to call sth shortly
   - you want to integrate several values together temporarily, etc.
-- `SELECT CustomerID AS ID, CustomerName AS Customer FROM Customers;`
-- `SELECT CustomerName AS Customer, ContactName AS [Contact Person] FROM Customers;`
-  - Here "[]" is used because the column name has white space
-- ```sql
+
+```sql
+/* Very basic*/
+SELECT * from Users;
+
+SELECT CustomerID AS ID, CustomerName AS Customer FROM Customers;
+
+/* Here [] is used because the column name includes white space */
+SELECT CustomerName AS Customer, ContactName AS [Contact Person] FROM Customers;
+
+/* alias for tables*/
+SELECT
+user.id as userId,
+user.firstName as userFirstName,
+user.lastName as userLastName
+FROM users user
+WHERE user.id = 1
+
+SELECT Orders.OrderID, Orders.OrderDate, Customers.CustomerName
+FROM Customers, Orders /* select from multiple tables */
+WHERE Customers.CustomerName="Around the Horn" AND Customers.CustomerID=Orders.CustomerID;
+```
+
+- I think this is very practical use of AS
+
+  ```sql
   SELECT CustomerName, Address + ', ' + PostalCode + ' ' + City + ', ' + Country AS Address FROM Customers;
-  ```
-  - I think this example is very practical
-- ```sql
+
+  /* You can use `CONCAT` keyword too */
   SELECT CustomerName, CONCAT(Address,', ',PostalCode,', ',City,', ',Country) AS Address FROM Customers;
   ```
-- ```sql
+
+- You can use alias for table name as well
+  ```sql
   SELECT o.OrderID, o.OrderDate, c.CustomerName
   FROM Customers AS c, Orders AS o
   WHERE c.CustomerName="Around the Horn" AND c.CustomerID=o.CustomerID;
   ```
-  - Giving the alias for a table
 
-## Constraint
+## Constraint on the column
 
 - PRIMARY_KEY
 - DEFAULT
 - NOT NULL
 - UNIQUE
 - AUTO_INCREMENT
+
+## Keywords appear with WHERE
+
+- `HAVING`
+- `LIMIT`
+- `ORDER BY`
+- `OFFSET`
+- MAX / min / avg / sum / COUNT
+- BETWEEN / NOT BETWEEN
+- NULL / NOT NULL
+- EXISTS
+- AND, OR, NOT
+
+```sql
+
+/* IN */
+SELECT * FROM Customers
+WHERE Country IN ('Germany', 'France', 'UK');
+
+/* LIKE */
+/* Upper case & lower case won't be distinguished */
+SELECT * FROM Customers
+WHERE CustomerName LIKE 'a%'; /* almond, Ant, aspect */
+
+SELECT * FROM Customers
+WHERE CustomerName LIKE '%or%'; /* world, Nordic, coordinate */
+
+/* Use underscore "_" to specify the number of characters */
+/* has "r" as the 3rd character */
+SELECT * FROM Customers
+WHERE CustomerName LIKE '__r%'; /* nerd, harden */
+
+/* starts with "a", and has at least 3 characters */
+SELECT * FROM Customers
+WHERE CustomerName LIKE 'a__%' /* and, almond */
+
+/**/
+/**/
+/**/
+
+```
+
+## `JOIN` & `ON`
+
+```sql
+/* JOIN */
+/* INNER JOIN */
+/* LEFT JOIN */
+/* RIGHT JOIN */
+/* FULL OUTER JOIN*/
+
+/* self join */
+```
 
 ## Data Types
