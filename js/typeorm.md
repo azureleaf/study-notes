@@ -10,6 +10,8 @@
 1. [Migration](#Migration)
 1. [Index](#Index)
 1. [Listener & Subscriber](#Listener%20%26%20Subscriber)
+1. [Logging](#Logging)
+1. [CLI](#CLI)
 
 ## Getting Started
 
@@ -69,6 +71,48 @@ const connection = await createConnection({
   password: "test",
   database: "test"
 });
+```
+
+### `ormconfig.json`
+
+- Set up the output directory of the CLI (e.g. `typeorm entity:create -n User`)
+- Options:
+  - If necessary, you can configure multiple connections in this file
+  - Alternatively, you can use `ormconfig.js`
+
+```json
+{
+  "type": "sqlite",
+  "host": "localhost",
+  "port": 3306,
+  "username": "test",
+  "password": "test",
+  "database": "test",
+  "synchronize": true,
+  "logging": false,
+  "entities": ["src/entity/**/*.ts"],
+  "migrations": ["src/migration/**/*.ts"],
+  "subscribers": ["src/subscriber/**/*.ts"],
+  "cli": {
+    "entitiesDir": "src/entity",
+    "migrationsDir": "src/migration",
+    "subscribersDir": "src/subscriber"
+  }
+}
+```
+
+- `.env` for environment variable
+
+```shell
+TYPEORM_CONNECTION = mysql
+TYPEORM_HOST = localhost
+TYPEORM_USERNAME = root
+TYPEORM_PASSWORD = admin
+TYPEORM_DATABASE = test
+TYPEORM_PORT = 3000
+TYPEORM_SYNCHRONIZE = true
+TYPEORM_LOGGING = true
+TYPEORM_ENTITIES = entity/*.js,modules/**/entity/*.js
 ```
 
 ## Entity
@@ -512,5 +556,45 @@ await getConnection()
 ## Listener & Subscriber
 
 ```
+
+```
+
+## Logging
+
+## CLI
+
+- Seems very similar to `artisan` in Laravel
+
+```shell
+typeorm init
+typeorm init --database mssql
+typeorm init --name my-project --expresss
+
+# generate docker-compose.yml
+typeorm init --docker
+
+typeorm entity:create -n User
+
+typeorm subscriber:create -n UserSubscriber
+
+# Migrations
+typeorm migration:create -n UserMigration
+typeorm migration:generate -n UserMigration # generate from existing schema
+typeorm migration:run
+typeorm migration:revert
+typeorm migration:show # Show status
+
+# Schemas
+typeorm schema:sync
+typeorm schema:log
+typeorm schema:drop
+
+# Run SQL query directly
+typeorm query "SELECT * FROM USERS"
+
+# Clear QueryBuilder cache (not ".save()" queries???)
+typeorm cache:clear
+
+typeorm version
 
 ```
