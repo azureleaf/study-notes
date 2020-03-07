@@ -68,9 +68,29 @@ user.lastName as userLastName
 FROM users user
 WHERE user.id = 1
 
+/* query above is same with this*/
+/* for this sample, you can't find any benefit of using alias, tho */
+SELECT
+  id,
+  firstName,
+  lastName 
+  FROM users
+  WHERE id = 1
+
+/* select from multiple table with alias??? */
+SELECT
+  customer.id,
+  worker.firstName,
+  worker.lastName 
+  FROM Customers customer, Workers worker /* Does this work? */
+  WHERE customer.id = 1
+
+/* select from multiple tables */
 SELECT Orders.OrderID, Orders.OrderDate, Customers.CustomerName
-FROM Customers, Orders /* select from multiple tables */
+FROM Customers, Orders
 WHERE Customers.CustomerName="Around the Horn" AND Customers.CustomerID=Orders.CustomerID;
+
+
 ```
 
 - I think this is very practical use of AS
