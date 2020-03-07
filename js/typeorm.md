@@ -1,6 +1,6 @@
 # TypeORM
 
-# ToC
+## ToC
 
 1. [Getting Started](#Getting%20Started)
 1. [Entity](#Entity)
@@ -8,6 +8,7 @@
 1. [Entity Manager](#Entity%20Manager)
 1. [Query Builder](#Query%20Builder)
 1. [Migration](#Migration)
+1. [Transaction](#Transaction)
 1. [Index](#Index)
 1. [Listener & Subscriber](#Listener%20%26%20Subscriber)
 1. [Logging](#Logging)
@@ -117,6 +118,22 @@ TYPEORM_ENTITIES = entity/*.js,modules/**/entity/*.js
 
 ## Entity
 
+### Overview
+
+- Entity is schema???
+- Embedded Entity
+  - This will be helpful when multiple entity shares the identical columns
+  - In `@Column(type => Name) name: Name;`, "Name" is the embedded entity
+  - embedding results in concatenated column names
+- Entity Inheritance
+  - In `export class Question extends Content`, "Content" is the inherited parent entity
+- Tree entities
+- View Entity
+  - Like DB View, you can define virtual table by defining `SELECT` query in advance
+  - `@ViewEntity` is the keyword for this
+- Schema
+  - You can separate Entity definition from columns definitions
+
 ### "@" Decorator for the Entity Column
 
 - `@Column()`
@@ -158,12 +175,15 @@ export class User {
   - INT PRIMARY KEY AUTO_INCREMENT
   - UUID(Universally Unique IDentifier) is unique string ID
 
+
+
+
 ## Relations
 
-### Basics
+### Overview
 
-- Relation とは、FOREIGN KEY に相当する関係性
-- Relations の定義の仕方だけでなく、Relations がかかったデータをどのように編集・参照するのかも抑えること
+- Relations is like `FOREIGN KEY`
+- You need to learn how to CRUD the records with relations
 
 ### `@OneToOne`
 
@@ -222,11 +242,11 @@ await connection.manager.save(user);
 
 ### `@OneToMany` と `@ManyToOne`
 
-- `@ManyToMany`と`@OneToOne`の表示は「親側」となる一方の Table にだけつければよかった
-- これに対して、`@OneToMany` と `@ManyToOne` は対応関係にある双方の Table につける
-- この例における関係性：
-  - 同一の User が多数の Photo を所有する
-  - ただし一つの Photo が複数の User に紐づくことはない
+- For `@ManyToMany` & `@OneToOne`, you have to describe the relations only on the owning-side table
+- For `@OneToMany` & `@ManyToOne`, you have to write relations on both tables in correspondence
+- Relations in the sample below:
+  - A "User" owns multiple "Photo"s
+  - A "Photo" will NOT belong to multiple "User"s
 
 ```js
 // Photo Side
@@ -380,7 +400,6 @@ categories: Category[];
 ## Entity Manager
 
 - Entity Manager
-
   - Has methods for SELECT, INSERT, DELETE, UPDATE, etc.
   - Returns Promise
 
@@ -551,13 +570,30 @@ await getConnection()
 
 ## Transaction
 
+### Overview
+
+- `getConnection().transaction(async transactionalEntityManager => {});`
+
+### `@Transaction`
+
+### `.createQueryRunner()`
+
 ## Index
+
+### Overview
+
+- You can add index just by adding `@Index()` to the `@Column()`
+- You can define common MySQL features like: `UNIQUE`, `SPATIAL`
 
 ## Listener & Subscriber
 
-```
+### Overview
 
-```
+- Listener adds custom logic for specific entity events
+- Subscriber is the class which is forced to listen to entity events
+- Listener will be useful for these situations:
+  - sample!
+
 
 ## Logging
 

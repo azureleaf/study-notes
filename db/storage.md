@@ -37,6 +37,10 @@
 - Primary Key
 - Cursol
 - View
+  - With view, you can make the shorthand to retrieve records with `SELECT`
+  - You can `SELECT * FROM view_name_here;` as if the view is a table
+  - Therefore, view is fften referred to as "virtual tables"
+  - Keywords like `JOIN` are available to define the view
 - Index
 
 ## Migration
