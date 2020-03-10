@@ -114,13 +114,27 @@ http
 - server にイベントリスナーをくっつける
 - これに限らず、on はイベントリスナーをくっつける際にどこでも使われるっぽい
   - server.on
-  - request.on
+  - req.on
+  - res.on
 
 ```js
 server.on("request", (request, response) => {
   // the same kind of magic happens here!
 });
 ```
+
+
+### Server listening
+
+```js
+var server = http.createServer(app);
+
+// "process.env" access to the server env var
+var port = normalizePort(process.env.PORT || "3000");
+server.listen(port);
+```
+
+
 
 ## `Event`
 
@@ -161,6 +175,14 @@ myEmitter.emit('event', 'a', 'b');
 ### node-check-updates
 
 ### nvm
+
+## Environment Variables
+
+```js
+process.env.PORT // port number
+process.env.NODE_ENV === 'production' // check if this is for production or development
+```
+
 
 ## Keywords
 

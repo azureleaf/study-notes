@@ -1,3 +1,10 @@
+# Robotics
+
+## Terminology
+
+- Bernstein's Problem
+- Synergy
+
 hardware																									
 		manipulator																							
 			category by structure																						
@@ -122,27 +129,7 @@ robot calculation
 																									
 																									
 																									
-physics																									
-		並進運動 vs 回転運動																							
-										並進運動									回転運動						
-										変位				r					角変位						θ
-							一回微分			速度				v					角速度　						ω
-							二階微分			加速度									角加速度						
-										運動量				p = mv					角運動量						L = r × p
-										力積									角力積						
-										力				F					力のモーメント（トルク）						N = r × F
-										質量				m					慣性モーメント						I
-										仕事				FΔr					仕事						NΔθ
-										運動エネルギー				mv^2 / 2					運動エネルギー						Iω^2 / 2
-										運動方程式				dp / dt = F					運動方程式						dL / dt = N
-										仕事率				Fv					仕事率						Nω
-																									
-																									
-		モーメント																							
-			主慣性モーメント																						
-			慣性主軸																						
-			断面二次モーメント																						
-			断面極モーメント																						
+										
 																									
 																									
 																									
