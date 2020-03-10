@@ -1,9 +1,5 @@
 # Numpy
 
-```py
-import numpy as np
-```
-
 ## Arrays
 
 ```py
@@ -39,13 +35,11 @@ print(d)              # Prints "[[ 1.  0.]
 e = np.random.random((2,2))  # Create an array filled with random values
 print(e)                     # Might print "[[ 0.91940167  0.08143941]
                              #               [ 0.68744134  0.87236687]]"
-
 ```
 
 ## Array Indexing
 
 ```py
-
 # Create the following rank 2 array with shape (3, 4)
 # [[ 1  2  3  4]
 #  [ 5  6  7  8]
@@ -64,14 +58,6 @@ print(a[0, 1])   # Prints "2"
 b[0, 0] = 77     # b[0, 0] is the same piece of data as a[0, 1]
 print(a[0, 1])   # Prints "77"
 
-
-
-# Create the following rank 2 array with shape (3, 4)
-# [[ 1  2  3  4]
-#  [ 5  6  7  8]
-#  [ 9 10 11 12]]
-a = np.array([[1,2,3,4], [5,6,7,8], [9,10,11,12]])
-
 # Two ways of accessing the data in the middle row of the array.
 # Mixing integer indexing with slices yields an array of lower rank,
 # while using only slices yields an array of the same rank as the
@@ -88,10 +74,7 @@ print(col_r1, col_r1.shape)  # Prints "[ 2  6 10] (3,)"
 print(col_r2, col_r2.shape)  # Prints "[[ 2]
                              #          [ 6]
                              #          [10]] (3, 1)"
-
-
 ```
-
 
 - Integer Array Indexing
 
@@ -114,12 +97,12 @@ print(np.array([a[0, 1], a[0, 1]]))  # Prints "[2 2]"
 
 
 # Create a new array from which we will select elements
-a = np.array([[1,2,3], [4,5,6], [7,8,9], [10, 11, 12]])
+# "array([[ 1,  2,  3],
+#         [ 4,  5,  6],
+#         [ 7,  8,  9],
+#         [10, 11, 12]])"
 
-print(a)  # prints "array([[ 1,  2,  3],
-          #                [ 4,  5,  6],
-          #                [ 7,  8,  9],
-          #                [10, 11, 12]])"
+a = np.array([[1,2,3], [4,5,6], [7,8,9], [10, 11, 12]])
 
 # Create an array of indices
 b = np.array([0, 2, 0, 1])
@@ -135,7 +118,6 @@ print(a)  # prints "array([[11,  2,  3],
           #                [17,  8,  9],
           #                [10, 21, 12]])
 ```
-
 
 - Boolean Array Indexing
 
@@ -326,7 +308,6 @@ print(x + np.reshape(w, (2, 1)))
 print(x * 2)
 ```
 
-
 ## Sort
 
 ```py
@@ -339,4 +320,3 @@ a_sort_reverse = np.sort(a)[::-1] # [4 3 2 1 0]
 
 
 ```
-
