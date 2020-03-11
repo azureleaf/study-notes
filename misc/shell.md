@@ -11,6 +11,8 @@
 - rmdir
 - rm -rf node_modules
   - `-f`コマンドはとても危険。Linuxの内部ファイルも簡単に削除されてしまう。なので、間違いがないよう実行前によく確認する
+- `rm -v !("hello.txt")`
+  - Remove all files but hello.txt
 - ls
 - ls *.txt
 - ls vue*

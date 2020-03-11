@@ -16,7 +16,7 @@
   - そのファイルを削除し、なおかつ git の index からも外す
 - `git branch`
 - `git branch -r`
-- `git branch --all`
+- `git branch -a` / `git branch --all`
 - `git branch NEW_BRANCH_NAME`
 - `git checkout BRANCH_NAME`
 - `git reset --hard 1234abcdblahblahblah`
@@ -24,7 +24,6 @@
   - 最後のコミットを取り消すが、ファイル内容はそのまま
 - `git reset --hard HEAD^`
   - 最後のコミットを取り消し、なおかつローカルのファイル内容も戻す
-
 
 
 ## ★★
@@ -46,7 +45,16 @@
   - rename current branch
 - `git branch -m OLD_BRANCH_NAME NEW_BRANCH_NAME`
   - rename the branch which you're not on
-
+- `git add -A`
+  - Stages Everything
+- `git add -u`
+  - Stages only Modified Files
+- `git add .`
+  - Stages everything, without Deleted Files
+- `git reset -- hello.txt`
+  - Unstage hello.txt
+- `git reset HEAD`
+  - Unstage all the files
 
 ### `git fetch` vs `git pull`
 
