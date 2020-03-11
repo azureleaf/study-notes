@@ -1,17 +1,36 @@
-# Try to use Passport.js
+# Passport.js
 
 ## Overview
 
 - Passport.js adds the user login function to the Express project
-- Declare to use passport @app.js (or server.js, index.ts, whatever)
-- Declare "Protected Routes" (routes requires authentication) @app.js / routes/index.js
+- To define "Protected Routes" (routes requires authentication), just add the `passport.authenticate()` method to the routing:
 
+```js
+// routing path as the 1st arg
+// passport.authenticate() as the 2nd arg
+// function after successful login as the 3rd arg
+app.post(
+  "/login",
+  // Choose the strategy to use
+  // Strategy must be configured before calling this app.post()
+  passport.authenticate("local"),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    // Redirecting after successful auth is very common
+    res.redirect("/users/" + req.user.username);
+  }
+);
+```
 
 ## Reference
 
 https://medium.com/@basics.aki/step-wise-tutorial-for-node-js-authentication-using-passport-js-and-jwt-using-apis-cfbf274ae522
 
-## Files (express-generator default)
+## Files
+
+- How Express project with Passport.js may look like
+- express-generator default
 
 ```
 passportjs/
@@ -34,81 +53,35 @@ passportjs/
     └── layout.pug
 ```
 
-## Common `express` Syntax
-
-- Create app
-
-```js
-var express = require("express");
-var app = express();
-```
-
-- Set project variables
-- Some reserved variables affect the behavior of the project
-
-```js
-app.set("Title", "My Site");
-app.get("Title"); // "My Site"
-```
-
-- Define how to use middleware
-
-```js
-// Middleware "usersRouter" will be used for the path '/users'
-var usersRouter = require("./routes/users");
-app.use(("/users", usersRouter));
-
-// Here the path (1st arg) is omitted, so express.json() middleware will be active for all the paths
-var express = require("express");
-app.use(express.json());
-
-// Define the middleware (error handling) on the spot
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
-});
-```
-
-
-
-### `bin/www`
-
-- `npm start` comes here
-- Declare middlewares to use
-
-### `app.js`
-
-- Call `router/index.js` router for the root path `/`
-- Call `router/users.js` router for the user path `/users`
-
 ## `passport.authenticate()`
 
+- Seemingly there're various positions for `passport.authenticate()`:
+  - `app.get("/login", passport.authenticate(), function(){})`
+  - `app.get("/login", function(){passport.authenticate()})`
+
 ```js
-app.get('/login', function(req, res, next) { // 普通のルーティングの記述
-  passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err); } // この時点でエラーが起きていたら、エラー処理のMWに渡す（）
-    if (!user) { return res.redirect('/login'); }
+app.get("/login", function(req, res, next) {
+  passport.authenticate("local", function(err, user, info) {
+    if (err) {
+      return next(err);
+    } 
+    // When there's no error but user isn't returned (What situation is this?)
+    if (!user) {
+      return res.redirect("/login");
+    }
+    // Is this req.logIn() the built-in passport function?
     req.logIn(user, function(err) {
-      if (err) { return next(err); }
-      return res.redirect('/users/' + user.username);
+      if (err) {
+        return next(err);
+      }
+      return res.redirect("/users/" + user.username);
     });
   })(req, res, next);
 });
-
 ```
-
 
 - `.authenticate(STRATEGY, OPTIONS, CALLBACK)`
   - Seemingly, OPTIONS or CALLBACK can be omitted
-
-
-
-
 
 ### strategy
 
@@ -177,26 +150,29 @@ function(err, user, info) {
 ## Key Expressions
 
 - Configure local strategy
+
 ```js
-passport.use(new Strategy(
-  function(username, password, cb) {
+passport.use(
+  new Strategy(function(username, password, cb) {
     db.users.findByUsername(username, function(err, user) {
-      if (err) { return cb(err); }
-      if (!user) { return cb(null, false); }
-      if (user.password != password) { return cb(null, false); }
+      if (err) {
+        return cb(err);
+      }
+      if (!user) {
+        return cb(null, false);
+      }
+      if (user.password != password) {
+        return cb(null, false);
+      }
       return cb(null, user);
     });
-  }));
-
+  })
+);
 ```
 
-
 ```js
-passport.serializeUser()
-passport.deserializeUser()
+passport.serializeUser();
+passport.deserializeUser();
 
-
-done()
-
-
+done();
 ```
