@@ -194,8 +194,7 @@ return done(null, false, { message: "incorrect password" });
 - プログラミングにおける Serialization とは、オブジェクトなどを自分の決めた手順でバイナリ化すること
 - Deserialization はその逆で、バイナリデータを実際に使える形に「解凍」して戻す動作
 - Passportにおけるserialize / deserializeの意味は、「userオブジェクト全体からidを取り出す」「idを基にuser全体を検索して見つける」の意味っぽい
-- このserializeUserはどこで呼ばれているのか???
-  - seriazlie + sessionのkey名、というふうに命名することが厳密に定義されている？
+- このserializeUserは、`done()`すると呼ばれる?
 
 ```js
 passport.serializeUser(function(user, done) {

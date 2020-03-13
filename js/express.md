@@ -8,7 +8,6 @@
 1. [Error Handling](#Error%20Handling)
 1. [Misc](#Misc)
 
-
 ## Routing
 
 ### Very basic
@@ -312,9 +311,40 @@ app.get("/user/:id", function(req, res, next) {
 
 ## Debugging
 
-
 ## Misc
 
 - Connect
   - Connect is a middleware layer for Node.js
   - Old Express.js depended on Conenct, however after Express 4 it's no longer dependent
+
+### Session とは
+
+- Session ID はユーザを識別するための番号
+- Session ID をブラウザ側で保管する場所が、Cookie
+- Session ID をサーバー側で保管する場所が、Session
+  - つまり、Session を DB で管理するなら、Session を記憶するためのテーブルをあらかじめ migrate しておく必要がある
+- HTTP は stateless
+  - しかし実用的なウェブサイトでは、ページ移動しても状態を保持できなきゃお話にならない
+  - だからセッションができた
+
+### Cookie とは
+
+- Cookie is composed of "key: value"
+- `Cookie: id=a3fWa`
+  - Format of sending cookie value in a request header
+  - cookie name can be arbitrary; "sessionId", "mysiteId", etc.
+- `Set-Cookie: id=a3fWa`
+  - Format of sending cookie value in a response header
+  - これに従って、ブラウザ側にクッキーが保存される
+  - このクッキーには expire が定義されていないので、ブラウザを閉じると消去される
+- `Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT`
+  - これは Permanent Cookie と呼ばれる
+  - 永続化、の意味はブラウザを閉じても失われないという意味
+  - 期限がくれば削除されるので、本当に permanent ではない
+- `Set-Cookie: id=a3fWa; Max-Age=2592000`
+  - Another format for a permanent Cookie
+- Cookie has data size limit
+  - 4096 bytes / domain
+  - 50 cookies / domain
+- Cookie の値はユーザ側で変えたい放題だと思うけど、それを使って他のユーザだと偽ることもできる？
+- Chrome の DevTool > Application Tab で Cookie を確認可能
