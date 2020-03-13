@@ -6,6 +6,8 @@
 1. [Middleware](#Middleware)
 1. [Template Engine](#Template%20Engine)
 1. [Error Handling](#Error%20Handling)
+1. [Misc](#Misc)
+
 
 ## Routing
 
@@ -309,3 +311,10 @@ app.get("/user/:id", function(req, res, next) {
 ## Error handling
 
 ## Debugging
+
+
+## Misc
+
+- Connect
+  - Connect is a middleware layer for Node.js
+  - Old Express.js depended on Conenct, however after Express 4 it's no longer dependent

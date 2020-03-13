@@ -1,5 +1,16 @@
 # 最低限のセキュリティ知識
 
+## ToC
+
+1. [misc](#misc)
+1. [Attacks](#Attacks)
+1. [Encryption](#Encryption)
+1. [SSL/TLS](#SSL%2FTLS)
+1. [SSH](#SSH)
+1. [Hash](#Hash)
+1. [Authentication](#Authentication)
+
+
 ## misc
 
 - Checksum
@@ -29,7 +40,7 @@
   - Canvas
   - Web Storage
 
-## 攻撃の種類
+## Attacks
 
 ### DDoS
 
@@ -107,7 +118,7 @@
 
 ### WAF: Web Application Firewall
 
-## Encryption Algorithm
+## Encryption
 
 - PGP Encryption
 
@@ -184,8 +195,9 @@
 - Laravel でも使われている
 - OpenSSL のライブラリはパソコンにインストールできる。手元で秘密鍵・公開鍵を生成できる。
 
-## SSH: Secure SHell
+## SSH
 
+- SSH: Secure SHell
 - SSL と名前がちょっと似てるが基本的には別物
 - 公開鍵のしくみなどを利用する点は SSL と共通
 - ユーザ名とパスワードを使った認証よりも安全
@@ -200,9 +212,9 @@
 | 秘密鍵でテストデータを復号化し、サーバ側に戻す |                                                  |
 |                                                | 正しく復号化されていれば、本人であると確認できる |  |
 
-## Hash Function
+## Hash
 
-- 任意長のビット列から規則性のない固定長のビット列を生成する関数のこと
+- 任意長のビット列から規則性のない固定長のビット列を生成する関数をハッシュ関数という
   - 高速なハッシュ関数ほど良質
   - 元データのサイズにかかわらず一定のサイズ。でないと使いにくい
   - 元データが少しでも違ったら、ハッシュ値はがらっと変わる。でないと改ざんしやすい
@@ -255,7 +267,7 @@
   1. 受信者は、共通鍵とメッセージを使って MAC を計算する
   1. 自分で計算した MAC と、送信された MAC が一致することを確認する
 
-## 認証
+## Authentication
 
 - 認証方式はたくさんある
 
@@ -263,13 +275,36 @@
 
 - 基本中の基本
 
+### JWT
+
+- 発音はjotらしい
+- 文字列になっている：`eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IuWxseeUsCIsImV4cCI6IjIwMTkvMDQvMDEifQ.u8TT4ySJhBiMod1rNqCxiISXwCXqddVSJE5gncSCGD7RPHigHoZiDnLfwcIIGij-ARBrswe4eluMUgaQwS7FUdN8IVwKkFUY1533TQZZYhTUzobO3q_PnDyPi8cPDmkSTJHzBhT298G7fNZENUUo8fmCjOkYC9FibTMrF6Aij4w`
+- `{Base64エンコードされたヘッダ}.{Base64エンコードされた JSON の中身(クレームという)}.{電子署名}`という形式
+- 電子署名は改竄を検出するために使われる
+
+```js
+// Header
+{
+"alg": "RS256", // REQUIRED algorithm 
+"typ": "JWT" // type
+}
+
+// Claim
+// You can add user-defined claims, however some claim name is reserved
+{
+"username": "山田",
+"exp": "2019/04/01" // expire
+}
+```
+
+
+
 ### OpenID
 ### OAuth2.0
 ### Social Login
 
-- OAuth とは
 
-## apt システムにおける package の認証
+### apt システムにおける package の認証
 
 - 例として、MongoDB だと以下のようにする
 
