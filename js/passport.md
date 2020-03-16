@@ -193,8 +193,8 @@ return done(null, false, { message: "incorrect password" });
 - しかし、それよりも複雑なプログラム上のオブジェクトなどをどうバイナリデータに変換するのかは自明ではない
 - プログラミングにおける Serialization とは、オブジェクトなどを自分の決めた手順でバイナリ化すること
 - Deserialization はその逆で、バイナリデータを実際に使える形に「解凍」して戻す動作
-- Passportにおけるserialize / deserializeの意味は、「userオブジェクト全体からidを取り出す」「idを基にuser全体を検索して見つける」の意味っぽい
-- このserializeUserは、`done()`すると呼ばれる?
+- Passportにおけるserialize / deserializeの意味は、「userオブジェクト全体からidを取り出す」「idを基にuser全体を検索して復元する」の意味っぽい
+- このserializeUserは、`done()`すると呼ばれる?しかし、serializeUser関数自体の内部でもdoneが実行されているな...
 
 ```js
 passport.serializeUser(function(user, done) {
