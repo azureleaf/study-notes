@@ -1,21 +1,33 @@
 # shell
 
-## ★★★
+## ToC
+
+1. [Basic](#Basic)
+1. [curl](#curl)
+1. [wget](#wget)
+1. [grep](#grep)
+1. [](#)
+1. [](#)
+1. [](#)
+
+## Basic
+
+### ★★★
 
 - cd
 - mv hello.txt ../src
 - mv old.txt new.txt
 - cp old.txt ../
-- rm 
+- rm
 - mkdir src
 - rmdir
 - rm -rf node_modules
-  - `-f`コマンドはとても危険。Linuxの内部ファイルも簡単に削除されてしまう。なので、間違いがないよう実行前によく確認する
+  - `-f`コマンドはとても危険。Linux の内部ファイルも簡単に削除されてしまう。なので、間違いがないよう実行前によく確認する
 - `rm -v !("hello.txt")`
   - Remove all files but hello.txt
 - ls
-- ls *.txt
-- ls vue*
+- ls \*.txt
+- ls vue\*
 - `ls -a`
   - show hidden files as well
 - `ls -a | grep app`
@@ -24,22 +36,67 @@
 - ctrl + C
   - 現在実行中のコマンドを強制終了する
 
-## ★★
+### ★★
+
 - touch hello.txt
 
-## ★
+### ★
 
 - rsync
-  - conditional copying / mirroring 
+  - conditional copying / mirroring
   - ファイルのバックアップなどに活躍する
 - mkdir -p hello/src
   - 階層を一気につくる
 - ps
 - top
 
+## curl
 
+## wget
 
+## grep
 
+## chmod
+
+### `ls -l mydir`
+
+- This command lists files with permission info
+- `-rw-r--r-- 1 root root 209 Mar 30 17:41 printcap`
+  - `-`
+    - `-` for a file
+    - `d` for a directory
+  - `rw-`
+    - Read, Write, Execute for the owner
+  - `r--`
+    - Read, Write, Execute for the group
+  - `r--`
+    - Read, Write, Execute for everybody else
+  - `1`
+    - number of links inside the dir
+  - `root`
+    - owner of the file / directory
+  - `root`
+    - group of the file / directory
+  - `209`
+    - size: bytes
+  - `Mar 30 17:41`
+    - last modification
+  - `printcap`
+    - file name
+
+### Command Samples
+
+- `chmod +x script.sh`
+- `chmod -x script.sh`
+- `chmod u+x script.sh`
+- `chmod ugo-x script.sh`
+- `chmod a-x script.sh`
+- `chmod o-x script.sh`
+- `chmod 750 script.sh`
+- `chmod a=xwr,g-x,o-xw script.sh`
+- ``
+- ``
+- ``
 
 ## Shell types
 
@@ -50,15 +107,14 @@ All the shells are text-based.
   - When you use SSH on your computer, you're using login shell
 - non-login shell
 - interactive shell
-  - いわゆるterminalやconsoleはこれに該当する
+  - いわゆる terminal や console はこれに該当する
 - non-interactive shell
 
-
-## bashとは
+## bash とは
 
 - CUI
 - 非常に
-- bashは「強く打つ」という意味
+- bash は「強く打つ」という意味
 
 ## Config
 
@@ -69,42 +125,46 @@ All the shells are text-based.
 - Do `source ~/.bashrc` after change
 
 ### .bash_profile
+
 - Executed for login shell
 - Will be read when you login
 - Setting per user
 
-
 ### Order of config file to be read on login shell
 
-/etc/profile以外は、省略可
+/etc/profile 以外は、省略可
 
 1. /etc/profile
-1. ~/.bash_profile 
-1. ~/.bash_login 
-  - Will be ignored when ./bash_profile exists
-1. ~/.profile 
-  - Will be ignored when ./bash_profile exists
-1. ~/.bashrc 
-  - You need to `source ~/.bashrc` after change
+1. ~/.bash_profile
+1. ~/.bash_login
 
-1. ~/.bash_logout 
+- Will be ignored when ./bash_profile exists
 
+1. ~/.profile
 
-## bashのなかまたち
+- Will be ignored when ./bash_profile exists
+
+1. ~/.bashrc
+
+- You need to `source ~/.bashrc` after change
+
+1. ~/.bash_logout
+
+## bash のなかまたち
 
 - zsh
-  - 次期Macのデフォルトになるという噂
+  - 次期 Mac のデフォルトになるという噂
   - oh-my-zsh
 - fish
   - 一番高機能っぽい
   - oh-my-fish
 - Command Prompt (cmd.exe)
   - Windows
-  - bashとのコマンドの互換性はほとんどない（Windowsのだめなところ）： `ls`じゃなくて`dir`とか
-  - WSLを使ったらいいんじゃないか？
+  - bash とのコマンドの互換性はほとんどない（Windows のだめなところ）： `ls`じゃなくて`dir`とか
+  - WSL を使ったらいいんじゃないか？
 - powershell
   - Windows
-  - cmd向けコマンドに加えて、bash系の機能も結構使える
+  - cmd 向けコマンドに加えて、bash 系の機能も結構使える
   - ただ、なんだか起動が遅い
 
 ## Setup fish
@@ -113,6 +173,7 @@ All the shells are text-based.
 1. `chsh -s /usr/bin/fish`
 
 ### misc
+
 - `echo $SHELL`
   - show curernt LOGIN shell
 - `chsh -s /bin/bash`

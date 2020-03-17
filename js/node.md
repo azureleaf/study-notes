@@ -33,6 +33,7 @@
     - If found, `npx` execute the package while `npm` never execute the package
     - If not found, `npx` directly execute the package without installing it(really?)
   - Tips: after `npm i some-package`, you can't execute it by `some-package`. You need `./node_modules/.bin/some-package` to execute
+
 ## `require('http')`
 
 - Node.js のサーバー起動のコアとなるパッケージ
@@ -123,7 +124,6 @@ server.on("request", (request, response) => {
 });
 ```
 
-
 ### Server listening
 
 ```js
@@ -134,55 +134,83 @@ var port = normalizePort(process.env.PORT || "3000");
 server.listen(port);
 ```
 
-
-
 ## `Event`
 
-- `require("http")`すると、その内部でEventが使われている
-- Event Emitterは特定のタイミングでイベントをemitする
-  - Event emitter `net.Server` emits 
+- `require("http")`すると、その内部で Event が使われている
+- Event Emitter は特定のタイミングでイベントを emit する
+  - Event emitter `net.Server` emits
   - Event emitter `fs.ReadStream` emits when the file is opend
   - Event emitter `stream` emits when the data is ready to be read
-- Event Listenerは紐付けられたEventがemitされると実行される
+- Event Listener は紐付けられた Event が emit されると実行される
 
 ```js
-const EventEmitter = require('events');
+const EventEmitter = require("events");
 
 // All the Event Emitters inherit EventEmitter class
-class MyEmitter extends EventEmitter {} 
+class MyEmitter extends EventEmitter {}
 
 // Instantiate event emitter
 const myEmitter = new MyEmitter();
 
 // Define Event name & Event listener
-myEmitter.on('event', (a, b) => {
+myEmitter.on("event", (a, b) => {
   console.log("Event occured! ", a, b, this); // a b {}
 });
 
 // Emit the event with args
-myEmitter.emit('event', 'a', 'b');
-
+myEmitter.emit("event", "a", "b");
 ```
-
-
 
 ### `require('cookie-parser')`
 
-## Node.js 管理のための packages
+## Major Packages
+
+### nvm
 
 ### nodemon
 
 ### node-check-updates
 
-### nvm
+### npm-run-all
+
+### passport.js
+
+### passport-local
+
+### express-session
+
+### body-parser
+
+### cors
+
+### typeorm
+
+### sequelize
+
+### morgan
+
+### mongoose
+
+### mysql
+
+### sqlite3 / sqlite
+
+### pg
+
+- PostgreSQL client
+
+###
+
+## Minor packages
+
+### shelljs
 
 ## Environment Variables
 
 ```js
-process.env.PORT // port number
-process.env.NODE_ENV === 'production' // check if this is for production or development
+process.env.PORT; // port number
+process.env.NODE_ENV === "production"; // check if this is for production or development
 ```
-
 
 ## Keywords
 

@@ -5,7 +5,16 @@
 - http://www.passportjs.org/docs/downloads/html/
 - https://medium.com/@basics.aki/step-wise-tutorial-for-node-js-authentication-using-passport-js-and-jwt-using-apis-cfbf274ae522
 
-## Overview
+## ToC
+
+1. [Overview](#overview)
+1. [passport.authenticate()](#auth)
+1. [Strategy](#strat)
+1. [done()](#done)
+1. [Serialization & Deserialization](#serial)
+1. [Key Expressions](#key)
+
+## Overview <a id="" name=""></a>
 
 - バックエンド側で認証を実証するための機能なので、Express のプロジェクトに追加して使う
 - "Protected Routes" (認証を必要とするルート)については、`app.get()`などの引数に`passport.authenticate()`を追加するだけで認証要求ができる
@@ -35,9 +44,18 @@ app.post(
 );
 ```
 
-## Terminology
+## How to add Passport.js
 
-## `passport.authenticate()`
+1. `npm install passport passport-local express-session`
+1. Edit `app.js`
+   - `require passport`
+   - `passport.use()` to define auth strategy
+   - `serializaUser()` / `deserializeUser()`
+1. Add to routing file
+   - `passport.authenticate()` for login page
+   - Add `if` statement to each guraded route to check if the user is authed
+
+## `passport.authenticate()` <a id="auth" name="auth"></a>
 
 - `.authenticate(STRATEGY, OPTIONS, CALLBACK)`
 - Strategy: 認証方式。パスワードなのか、ソーシャルログインなのか、など
@@ -68,7 +86,6 @@ app.get("/login", function(req, res, next) {
 
 ### strategy
 
-
 - local
 - basic
 - openid
@@ -92,7 +109,7 @@ app.get("/login", function(req, res, next) {
   - Note that browsers and sometimes web servers enforce a limit on cookie sizes
   - This means that flashing messages that are too large for session cookies causes message flashing to fail silently.
   - 例："パスワードかユーザ名が不正です", "このメールアドレスは既に使われています"
-  - Expressでflash messageを使うには、オプションで指定するのに加えて`connect-flash` ミドルウェアをインストールする必要あり
+  - Express で flash message を使うには、オプションで指定するのに加えて`connect-flash` ミドルウェアをインストールする必要あり
 - セッションを使うのが基本になる
   - ログインに成功すると、それ以降のユーザーからのアクセスには`req.user`を Express.js のミドルウェアが付加するようになる
   - API サーバーなどは、アクセスがあるたびに認証するものらしい。なので、この場合はセッションは使わない`{session: false}`
@@ -105,7 +122,7 @@ app.get("/login", function(req, res, next) {
 
   // Message flash
   // booleanを指定するか、もしくは文字列を指定
-  failureFlash: true, 
+  failureFlash: true,
   failureFlash: 'Invalid username or password.',
   successFlash: 'Welcome!'
 
@@ -138,7 +155,7 @@ function(err, user, info) {
 }
 ```
 
-## Configure Strategy
+## Strategy <a id="strat" name="strat"></a>
 
 - passport.use の中で定義する
 
@@ -162,12 +179,10 @@ passport.use(
 );
 ```
 
-## Misc: Key expressions
-
-### `done()`
+## `done()` <a id="done" name="done"></a>
 
 - `done()`は認証した結果を Passport 本体に渡すためのコールバック関数である
-  - というかsessionに保存されるっぽい
+  - というか session に保存されるっぽい
 - Syntax: `done(error, user, options)`
 - `done()`に渡した内容が`serialization()`で処理される
 
@@ -187,20 +202,20 @@ return done(null, false);
 return done(null, false, { message: "incorrect password" });
 ```
 
-### Serialization / Deserialization
+## Serialization / Deserialization <a id="serial" name="serial"></a>
 
 - 例えば数字の 10 をバイナリデータに変換すれば 1010 になるのはどこでも同じ
 - しかし、それよりも複雑なプログラム上のオブジェクトなどをどうバイナリデータに変換するのかは自明ではない
 - プログラミングにおける Serialization とは、オブジェクトなどを自分の決めた手順でバイナリ化すること
 - Deserialization はその逆で、バイナリデータを実際に使える形に「解凍」して戻す動作
-- Passportにおけるserialize / deserializeの意味は、「userオブジェクト全体からidを取り出す」「idを基にuser全体を検索して復元する」の意味っぽい
-- このserializeUserは、`done()`すると呼ばれる?しかし、serializeUser関数自体の内部でもdoneが実行されているな...
+- Passport における serialize / deserialize の意味は、「user オブジェクト全体から id を取り出す」「id を基に user 全体を検索して復元する」の意味っぽい
+- この serializeUser は、`done()`すると呼ばれる?しかし、serializeUser 関数自体の内部でも done が実行されているな...
 
 ```js
 passport.serializeUser(function(user, done) {
   // 「user全体はいらない。user.idだけをsessionに保存せよ」と指示
   // この結果、req.session.passport.user = { id: "abc" }というように保存される
-  done(null, user.id); 
+  done(null, user.id);
 });
 
 // deserializaUserの第一引数はserializeUserで指定したkey
@@ -210,5 +225,15 @@ passport.deserializeUser(function(id, done) {
   User.findById(id, function(err, user) {
     done(err, user);
   });
+});
+```
+
+## Key Expressions <a id="key" name="key"></a>
+
+```js
+router.get("/logout", (req, res) => {
+  req.logout();
+  req.session.destroy(); // これはユーザーのブラウザーからクッキーも削除するのか？
+  res.redirect("/");
 });
 ```
