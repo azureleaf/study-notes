@@ -32,6 +32,8 @@
   - Spread / Rest operator
   - Promise.prototype.finally()
 - ES10 = ES2019
-
+- Common JS
+  - JS本体に外部モジュールを読み込む機能が無いことにキレたMozillaの人が始めた、新しい仕様
+  - `require`を用いて外部のコードを読み込めるようにした
 
 

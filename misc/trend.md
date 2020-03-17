@@ -28,6 +28,8 @@
     - PFNが開発
 - Amazon SageMaker
 - AutoML
+- IBM Watson
+
 
 ## NLP: Natural Language Processing
 

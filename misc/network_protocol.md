@@ -96,23 +96,29 @@
 
 ### Structure of Request & Response
 
-| Request                                                       |                                    | Response                                                            |
-| ------------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------- |
-| `GET /book/list.html HTTP/1.1`                                | Start Line                         | `HTTP/1.1 200 OK`                                                   |
-| `HOST: www.mylibrary.com`<br>`User-Agent: Mozilla/5.0`<br>... | Request Headers / Response Headers | `Server: Apache`<br>`Content-Type: text/html; charset=utf-8`<br>... |
-|                                                               | (empty line)                       |                                                                     |
-| `bookId=123&author=Jane+Austen`                               | Request Body                       | `<HTML><HEAD>`<br>...                                               |
+| Request                                                       |              | Response                                                            |
+| ------------------------------------------------------------- | ------------ | ------------------------------------------------------------------- |
+| `GET /book/list.html HTTP/1.1`                                | Start Line   | `HTTP/1.1 200 OK`                                                   |
+| `HOST: www.mylibrary.com`<br>`User-Agent: Mozilla/5.0`<br>... | Headers      | `Server: Apache`<br>`Content-Type: text/html; charset=utf-8`<br>... |
+|                                                               | (empty line) |                                                                     |
+| `bookId=123&author=Jane+Austen`                               | Body         | `<HTML><HEAD>`<br>...                                               |
 
 ### Important HTTP Status Code
 
-- `200 OK` ウェブサイトがきちんと表示されるとき
-- `301 Moved Permanently` 「３０１リダイレクト」と呼ばれるもの。検索エンジンの評価を引き継げる。
-- `302 Moved Temporarily` 一時的な移動。Google ボットはサイト評価を移動しない
-- `401 Unauthorized`　認証をそもそもしてないとき、認証に失敗したときなど
+- `200 OK`
+- `301 Moved Permanently`
+    - Called "301 Redirection"
+    - New website location can inherit the SEO history by the Google bot
+- `302 Moved Temporarily`
+    - Google bot will NOT recognize temporary location same as old one
+- `401 Unauthorized`
+    - Client isn't authenticated, or authorized
 - `403 Forbidden`　管理者以外アクセス禁止の場所の場合
 - `404 Not Found`
-- `500 Internal Server Error`　サーバーの内部エラー。バグなどが原因
-- `503 Service Unavailable`　サーバーのメンテナンスや、過負荷など
+- `500 Internal Server Error`
+    - サーバーの内部エラー。バグなどが原因
+- `503 Service Unavailable`
+    - Server is down due to maintenance, overload, etc.
 
 ### Port Number
 
@@ -151,7 +157,7 @@
 - 送信先のポート番号
 - シーケンス番号：　このデータが何バイト目なのか
 - 確認応答番号：
-- Control flag： それぞれ 1 ビット。
+- Control flags: Every flag has one bit (0 or 1)
   - URG
   - ACK
   - PSH

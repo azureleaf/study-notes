@@ -1,9 +1,13 @@
 # Network Device
 
+## Reference
+
+- ネットワーク超入門講座 第４版, 三上信男, Softbank Creative
+
 ## ToC
+
 1. [MISC](#MISC)
-1. [ONU](#ONU)
-1. [MODEM](#MODEM)
+1. [ONU and MODEM](#ONU%20and%20MODEM)
 1. [Layer 2 Switch](#switch2)
 1. [Layer 3 Switch](#switch3)
 1. [Router](#Router)
@@ -18,17 +22,20 @@
   - WAE: Widearea Ethernet
 - LAN
 
-### 大規模ネットワークでの構成
+### Devices Configuration at the Large network
 
-1. Internet もしくは IP-VPN 　もしくは 広域イーサネット
+1. Internet / IP-VPN / 広域イーサネット
 1. Router
-1. Firewall: ここで DMZ にも分岐する
+1. Firewall
+   - ここで DMZ にも分岐する
 1. L3 Switch
-1. L2 Switch: LAN の数だけ複数ある。複数の L3 Switch に接続することもある。
+1. L2 Switch
+   - Every LAN has a L2 Switch; relations between L3 Switch & L2 Switch is One-to-Many
+   - Sometimes a L2 Switch connect to multiple L3 Switches; Many-to-Many
 1. LAN
-1. Wireless Access Point や PC(Ethernet)
+1. Wireless Access Point / PC via Ethernet
 
-### 小規模ネットワークでの構成
+### Devices Configuration at the Small network
 
 1. Internet
 1. MODEM or ONU
@@ -37,42 +44,41 @@
 
 「WiFi ルータ」として売ってるものは、Router + L3 Switch + Wireless AP の全てを担っている？？？
 
-### VoIP 
+### VoIP
 
+## ONU and MODEM
 
-## ONU
+## What does "hub" refer to?
 
-- 
+- Some devices are called "hub" just because they have many ports
+  - Repeater Hub (In most cases, hub refers to Repeater hub)
+  - Switching hub
+  - Router ?
 
-## MODEM
-
-- 
-
-## "hub"はなにを指すのか
-
-- 要するに、ポートがたくさんあると Hub と呼ばれてる気がする
-- Repeater Hub のことを指すことが多い。なお、Repeater と Repeater Hub は別物
-- しかし"Switching Hub"も Hub とついている以上は Hub と呼ばれることもあるだろう
-
-## Repeater 
+## Repeater
 
 - 信号が劣化する前に補正する
 - 信号を「増幅」するわけではない
 - 現在では、ハブがリピータの役割を果たす
-- CSMA/CD 方式を採用
+- Use CSMA/CD method
 - OSI の Physical Layer しか見ない
 
-## Repeater Hub
+### Repeater Hub
 
 - 複数のポートを持っている Repeater
+- In many context in Japan, when somebody says "hub" it refers to a repeater hub
 
 ### CSMA/CD
 
-- 通信ケーブルにデータを流すためのルールである
+- Repeater hub uses CSMA/CD method
+- CSMA/CD is the rule to send the data into the cable
 - CS: Carrier Sense
+  - All the devices on the cable always check if the cable isn't used by others
 - MA: Multiple Access
+  - As long as you can
 - CD: Collision Detection
-  - 複数の装置が同時に送信を開始してしまった場合は、双方のデータが使えなくなる。それを検知したら再送することになる
+  - when the multiple devices send the data at the same time, data from both ones will be discarded
+  - When such collision is detected, both devices try to resend the data
 
 ## Bridge
 
@@ -82,36 +88,27 @@
   - つまり、Bridge は内部でネットワーク毎の MAC アドレスの一覧（MAC Address Table）を学習する必要がある
 - Repeater が OSI 物理層しか見ないのにたいして、Bridge は Data Link Layer の情報も活用する
 
-## Layer 2 Switch <a name="switch2"></a>
+## Layer 2 Switch <a id="switch2" name="switch2"></a>
 
 - 信号を中継する
 - 多数のイーサネットポートを持っている
 - ここでいう Layer 2 とは、OSI モデルの第二層（データリンク層）である。
 - 信号が来たら、それがどの宛先なのかを判断し、そのデバイスのみに送出する。
-
-### 利点
-
--
-- VLAN 分割が可能
-
-### 欠点
-
-- 宛先を判別する作業などに一定の時間がかかるので、その分は遅くなる
+- 利点
+  - VLAN 分割が可能
+- 欠点
+  - 宛先を判別する作業などに一定の時間がかかるので、その分は遅くなる
 
 ### VLAN
 
-- 一つの物理的なネットワークを、複数の論理的ネットワークに分割する技術
+- Separate single physical network into multiple logical network
 - 利点
-
-  -
   - Enhanced Security
   - Broadcast による帯域消費を最小限にできる
-
 - Trunk Link
   - １本のケーブルに複数の VLAN Frame を流す
   - VLAN を実現するのに欠かせない機能
 - VLAN 越え通信
-  -
 - Static VLAN / Port VLAN
 - Dynamic VLAN
 
@@ -136,10 +133,9 @@
 - Connects LANs (switch) and WANs (internet)
 - ルータがないと、１つの外部回線に１台しか接続できない
 - １つのネットワークにルータ機能が ON の機器が複数あると問題が起きる
+  - Is this "Rogue DHCP Server"???
 - Routing Table
--
-
-* Default Route
+- Default Route
   - 既定の動作では、Routing Table に一致する宛先がない場合にはｓのパケットは破棄される
   - Default Route を設定すると、宛先不明パケットは全てそこに送られる
 
@@ -183,8 +179,6 @@ routing できる点では共通だが、違いを抑える
 
 - WiFi の動作範囲を拡大する
 
-
-
 ## Wireless LAN
 
 ### Wireless LAN Network Types
@@ -214,15 +208,14 @@ routing できる点では共通だが、違いを抑える
 - 2.4 GHz
 - 5 GHz
 
+### Band
+
 - Dual Band
 - Triband
 
 ### CSMA/CA
 
-- **１つのアクセスポイントにアクセスできるのは、１台だけ**
-
-  -
-
+- １つのアクセスポイントにアクセスできるのは、１台だけ
 - CS: Carrier Sense
 - MA: Multiple Access
 - CA: Collision Avoidance
@@ -241,15 +234,17 @@ routing できる点では共通だが、違いを抑える
 ### Wireless LAN Security Protocols
 
 - WPA
-- WPA2:
-- WEP: もう使っちゃだめ。暗号化はするが脆弱
+- WPA2
+- WEP
+  - DO NOT USE THIS
+  - This is old and fragile encryption
 
 ### Wireless LAN Security Technology
 
 - MAC Address Filtering
   - まあまあ意味ある
   - 脆弱性：　 Wireless LAN カードの盗難、MAC Address の偽装
-- ## SSID
+- SSID
 - IEEE802.1X
 
 ### Wireless LAN MISC
