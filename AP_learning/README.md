@@ -9,7 +9,7 @@
 # MarkDownファイルの分類
  1. プログラマ、ITエンジニアに必要そうな知識をまとめた`AP_reference_book.md`
  1. プログラマ、ITエンジニアに必要かどうかは置いといて雑学にはなる知識をまとめた`AP_reference_other.md`
- 1. ニッチな単語をまとめた単語帳形式の`AP_reference_wordbook`
+ 1. ニッチな単語をまとめた単語帳形式の`AP_reference_wordbook.md`
  - 大雑把にAPの範囲を分けていくつかのMarkDownファイルを用意した
  - **応用情報を受けるつもりなら1,2までのMarkDownファイルの知識は必要**
 

@@ -6,12 +6,23 @@
 1. [Middleware](#Middleware)
 1. [Template Engine](#Template%20Engine)
 1. [Error Handling](#Error%20Handling)
+1. [Misc](#Misc)
 
 ## Routing
 
 ### Very basic
 
 ```js
+// Create the app
+var express = require("express");
+var app = express();
+
+// Set project variables
+// Some reserved variables affect the behavior of the Express
+app.set("Title", "My Site"); // Set user-defined variable
+app.get("Title"); // "My Site"
+app.set("view engine", "pug"); // Set value of built-in variable
+
 // GET method route
 app.get("/", function(req, res) {
   res.send("GET request to the homepage");
@@ -83,7 +94,7 @@ app("/book").put(function(req, res) {
 
 - Response Methods
 
-- "octet stream": 
+- "octet stream":
   - Is a MIME type
   - Is a binary file
   - Typically, it will be an application or a document that must be opened in an application, such as a spreadsheet or word processor
@@ -94,11 +105,11 @@ res.send();
 res.redirect();
 res.end();
 res.json();
-res.jsonp()	// Send a JSON response with JSONP support.
-res.download() // Prompt a file to be downloaded.
-res.render() //	Render a view template.
-res.sendFile() //Send a file as an octet stream.
-res.sendStatus()	// Set the response status code and send its string representation as the response body.
+res.jsonp(); // Send a JSON response with JSONP support.
+res.download(); // Prompt a file to be downloaded.
+res.render(); //	Render a view template.
+res.sendFile(); //Send a file as an octet stream.
+res.sendStatus(); // Set the response status code and send its string representation as the response body.
 
 // Sending status has alternative
 res.status(500).send({ error: "boo:(" }); // send + sendStatus
@@ -163,20 +174,33 @@ module.exports = router;
 ### Minimum MW
 
 ```js
-var myLogger = function (req, res, next) {
-  console.log('LOGGED')
-  next()
-}
+var myLogger = function(req, res, next) {
+  console.log("LOGGED");
+  next();
+};
 
 // app.use() without the path; so this will be executed for all the requests
-app.use(myLogger)
+app.use(myLogger);
 
-app.get('/', function (req, res) {
-  res.send('Hello World!') // "LOGGED" will be shown on the console
-})
+app.get("/", function(req, res) {
+  res.send("Hello World!"); // "LOGGED" will be shown on the console
+});
 
-app.listen(3000)
+app.listen(3000);
+```
 
+- MW in `app.use()` can be declared on the spot
+
+```js
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error");
+});
 ```
 
 ### `next()`
@@ -197,7 +221,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-// You can define the series of MWs as the multiple arguments of the app.use()
+// You can define the series of MWs as multiple arguments of the app.use()
 app.use(
   "/user/:id",
   function(req, res, next) {
@@ -252,6 +276,31 @@ app.get("/user/:id", function(req, res, next) {
 
 ### Router-level MW
 
+### Built-in MW
+
+- `express.static()`
+  - Serves static files (images, HTML, etc.)
+- `express.json()`
+  - Parses incoming request which payload is JSON
+- `express.urlencoded()`
+  - Parses incoming request which payload is URL-encoded (what?)
+
+### Third-party MW
+
+- List of common third-party middlewares
+- Some middlewares will be installed automatically by `express-generator`
+
+- `cookie-parser`
+- `morgan`
+  - Logger for dev
+- `http-errors`
+- `path`
+- `body-parser`
+- `debug`
+- `passport`
+- `cors`
+  - Enable CORS
+
 ## Template Engines
 
 - You don't have to learn this when you use Vue.js
@@ -261,3 +310,41 @@ app.get("/user/:id", function(req, res, next) {
 ## Error handling
 
 ## Debugging
+
+## Misc
+
+- Connect
+  - Connect is a middleware layer for Node.js
+  - Old Express.js depended on Conenct, however after Express 4 it's no longer dependent
+
+### Session とは
+
+- Session ID はユーザを識別するための番号
+- Session ID をブラウザ側で保管する場所が、Cookie
+- Session ID をサーバー側で保管する場所が、Session
+  - つまり、Session を DB で管理するなら、Session を記憶するためのテーブルをあらかじめ migrate しておく必要がある
+- HTTP は stateless
+  - しかし実用的なウェブサイトでは、ページ移動しても状態を保持できなきゃお話にならない
+  - だからセッションができた
+
+### Cookie とは
+
+- Cookie is composed of "key: value"
+- `Cookie: id=a3fWa`
+  - Format of sending cookie value in a request header
+  - cookie name can be arbitrary; "sessionId", "mysiteId", etc.
+- `Set-Cookie: id=a3fWa`
+  - Format of sending cookie value in a response header
+  - これに従って、ブラウザ側にクッキーが保存される
+  - このクッキーには expire が定義されていないので、ブラウザを閉じると消去される
+- `Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT`
+  - これは Permanent Cookie と呼ばれる
+  - 永続化、の意味はブラウザを閉じても失われないという意味
+  - 期限がくれば削除されるので、本当に permanent ではない
+- `Set-Cookie: id=a3fWa; Max-Age=2592000`
+  - Another format for a permanent Cookie
+- Cookie has data size limit
+  - 4096 bytes / domain
+  - 50 cookies / domain
+- Cookie の値はユーザ側で変えたい放題だと思うけど、それを使って他のユーザだと偽ることもできる？
+- Chrome の DevTool > Application Tab で Cookie を確認可能
