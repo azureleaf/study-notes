@@ -179,6 +179,70 @@ passport.use(
 );
 ```
 
+- Passport 内部では以下のようにして実装されている
+
+```js
+// @param {Object} options
+//    - usernameField, passwordFieldという２つのキーが存在することが想定されている
+// @param {Function} verify
+//    - 上記の例で言えばdoneがverifyに相当する
+function Strategy(options, verify) {
+  // optionsが完全に省略され、第一引数しかないときは、その引数が関数ということなのでそれをverifyと見なす
+  if (typeof options == "function") {
+    verify = options;
+    options = {};
+  }
+
+  // Strategyに渡された引数が一つもない場合には明らかにエラー
+  if (!verify) {
+    throw new TypeError("LocalStrategy requires a verify callback");
+  }
+
+  // optionsに正しくキーが設定されていない場合には、既定値を設定
+  // この２つの値はStrategyオブジェクトに記憶されているが、どこで使うのか？
+  this._usernameField = options.usernameField || "username";
+  this._passwordField = options.passwordField || "password";
+
+  // call関数：この行以降では「passport.Strategy」のオブジェクトの内容を、「this」という名前で呼び出せるようになる
+  // thisの指す内容を変更したのと等しい
+  passport.Strategy.call(this);
+  this.name = "local"; // つまりこれはpassport.Strategy.nameにlocalという文字列を設定したのと同じ
+  this._verify = verify;
+  this._passReqToCallback = options.passReqToCallback;
+  // passportオブジェクトにはStrategyというメンバーがあり、その中にさらにnameや_verifyなどのプロパティが存在するということ
+}
+```
+
+## `passport-local` dependencies
+
+- This package requires `passport-strategy` package
+- `passport-local/lib/index.js` requires `passport-local/lib/strategy.js`
+- `passport-local/lib/strategy.js` requires `passport-local/lib/utils.js`
+
+## `passport` dependencies
+
+- This package requires `passport-strategy` package
+- `passport/lib/index.js` requires:
+  - `passport/lib/authenticator.js` (no dependency)
+  - `passport/lib/strategies/session.js` (no dependency)
+- `passport/lib/authenticator.js` requires:
+  - `passport/lib/sessionmanager.js`
+  - `passport/lib/strategies/session.js` (no dependency)
+  - `passport/lib/framework/connect.js`
+- `passport/lib/framework/connect.js`
+  - `passport/lib/middleware/authenticate.js`
+  - `passport/lib/middleware/initialize.js` (no dependency)
+  - `passport/lib/http/request.js` (no dependency)
+- `passport/lib/middleware/authenticate.js` requires:
+  - `passport/lib/http/request.js` (no dependency)
+  - `passport/lib/errors/authenticationerror.js` (no dependency)
+  - `passport/lib/framework/connect.js` (already checked)
+
+## `passport-strategy` dependencies
+
+- `passport-strategy/lib/index.js` requires:
+  - `passport-strategy/lib/strategy.js` (no dependency)
+
 ## `done()` <a id="done" name="done"></a>
 
 - `done()`は認証した結果を Passport 本体に渡すためのコールバック関数である
