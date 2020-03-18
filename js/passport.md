@@ -179,7 +179,24 @@ passport.use(
 );
 ```
 
-- Passport 内部では以下のようにして実装されている
+
+## `passport-local` dependencies
+
+- This package requires `passport-strategy` package
+- `passport-local/lib/index.js` requires `passport-local/lib/strategy.js`
+- `passport-local/lib/strategy.js` requires `passport-local/lib/utils.js`
+
+### `strategy.js`
+
+```js
+
+util.inherits(Strategy, passport.Strategy);
+
+Strategy.prototype.authenticate = function(req, options) {
+
+
+
+```
 
 ```js
 // @param {Object} options
@@ -212,12 +229,6 @@ function Strategy(options, verify) {
   // passportオブジェクトにはStrategyというメンバーがあり、その中にさらにnameや_verifyなどのプロパティが存在するということ
 }
 ```
-
-## `passport-local` dependencies
-
-- This package requires `passport-strategy` package
-- `passport-local/lib/index.js` requires `passport-local/lib/strategy.js`
-- `passport-local/lib/strategy.js` requires `passport-local/lib/utils.js`
 
 ## `passport` dependencies
 
