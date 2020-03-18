@@ -31,6 +31,16 @@ volume(2)(3)(4);
 passport.authenticate("local", function(err, user, info) {...})(req, res, next);
 ```
 
+## Terminology
+
+- Arity
+    - Unary
+    - Binary
+    - Ternary
+    - n-ary
+- Higher-order function
+- Pure function
+
 ## 投入した引数を全て消費しないとどうなるか
 
 - 関数が返ってくるので、それをさらに使える

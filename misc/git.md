@@ -1,5 +1,15 @@
 # Learn Git
 
+## ToC
+
+1. [](#)
+1. [](#)
+1. [](#)
+1. [](#)
+1. [](#)
+1. [](#)
+1. [](#)
+
 ## ★★★
 
 - `git add -A`
@@ -24,7 +34,6 @@
   - 最後のコミットを取り消すが、ファイル内容はそのまま
 - `git reset --hard HEAD^`
   - 最後のコミットを取り消し、なおかつローカルのファイル内容も戻す
-
 
 ## ★★
 
@@ -99,6 +108,54 @@
   - 新しい remote を追加（例：GitHub に上げてたリポジトリを、GitLab にも上げられるようにするとか）
 - `git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git`
 
+## CLONE vs FORK
+
+## MERGE REQUEST vs PULL REQUEST
+
+## Git レポジトリの付替え
+
+1. `cd existing_repo`
+1. `git remote rename origin old-origin`
+1. `git remote add origin git@gitlab.com:mydevelopgroup/helloworldproj.git`
+1. `git push -u origin --all`
+1. `git push -u origin --tags`
+
+## Troubleshooting
+
+### GitLab で２段階認証を設定したらそれ以降の Git 動作が失敗する
+
+1. GitLab 上で Access Token を生成し、これをどこかに保存しとく
+1. git clone する
+1. email / account を聞かれたら、いつもどおり GitLab のアカウントを記入
+1. password を聞かれたら、GitLab アカウントのパスワードではなく、さっき生成した Access Token を入力する
+
+### GitLab: Permission denied (publickey)
+
+- Error message:
+
+  ```
+  git@gitlab.com: Permission denied (publickey).
+  fatal: Could not read from remote repository.
+
+  Please make sure you have the correct access rights
+  and the repository exists.
+  ```
+
+- Solution: SSH キーを設定する@Ubuntu
+
+1. `ls -l ~/.ssh/id_*.pub`
+1. `ssh-keygen -t rsa -b 4096 -C "your_email@domain.com"`
+   - ここのメールアドレスは、GitLab の認証のやつにする
+1. 保存名の変更（default のままで可）
+1. passphrase の入力（空欄でも可能）
+1. `sudo apt install xclip`
+   - If you don't have it in your computer
+1. `xclip -sel clip < ~/.ssh/id_rsa.pub`
+1. GitLab のウェブサイト上で登録
+   - Setting -> SSH Keys -> Key に貼り付け
+1. `ssh -T git@gitlab.com`
+   - `Welcome to GitLab!`と表示されていれば、成功している
+
 ## Good Tutorials
 
 - [サルでもわかる](https://backlog.com/ja/git-tutorial/)
@@ -130,9 +187,9 @@
 
 ### SourceTree
 
-- gitの履歴などを可視化するツール
-- CUIではなく、GUIを使ったコミットやマージそのほかもできる
-- WindowsとMacに対応（Linuxには対応せず...）
+- git の履歴などを可視化するツール
+- CUI ではなく、GUI を使ったコミットやマージそのほかもできる
+- Windows と Mac に対応（Linux には対応せず...）
 
 ### CI/CD: Continuous Integration + Continuous Deployment （もしくは Continuous Delivery）
 
@@ -143,6 +200,5 @@
 - Continuous Deployment では、テストで問題なければ本番環境へのデプロイも自動で行う
 
 ## Naming Branch
-
 
 ## Commit Message Format
