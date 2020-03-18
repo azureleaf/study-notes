@@ -202,7 +202,7 @@ Strategy.prototype.authenticate = function(req, options) {
 // @param {Object} options
 //    - usernameField, passwordFieldという２つのキーが存在することが想定されている
 // @param {Function} verify
-//    - 上記の例で言えばdoneがverifyに相当する
+//    - doneがこのverifyに相当する。名前はdoneでもなんでもよいが、引数の位置と、関数であることが重要
 function Strategy(options, verify) {
   // optionsが完全に省略され、第一引数しかないときは、その引数が関数ということなのでそれをverifyと見なす
   if (typeof options == "function") {
@@ -210,7 +210,7 @@ function Strategy(options, verify) {
     options = {};
   }
 
-  // Strategyに渡された引数が一つもない場合には明らかにエラー
+  // Strategyに渡された引数が一つもない場合には明らかにエラーなので弾く
   if (!verify) {
     throw new TypeError("LocalStrategy requires a verify callback");
   }
