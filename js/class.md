@@ -4,17 +4,17 @@
 
 ```js
 class Person {
-  constructor(name, height, weight){
+  constructor(name, height, weight) {
     this.name = name;
     this.height = height;
     this.weight = weight;
   }
 
-  getBMI(){
+  getBMI() {
     return this.weight / (this.height * this.height);
   }
 
-  greet(){
+  greet() {
     console.log("私は" + this.name + "です。BMIは" + this.getBMI() + "です");
   }
 }
@@ -22,10 +22,8 @@ class Person {
 var suzuki = new Person("suzuki", 0.172, 65);
 suzuki.greet();
 
-
-var yoshida = new Person("yoshida", 0.180, 60);
+var yoshida = new Person("yoshida", 0.18, 60);
 yoshida.greet();
-
 ```
 
 ```js
@@ -80,4 +78,60 @@ person = {
 console.log(person.greet); // Hello, I'm John 値が参照されている、つまりgetされているのでgetterが作動
 person.greet = "Mike"; // 値が代入されているのでsetterが作動
 console.log(person.greet); // Hello, I'm Mike
+```
+
+## Class vs Object vs Function
+
+- まあ結局全てオブジェクトだが
+- 他のプログラミング言語と比較すると、関数や object literal までクラスのように振る舞うのは違和感しかない
+
+```js
+function Person(name, country) {
+  this.name = name;
+  this.country = country;
+  this.greet = function() {
+    return "I'm " + this.name + ", I'm from " + this.country + "!";
+  };
+}
+
+person1 = new Person("John", "USA");
+person1.greet(); // "I'm John, I'm from USA!"
+```
+
+### Object Constructor with `function`
+
+```js
+function Person(name, country) {
+  this.name = name;
+  this.country = country;
+  this.greet = function() {
+    return "I'm " + this.name + ", I'm from " + this.country + "!";
+  };
+}
+
+// "new" to "function" looks really weird
+person1 = new Person("John", "USA");
+person1.greet(); // "I'm John, I'm from USA!"
+```
+
+## Class
+
+- すんなり理解できる構文
+
+```js
+
+class Person {
+  constructor(name, country){
+  this.name = name;
+  this.country = country;
+  }
+  
+  // thisはつけない
+  greet() {
+    return "I'm " + this.name + ", I'm from " + this.country + "!";
+  };
+}
+
+person2 = new Person("John", "USA");
+person2.greet(); // "I'm John, I'm from USA!"
 ```

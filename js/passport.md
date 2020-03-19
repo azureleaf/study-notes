@@ -13,6 +13,9 @@
 1. [done()](#done)
 1. [Serialization & Deserialization](#serial)
 1. [Key Expressions](#key)
+1. [passport Code Overview](#ppcode)
+1. [passport-local Code Overview](#pplcode)
+1. [passport-strategy Code Overview](#ppstcode)
 
 ## Overview <a id="" name=""></a>
 
@@ -179,12 +182,16 @@ passport.use(
 );
 ```
 
-
-## `passport-local` dependencies
+## `passport-local` Code Overview <a id="pplcode" name="pplcode"></a>
 
 - This package requires `passport-strategy` package
-- `passport-local/lib/index.js` requires `passport-local/lib/strategy.js`
-- `passport-local/lib/strategy.js` requires `passport-local/lib/utils.js`
+- File relations:
+
+```
+passport-local/lib/index.js
+  passport-local/lib/strategy.js
+    passport-local/lib/utils.js
+```
 
 ### `strategy.js`
 
@@ -230,29 +237,88 @@ function Strategy(options, verify) {
 }
 ```
 
-## `passport` dependencies
+## `passport` Code Overview <a id="ppcode" name="ppcode"></a>
 
 - This package requires `passport-strategy` package
-- `passport/lib/index.js` requires:
-  - `passport/lib/authenticator.js` (no dependency)
-  - `passport/lib/strategies/session.js` (no dependency)
-- `passport/lib/authenticator.js` requires:
-  - `passport/lib/sessionmanager.js`
-  - `passport/lib/strategies/session.js` (no dependency)
-  - `passport/lib/framework/connect.js`
-- `passport/lib/framework/connect.js`
-  - `passport/lib/middleware/authenticate.js`
-  - `passport/lib/middleware/initialize.js` (no dependency)
-  - `passport/lib/http/request.js` (no dependency)
-- `passport/lib/middleware/authenticate.js` requires:
-  - `passport/lib/http/request.js` (no dependency)
-  - `passport/lib/errors/authenticationerror.js` (no dependency)
-  - `passport/lib/framework/connect.js` (already checked)
+- File relations:
 
-## `passport-strategy` dependencies
+```
+passport/lib/index.js
+  passport/lib/strategies/session.js
+  passport/lib/authenticator.js
+    passport/lib/sessionmanager.js
+    passport/lib/strategies/session.js
+    passport/lib/framework/connect.js
+      passport/lib/middleware/initialize.js
+      passport/lib/http/request.js
+      passport/lib/middleware/authenticate.js
+        passport/lib/http/request.js`
+        passport/lib/errors/authenticationerror.js`
+        passport/lib/framework/connect.js` (duplicate)
 
-- `passport-strategy/lib/index.js` requires:
-  - `passport-strategy/lib/strategy.js` (no dependency)
+```
+
+### `serializeUser`  @ `authenticator.js`
+
+```js
+Authenticator.prototype.serializeUser = function(fn, req, done) {
+  if (typeof fn === 'function') {
+    return this._serializers.push(fn);
+  }
+  
+  // private implementation that traverses the chain of serializers, attempting
+  // to serialize a user
+  var user = fn;
+
+  // For backwards compatibility
+  if (typeof req === 'function') {
+    done = req;
+    req = undefined;
+  }
+  
+  var stack = this._serializers;
+  (function pass(i, err, obj) {
+    // serializers use 'pass' as an error to skip processing
+    if ('pass' === err) {
+      err = undefined;
+    }
+    // an error or serialized object was obtained, done
+    if (err || obj || obj === 0) { return done(err, obj); }
+    
+    var layer = stack[i];
+    if (!layer) {
+      return done(new Error('Failed to serialize user into session'));
+    }
+    
+    
+    function serialized(e, o) {
+      pass(i + 1, e, o);
+    }
+    
+    try {
+      var arity = layer.length;
+      if (arity == 3) {
+        layer(req, user, serialized);
+      } else {
+        layer(user, serialized);
+      }
+    } catch(e) {
+      return done(e);
+    }
+  })(0);
+};
+
+```
+
+## `passport-strategy` Code Overview  <a id="ppstcode" name="ppstcode"></a>
+
+- "done()" is defined in `strategy.js`
+- File relations:
+
+```
+passport-strategy/lib/index.js
+  passport-strategy/lib/strategy.js
+```
 
 ## `done()` <a id="done" name="done"></a>
 
