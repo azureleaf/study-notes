@@ -23,6 +23,14 @@ var x = document.getElementsByClassName("intro");
 var x = document.querySelectorAll("p.intro");
 ```
 
+## Get from DOM:
+
+- `importNode()`
+- `cloneNode()`
+
+
+```
+
 ## Modify DOM
 
 ```js
@@ -40,6 +48,40 @@ for (i = 0; i < x.length; i++) {
 }
 document.getElementById("demo").innerHTML = text;
 document.getElementById("p2").style.color = "blue";
+```
+
+## Modify DOM: using `<template>`
+
+```html
+<template>
+  <div class="myClass">I like:</div>
+</template>
+
+<script>
+  var myArr = ["Audi", "BMW", "Ford"];
+
+  function showContent() {
+    var temp, item, a, i;
+    temp = document.getElementsByTagName("template")[0];
+    item = temp.content.querySelector("div");
+    for (i = 0; i < myArr.length; i++) {
+      // Create a new node, based on the template:
+      a = document.importNode(item, true);
+      // Add data from the array:
+      a.textContent += myArr[i];
+      // Append the new node wherever you like:
+      document.body.appendChild(a);
+    }
+  }
+</script>
+```
+
+- 上記により以下がレンダリングされる
+
+```html
+<div class="myClass">I like: Audi</div>
+<div class="myClass">I like: BMW</div>
+<div class="myClass">I like: Ford</div>
 ```
 
 ### Use "this" to refer to self
@@ -60,6 +102,7 @@ document.getElementById("p2").style.color = "blue";
 ## Event
 
 ### Events by browser
+
 - `ended`
   - When the audio or video are stopped
 - `error`
@@ -93,8 +136,6 @@ document.getElementById("p2").style.color = "blue";
 
 ```js
 document.getElementById("myBtn").addEventListener("click", displayDate);
-
-
 ```
 
 ### `preventDefault()`
@@ -107,4 +148,4 @@ document.getElementById("myBtn").addEventListener("click", displayDate);
   - Click on `<a>` event
     - redirect to new page
   - Click on `<input type="submite">` button
-    - 
+    -

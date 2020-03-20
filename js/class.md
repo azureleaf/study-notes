@@ -135,3 +135,36 @@ class Person {
 person2 = new Person("John", "USA");
 person2.greet(); // "I'm John, I'm from USA!"
 ```
+
+## Key Expressions
+
+
+### Object.prototype.constructor
+
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor
+
+```js
+let o = {}
+o.constructor === Object // true
+
+let o = new Object
+o.constructor === Object // true
+
+let a = []
+a.constructor === Array // true
+
+let a = new Array
+a.constructor === Array // true
+
+let n = new Number(3)
+n.constructor === Number // true
+```
+
+```js
+function Tree(name) {
+  this.name = name
+}
+
+let theTree = new Tree('Redwood')
+console.log('theTree.constructor is ' + theTree.constructor)
+```
