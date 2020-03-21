@@ -1,59 +1,89 @@
 # Property
 
-## Major Properties
+## Data Options
 
-### data:
+- `data` *
+    - for Vue instance: obj
+    - for Vue component: function which returns obj
+- `props` *
+- `propsData`
+- `computed` *
+- `methods` *
+- `watch` *
 
-- 基本的な変数はここに書く
-- Vue インスタンスの場合は、変数を直接オブジェクトリテラルで書く
-- Vue Component の場合は、「オブジェクトリテラルを return する関数」
+## DOM Options`
+- `el`
+- `template`
+- `render`
+- `renderError`
+
+## Lifecycle Hook Options`
+
+- `beforeCreate`
+- `created` *
+- `beforeMount`
+- `mounted` *
+- `beforeUpdate`
+- `activated`
+- `deactivated`
+- `beforeDestroy`
+- `destroyed` *
+- `errorCaptured`
+
+## Other Options
+
+- `directives`
+- `filters`
+- `components` *
+- `parent`
+- `mixins` *
+- `extends`
+- `provide` / `inject`
+- `name`
+- `delimiters`
+- `functional`
+- `model`
+- `inheritAttrs`
+- `comments`
+
+## Confusion
+
+### data: vs props:
+
+### methods: vs computed: vs watched:
+
+- computed:は依存する変数が変更されない限りキャッシュから値を返す
+- methods:は常に再計算する
+- computed 内部から data:の変数などを書き換えてはいけない！（Unexpected side effect のエラーなどが返る）
+
 
 ### computed:
 
 - getter として働くのが基本だが、自分で定義すれば setter としても働く
   - つまり`a = compVal`のように値を取り出すだけではなく、`compVal = 12`のように値を代入することもできるということ
 
-### methods:
-
-### props:
 
 ### watch:
 
 - data:はもともと監視されているので、watch する必要はない（？）
 
-### components:
 
-- 別の場所で定義されたコンポーネントを利用するときに記述する
+## Abbreviated Notation for Methods
 
-## Method Notation
+```javascript
+hello: function() {console.log("hello");}
+hello() {console.log("hello");}
+```
 
-- Normal
-    ```javascript
-    hello: function() {console.log("hello");}```
-    ```
+## Anti-pattern
 
-- Abbreviated: 初見は混乱する
-    ```javascript
-    hello() {console.log("hello");}```
-    ```
+- Don't use arrow function as the property
+    - Or `this` inside the function won't be recognized correctly
 
-- **ダメなやり方**: アロー関数だと関数定義内部に書いたthisが正しく認識されなくなるらしい
-    ```javascript
-    hello: () => {console.log("hello");}```
-    ```
+```javascript
+// NG
+hello: () => {console.log("hello");}
 
-    - こういうのもダメらしい
-        ```javascript
-        vm.$watch('a', newValue => this.myMethod())
-        ```
-
-## Major Lifecycle Hooks
-
-### created
-### mounted
-### updated
-### destroyed
-### beforecreated
-### beforemounted
-### beforeupdated
-### beforedestroyed
+// NG
+vm.$watch('a', newValue => this.myMethod())
+```

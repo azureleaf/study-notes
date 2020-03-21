@@ -1,39 +1,90 @@
-# 重要な Directive（重要度順）
+# Directives
 
-1. v-bind
-1. v-on
-    - @click, @submit, @keyup
-1. v-for
-   - `v-bind:key`が必須！
-1. v-model
-1. v-if
-1. v-show
-1. v-html:
+## ToC
 
-## 紛らわしい directive の比較
+1. [List](#list)
+1. [Clarification](#clear)
+1. [Event](#event)
+1. [](#)
+
+## List <a name="list" id=""></a>
+
+- `v-bind` \*
+- `v-cloak`
+- `v-for` \*
+  - `v-bind:key` required
+- `v-html`
+- `v-if` / `v-else` / `v-else-if` \*
+- `v-model` \*
+- `v-on` \*
+  - @click, @submit, @keyup
+- `v-once`
+- `v-pre`
+- `v-show` \*
+- `v-slot`
+- `v-text`
+
+## Clarification <a name="clear" id="clear"></a>
 
 ### v-bind VS v-model
 
 - v-bind は一方向、v-model は双方向
-- したがって、v-modelは`<input>`の属性などとしてよく出現する
+  - This is why v-model often appears inside `<input>`
+- `v-model` = `v-on` + `v-bind`
 
-- v-model は、v-on + v-bind を一気に書いたものである
-  - 以下の２つは同義
-  ```html
-  <input v-model="searchText" />
-  <input :value="searchText" @change="searchText = $event.target.value" />
-  ```
-  - v-bind で model から view へのデータの流れを定義
-  - v-on で、view 側で値が変更された時に model 側の値も書き換えるようイベントを結合
+```html
+<input v-model="searchText" />
+<input :value="searchText" @change="searchText = $event.target.value" />
+```
+
+- v-bind で model から view へのデータの流れを定義
+- v-on で、view 側で値が変更された時に model 側の値も書き換えるようイベントを結合
 
 ### v-if VS v-show
 
+## Event <a name="event" id="event"></a>
 
-### data: vs props:
+### Event List
 
+- `click`
+- ``
+- ``
+- ``
+- ``
 
-### methods: vs computed: vs watched:
+### Event Modifier
 
-- computed:は依存する変数が変更されない限りキャッシュから値を返す
-- methods:は常に再計算する
-- computed内部からdata:の変数などを書き換えてはいけない！（Unexpected side effectのエラーなどが返る）
+```html
+<!-- Modifier can be chained -->
+<button @click.stop.prevent="doThis"></button>
+```
+
+- `.stop`
+- `.prevent`
+- `.capture`
+- `.self`
+- `.once`
+- `.passive`
+- `.{keyCode | keyAlias}`
+- `.native`
+
+### Key Modifier
+
+- `.enter`
+- `.tab`
+- `.delete (captures both “Delete” and “Backspace” keys)`
+- `.esc`
+- `.space`
+- `.up`
+- `.down`
+- `.left`
+- `.right`
+- `.ctrl`
+- `.alt`
+- `.shift`
+- `.meta`
+- `.exact`
+- `.left`
+- `.right`
+- `.middle`
+- ~~Key Codes~~ (deprecated)

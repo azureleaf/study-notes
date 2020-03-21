@@ -1,10 +1,69 @@
 # HTML Tags
 
+
+## Decoration
+
+## List
+
+## Table
+
+- `<table>`
+- `<th>`
+- `<tr>`
+- `<td>`
+- `<caption>`
+- `<colgroup>`
+- `<col>`
+- `<thead>`
+- `<tbody>`
+- `<tfoot>`
+
+
+
+## Semantic Element / Strtuctural Element
+
+- `<html>`
+- `<head>`
+- `<body>`
+
+### HTML 5
+- `<header>`
+- `<footer>`
+- `<nav>`
+- `<article>`
+- `<section>`
+- `<aside>`
+- `<>`
+- `<>`
+
+## Form
+
+- `<datalist>`
+- `<output>`
+
+## HTML5 Input Types
+
+## HTML5 Attribute Syntax
+
+## HTML5 Graphics
+
+- `<canvas>`
+- `<picture>`
+- `<svg>`
+
+## Media 
+- `<audio>`
+- `<embed>`
+- `<picture>`
+- `<source>`
+- `<track>`
+- `<video>`
+
 ## `<template>`
 
 - Mechanism for holding HTML that is not to be rendered immediately when a page is loaded but may be instantiated subsequently during runtime using JavaScript.
 - JS framework such as Vue.js and React will totally replace this tag;
-    - That's why Vue.js has `<template>` tag
+  - That's why Vue.js has `<template>` tag
 
 ```html
 <table id="producttable">
@@ -24,16 +83,15 @@
     <td class="record"></td>
     <td></td>
   </tr>
-</template> 
+</template>
 
 <script>
-// Test to see if the browser supports the HTML template element by checking
-// for the presence of the template element's content attribute.
-if ('content' in document.createElement('template')) {
-
+  // Test to see if the browser supports the HTML template element by checking
+  // for the presence of the template element's content attribute.
+  if ("content" in document.createElement("template")) {
     // Instantiate the table with the existing HTML tbody
     // and the row with the template
-    var template = document.querySelector('#productrow');
+    var template = document.querySelector("#productrow");
 
     // Clone the new row and insert it into the table
     var tbody = document.querySelector("tbody");
@@ -51,11 +109,10 @@ if ('content' in document.createElement('template')) {
     td[1].textContent = "Acme Kidney Beans 2";
 
     tbody.appendChild(clone2);
-
-} else {
-  // Find another way to add the rows to the table because 
-  // the HTML template element is not supported.
-}
+  } else {
+    // Find another way to add the rows to the table because
+    // the HTML template element is not supported.
+  }
 </script>
 ```
 
@@ -71,16 +128,16 @@ if ('content' in document.createElement('template')) {
   </thead>
   <tbody>
     <!-- existing data could optionally be included here -->
-  
-  <tr>
-    <td class="record">1235646565</td>
-    <td>Stuff</td>
-  </tr>
 
-  <tr>
-    <td class="record">0384928528</td>
-    <td>Acme Kidney Beans 2</td>
-  </tr>
-</tbody>
+    <tr>
+      <td class="record">1235646565</td>
+      <td>Stuff</td>
+    </tr>
+
+    <tr>
+      <td class="record">0384928528</td>
+      <td>Acme Kidney Beans 2</td>
+    </tr>
+  </tbody>
 </table>
 ```

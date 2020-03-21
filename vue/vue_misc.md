@@ -1,6 +1,67 @@
-# Vue 超要約
+# Vue 
 
-（※個人的な学習メモなので、正確性は全然保証いたしません）
+## Global API
+
+- `Vue` *
+- `Vue.extend`
+- `Vue.nextTick`
+- `Vue.set`
+- `Vue.delete`
+- `Vue.directive`
+- `Vue.filter`
+- `Vue.component` *
+- `Vue.use`
+- `Vue.mixin`
+- `Vue.compile`
+- `Vue.observable`
+- `Vue.version`
+
+## Instance Property
+
+- `vm.$data`
+- `vm.$props`
+- `vm.$el`
+- `vm.$options`
+- `vm.$parent`
+- `vm.$root`
+- `vm.$children`
+- `vm.$slots`
+- `vm.$scopedSlots`
+- `vm.$refs`
+- `vm.$isServer`
+- `vm.$attrs`
+- `vm.$listeners`
+
+## Instance Methods
+
+- `vm.$watch`
+- `vm.$set`
+- `vm.$delete`
+- `vm.$on`
+- `vm.$once`
+- `vm.$off`
+- `vm.$emit`
+- `vm.$mount`
+- `vm.$forceUpdate`
+- `vm.$nextTick`
+- `vm.$destroy`
+
+## Built-in Component
+
+- `<component>`
+- `<transition>`
+- `<transition-group>`
+- `<keep-alive>`
+- `<slot>`
+
+## Built-in Attribute
+
+- `key` *
+- `ref`
+- `is`
+- `slot`
+- `slot-scope`
+- `scope`
 
 ## 到達度チェックリスト
 
@@ -84,37 +145,6 @@
 1. D3.js
    - 高度なグラフなどの表示。データ可視化界の大御所。
 
-## Vue Component
-
-### 基本形
-
-```
-Vue.Component('コンポーネント名', {コンポーネント内容のオブジェクトリテラル})
-```
-
-### コンポーネント名の書き方
-
-- 大文字小文字の違いは無視される。HTML がそもそもそういう仕様なので。
-
-### 内容部分の書き方
-
-- `template:`
-  - 常に必要。SFC（シングルファイルコンポーネント）を使う場合は、`<template>`のタグ内に書く。
-- `data:`
-  - データ
-- `props:`: Required when you need to get data from the parent data.
-
-## コンポーネントの種類
-
-###　による分類
-
-- Dynamic Components
-- Static Components
-
-### 有効範囲による分類
-
-- Global Registration
-- Local Registration
 
 ## Vue Dev Procedure
 

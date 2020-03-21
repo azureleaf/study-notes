@@ -2,42 +2,37 @@
 
 ## ToC
 
-1. [](#)
-1. [](#)
-1. [](#)
+1. [Local](#Local)
+1. [Remote](#Remote)
+1. [Branch](#Branch)
 1. [](#)
 1. [](#)
 1. [](#)
 1. [](#)
 
-## ★★★
+## Local
 
 - `git add -A`
+- `git add -u`
+  - Stages only Modified Files
+- `git add .`
+  - Stages everything, without Deleted Files
+- `git reset -- hello.txt`
+  - Unstage hello.txt
+- `git reset HEAD`
+  - Unstage all the files
 - `git commit -m "debug: Solve DB access error"`
-- `git push origin master`
-  - `git push <remote> <branch>`という構造
-- `git pull origin master`
-- `git pull --all`
 - `git status`
 - `git mv`
   - Git 管理されているファイルを移動したり、名前を変更したりするときには必ずこれらを使う
   - **エクスプローラ上などで勝手に変更してはいけない！**　そのファイルの変更履歴が反映されなくなってしまう。
 - `git rm`
   - そのファイルを削除し、なおかつ git の index からも外す
-- `git branch`
-- `git branch -r`
-- `git branch -a` / `git branch --all`
-- `git branch NEW_BRANCH_NAME`
-- `git checkout BRANCH_NAME`
 - `git reset --hard 1234abcdblahblahblah`
 - `git reset --soft HEAD^`
   - 最後のコミットを取り消すが、ファイル内容はそのまま
 - `git reset --hard HEAD^`
   - 最後のコミットを取り消し、なおかつローカルのファイル内容も戻す
-
-## ★★
-
-- `git clone http://blahblah.git`
 - `git init`
 - `git log -n 3`
 - `git revert HEAD~3`
@@ -50,20 +45,45 @@
 - `git reset --hard HEAD^`
   - 最新のコミットを取り消す。その一つ前のコミット状態まで、ファイルも戻す
   - これは恐らくやりなおしできない操作
+- `git config --list`
+- `git config --global credential.helper 'cache --timeout 3600'`
+- `git config credential.helper store`
+  - remote に push/pull するときに、パスワードやメールアドレスを毎度打たずに済むよう記憶する
+- `git config --global --unset credential.helper`
+  - Forget stored credentials
+  - You need to run this command when you changed your password
+- `git config --global user.name "John Doe"`
+  - Git をインストールした直後に設定
+- `git config --global user.email johndoe@example.com`
+  - Git をインストールした直後に設定
+
+## Remote
+
+- `git push origin master`
+- `git push <remote> <branch>`という構造
+- `git pull origin master`
+- `git pull --all`
+- `git clone http://blahblah.git`
+- `git remote rename origin gitlab`
+- `git remote add origin https://username@your.bitbucket.domain:7999/yourproject/repo.git`
+  - 新しい remote を追加（例：GitHub に上げてたリポジトリを、GitLab にも上げられるようにするとか）
+- `git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git`
+
+## Branch
+
+- `git branch`
+- `git branch -r`
+- `git branch -a` / `git branch --all`
+- `git branch NEW_BRANCH_NAME`
+- `git checkout BRANCH_NAME`
+- `git push -d <remote_name> <branch_name>`
+  - Delete the branch on the remote
+- `git branch -d <branch_name>`
+  - Delete the local branch
 - `git branch -m NEW_BRANCH_NAME`
   - rename current branch
 - `git branch -m OLD_BRANCH_NAME NEW_BRANCH_NAME`
   - rename the branch which you're not on
-- `git add -A`
-  - Stages Everything
-- `git add -u`
-  - Stages only Modified Files
-- `git add .`
-  - Stages everything, without Deleted Files
-- `git reset -- hello.txt`
-  - Unstage hello.txt
-- `git reset HEAD`
-  - Unstage all the files
 
 ### `git fetch` vs `git pull`
 
@@ -89,24 +109,6 @@
   - Therefore, in most cases, you better use `git rebase`
 - `git checkout features/visualization` then `git rebase master`
   - Merging "features/visualization" branch to "master"
-
-## ★
-
-- `git config --list`
-- `git config --global credential.helper 'cache --timeout 3600'`
-- `git config credential.helper store`
-  - remote に push/pull するときに、パスワードやメールアドレスを毎度打たずに済むよう記憶する
-- `git config --global --unset credential.helper`
-  - Forget stored credentials
-  - You need to run this command when you changed your password
-- `git config --global user.name "John Doe"`
-  - Git をインストールした直後に設定
-- `git config --global user.email johndoe@example.com`
-  - Git をインストールした直後に設定
-- `git remote rename origin gitlab`
-- `git remote add origin https://username@your.bitbucket.domain:7999/yourproject/repo.git`
-  - 新しい remote を追加（例：GitHub に上げてたリポジトリを、GitLab にも上げられるようにするとか）
-- `git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git`
 
 ## CLONE vs FORK
 
