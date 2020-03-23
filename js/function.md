@@ -1,6 +1,16 @@
-# JS における関数
+# Functions
 
-## Object Literal のメンバとしての関数
+## ToC
+
+1. [Class Method](#method)
+1. [Callback](#callback)
+1. [Arrow Function](#arrow)
+1. [Default Parameter](#default)
+1. [Destructuring Assignment](#)
+1. [](#)
+1. [Higher-Order Function](#higher)
+
+## Class Method <a id="method" name="method"></a>
 
 ```js
 John = {
@@ -12,11 +22,26 @@ John = {
 John.greet();
 ```
 
-## Arrow Function
+## Callback <a name="callback" id="callback"></a>
 
-- "function"と書かずに済む
-- 矢印の方向により、見た目が直感的になる
-- アロー関数を使うと、無名のコールバック関数を定義する時に記述が短くなる
+```js
+var sayHello = () => {
+  return "hello";
+};
+
+var sayHelloWorld = callback => {
+  console.log(callback(), ", world!");
+};
+
+sayHelloWorld(sayHello);
+```
+
+
+## Arrow Function <a id="arrow" name="arrow"></a>
+
+- Advantages
+  - Shorter code; no need to write keywords "function"
+  - Intuitive data flow; arguments value are thrown into the function
 
 ```js
 function greet1(name) {
@@ -44,7 +69,7 @@ greet4("Mike", "UK");
 
 ```
 
-## Default Parameter
+## Default Parameter  <a name="default" id="default"></a>
 
 ```js
 function greet(name, country = "UK") {
@@ -69,10 +94,9 @@ var greet = ({ country, age, name }) => {
 greet({ name: "John", country: "USA", age: 20 });
 ```
 
-## Spread Operator vs Rest Parameters
+## Spread Operator vs Rest Parameters  <a name="spread" id="spread"></a>
 
 - 見た目は同じ（...を使う）だが何が違う？
-
 - 可変長引数
 
 ```js
@@ -88,9 +112,13 @@ function sum(...nums) {
 sum([1, 2, 3]); // 6
 ```
 
-## 配列の分割代入（Destructuring Assignment）
+## Destructuring Assignment <a name="" id=""></a>
+
+- 分割代入
 
 ```js
+// Destructuring Assignment of Arrays
+
 // 左辺が２つしかないので、右辺の３つめ以降は捕捉されない
 let [a, b] = [10, 20, 30];
 console.log(a); // 10
@@ -116,7 +144,7 @@ let a, b, rest;
 console.log(rest); // [30,40,50]
 ```
 
-## オブジェクトの分割代入
+- Destructuring Assignment of Objects
 
 ```js
 // 変数の宣言時に分割代入する場合
@@ -143,16 +171,47 @@ console.log(bar); // 20
 console.log(blah); // 99
 ```
 
-## Callback
+## Higher-order Function <a id="higher" name="higher"></a>
+
+- What's High-order function(高階関数)?
+  - Functions which take another function as an argument
+  - Functions which return another function as a return value
+- Advantage:
+  - More
+- There're many built-in high-order functions:
 
 ```js
-var sayHello = () => {
-  return "hello";
-};
+data.forEach(function(value, index, array) {
+  console.log(value * value); //25 , 36, 49, 64
+});
 
-var sayHelloWorld = callback => {
-  console.log(callback(), ", world!");
-};
+mypromise.then(function(value) {
+  console.log(value);
+});
+```
 
-sayHelloWorld(sayHello);
+- Sample of higher-order function
+  - This sample doesn't show why higher-order f is useful, tho...
+
+```js
+function higherOrder(f, ...args) {
+  f(...args);
+}
+
+function add(...args) {
+  console.log(
+    "sum:",
+    args.reduce((acc, cur) => acc + cur)
+  );
+}
+
+function multiply(...args) {
+  console.log(
+    "product:",
+    args.reduce((acc, cur) => acc * cur)
+  );
+}
+
+higherOrder(add, 1, 2, 3, 4, 5); // 15
+higherOrder(multiply, 1, 2, 3, 4, 5); // 120
 ```

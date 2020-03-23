@@ -13,9 +13,9 @@
 1. [done()](#done)
 1. [Serialization & Deserialization](#serial)
 1. [Key Expressions](#key)
-1. [passport Code Overview](#ppcode)
-1. [passport-local Code Overview](#pplcode)
-1. [passport-strategy Code Overview](#ppstcode)
+1. [Package Walkthrough: passport](#ppcode)
+1. [Package Walkthrough: passport-local](#pplcode)
+1. [Package Walkthrough: passport-strategy](#ppstcode)
 
 ## Overview <a id="" name=""></a>
 
@@ -182,7 +182,7 @@ passport.use(
 );
 ```
 
-## `passport-local` Code Overview <a id="pplcode" name="pplcode"></a>
+## `passport-local` Walkthrough <a id="pplcode" name="pplcode"></a>
 
 - This package requires `passport-strategy` package
 - File relations:
@@ -237,7 +237,7 @@ function Strategy(options, verify) {
 }
 ```
 
-## `passport` Code Overview <a id="ppcode" name="ppcode"></a>
+## `passport` Walkthrough <a id="ppcode" name="ppcode"></a>
 
 - This package requires `passport-strategy` package
 - File relations:
@@ -257,6 +257,12 @@ passport/lib/index.js
         passport/lib/framework/connect.js` (duplicate)
 
 ```
+
+### `index.js`
+
+### `strategies/session.js`
+
+
 
 ### `serializeUser`  @ `authenticator.js`
 

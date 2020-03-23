@@ -1,4 +1,4 @@
-# Export, import, そしてrequire
+# Export, import, require
 
 ## Overview
 
@@ -10,12 +10,37 @@
     - `import`
     - `export`
 - Babelなどのツールにより、importで書いてもCommonJSのrequireに変換される
+- Functions without `export` keywords aren't available even when you `require` it in other files
 
 ## Keywords
 
 - Dynamic Import
 
 ## CommonJS
+
+```js
+// sayAdd is available in other files
+exports.sayAdd = function(a, b) {
+  say(a + b);
+}
+
+// saySubstract is NOT available in other files
+saySubtract = function(a, b) {
+  say(a - b);
+}
+```
+
+```js
+var Movie = function(title) {
+  this.title = title;
+}
+
+Movie.prototype.sayTitle = function() {
+  say(this.title);
+}
+
+module.exports = Movie;
+```
 
 ## ES6
 
@@ -37,7 +62,7 @@ var promise = import("module-name");
 
 - defaultをつけた場合には、一つのファイルに一つのexportしか書けない
     - defaultをつけた場合、import時に`{}`が不要
-- exportできるのは、関数、変数、クラスなどなんでもあり
+- You can `export` anything; function, class, varible, whatever
 
 ```js
 // Exporting individual features

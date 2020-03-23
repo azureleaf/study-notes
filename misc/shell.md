@@ -10,9 +10,22 @@
 1. [](#)
 1. [](#)
 
-## Basic
+## MISC
 
-### ★★★
+- `sudo apt update`
+- `sudo apt upgrade`
+- ctrl + C
+  - 現在実行中のコマンドを強制終了する
+- `sudo su`
+  - You can't do even `cd` in some dir, so you need this
+- rsync
+  - conditional copying / mirroring
+  - ファイルのバックアップなどに活躍する
+
+- ps
+- top
+
+## Files
 
 - cd
 - mv hello.txt ../src
@@ -22,33 +35,31 @@
 - mkdir src
 - rmdir
 - rm -rf node_modules
-  - `-f`コマンドはとても危険。Linux の内部ファイルも簡単に削除されてしまう。なので、間違いがないよう実行前によく確認する
+  - `-f` is very dangerous; you can break your OS easily
 - `rm -v !("hello.txt")`
   - Remove all files but hello.txt
 - ls
-- ls \*.txt
-- ls vue\*
+- `ls *.txt`
+- `ls vue*`
 - `ls -a`
   - show hidden files as well
 - `ls -a | grep app`
-- `sudo apt update`
-- `sudo apt upgrade`
-- ctrl + C
-  - 現在実行中のコマンドを強制終了する
 
-### ★★
+## Archive
 
-- touch hello.txt
+- `tar -zxvf yourfile.tar.gz`
+  - eXtract, Verbose, Filename, 
+- `sudo tar -xzf jetbrains-toolbox-1.13.4801.tar.gz -C /opt`
+  - "C"hange directory: set destination to decompress
 
-### ★
 
-- rsync
-  - conditional copying / mirroring
-  - ファイルのバックアップなどに活躍する
-- mkdir -p hello/src
-  - 階層を一気につくる
-- ps
-- top
+## Text
+
+- `touch hello.txt`
+- `echo "hello" >> log.txt`
+  - Append
+- `echo "hello" > log.txt`
+  - Overwrite
 
 ## curl
 

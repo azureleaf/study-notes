@@ -21,6 +21,12 @@
   - Unstage hello.txt
 - `git reset HEAD`
   - Unstage all the files
+- `git reset --hard 1234abcdblahblahblah`
+- `git reset --soft HEAD^`
+  - 最後のコミットを取り消すが、ファイル内容はそのまま
+- `git reset --hard HEAD^`
+  - 最後のコミットを取り消し、なおかつローカルのファイル内容も戻す
+- `git init`
 - `git commit -m "debug: Solve DB access error"`
 - `git status`
 - `git mv`
@@ -28,23 +34,12 @@
   - **エクスプローラ上などで勝手に変更してはいけない！**　そのファイルの変更履歴が反映されなくなってしまう。
 - `git rm`
   - そのファイルを削除し、なおかつ git の index からも外す
-- `git reset --hard 1234abcdblahblahblah`
-- `git reset --soft HEAD^`
-  - 最後のコミットを取り消すが、ファイル内容はそのまま
-- `git reset --hard HEAD^`
-  - 最後のコミットを取り消し、なおかつローカルのファイル内容も戻す
-- `git init`
 - `git log -n 3`
 - `git revert HEAD~3`
 - `git stash`
 - `git stash list`
 - `git switch` (new)
 - `git restore` (new)
-- `git reset --soft HEAD^`
-  - 最新のコミットを取り消す。ファイルは変更しない
-- `git reset --hard HEAD^`
-  - 最新のコミットを取り消す。その一つ前のコミット状態まで、ファイルも戻す
-  - これは恐らくやりなおしできない操作
 - `git config --list`
 - `git config --global credential.helper 'cache --timeout 3600'`
 - `git config credential.helper store`
@@ -64,10 +59,10 @@
 - `git pull origin master`
 - `git pull --all`
 - `git clone http://blahblah.git`
+- `git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git`
 - `git remote rename origin gitlab`
 - `git remote add origin https://username@your.bitbucket.domain:7999/yourproject/repo.git`
   - 新しい remote を追加（例：GitHub に上げてたリポジトリを、GitLab にも上げられるようにするとか）
-- `git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git`
 
 ## Branch
 
@@ -84,6 +79,8 @@
   - rename current branch
 - `git branch -m OLD_BRANCH_NAME NEW_BRANCH_NAME`
   - rename the branch which you're not on
+
+## Clarification
 
 ### `git fetch` vs `git pull`
 
@@ -110,9 +107,9 @@
 - `git checkout features/visualization` then `git rebase master`
   - Merging "features/visualization" branch to "master"
 
-## CLONE vs FORK
+### CLONE vs FORK
 
-## MERGE REQUEST vs PULL REQUEST
+### MERGE REQUEST vs PULL REQUEST
 
 ## Git レポジトリの付替え
 
@@ -124,14 +121,14 @@
 
 ## Troubleshooting
 
-### GitLab で２段階認証を設定したらそれ以降の Git 動作が失敗する
+### Trouble: GitLab で２段階認証を設定したらそれ以降の Git 動作が失敗する
 
 1. GitLab 上で Access Token を生成し、これをどこかに保存しとく
 1. git clone する
 1. email / account を聞かれたら、いつもどおり GitLab のアカウントを記入
 1. password を聞かれたら、GitLab アカウントのパスワードではなく、さっき生成した Access Token を入力する
 
-### GitLab: Permission denied (publickey)
+### Trouble: Permission denied (publickey) @ GitLab
 
 - Error message:
 

@@ -1,5 +1,7 @@
 # Manipulate DOM with JavaScript
 
+When you use Vue you may not need to know some of this; Vue will do the same thing instead
+
 ## ToC
 
 ## DOM Tree

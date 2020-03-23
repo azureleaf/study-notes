@@ -136,8 +136,27 @@ person2 = new Person("John", "USA");
 person2.greet(); // "I'm John, I'm from USA!"
 ```
 
-## Key Expressions
 
+## Prototype
+
+- In the basic JS files, you can't add new property / methods without constructor
+- With `prototype` keyword, you can add them
+
+```js
+function Person(first, last, age, eyecolor) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+  this.eyeColor = eyecolor;
+}
+
+// Person.city = "London"; // error, because it's prohibited
+
+Person.prototype.nationality = "English";
+Person.prototype.name = function() {
+  return this.firstName + " " + this.lastName;
+};
+```
 
 ### Object.prototype.constructor
 
