@@ -16,13 +16,12 @@ if (x > 10) {
 const answer = x > 10 ? 'is greater' : 'is lesser';
 ```
 
-### Short-circuit Evaluation
+## Short-circuit Evaluation
 
 - 「値が存在する時はそれを代入、そうでないときは既定値を代入」などの動作
 
 ```js
 // before
-
 if (variable1 !== null || variable1 !== undefined || variable1 !== '') {
      let variable2 = variable1;
 }
@@ -44,7 +43,7 @@ if (process.env.DB_HOST) {
 const dbHost = process.env.DB_HOST || 'localhost';
 ```
 
-### 変数宣言
+## 変数宣言
 
 
 ```js
@@ -78,24 +77,4 @@ if (likeJavaScript === true)
 
 // after-ish
 if (likeJavaScript)
-```
-
-
-```js
-```
-
-
-```js
-```
-
-
-```js
-```
-
-
-```js
-```
-
-
-```js
 ```

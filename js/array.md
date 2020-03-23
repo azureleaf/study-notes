@@ -1,8 +1,8 @@
-# 配列と Object Literal
+# Array & Object Literal
 
-## 配列に繰り返しアクセスして何か操作する方法たち
+## Access to the array elements one by one
 
-- C 言語風
+### C-ish Traditional Notation
 
 ```js
 let numbers = [10, 20, 30];
@@ -12,7 +12,7 @@ for (var i = 0; i < numbers.length; i++) {
 console.log(numbers); // 20, 40, 60
 ```
 
-- for in
+### for in
 
 ```js
 let numbers = [10, 20, 30];
@@ -22,7 +22,9 @@ for (key in numbers) {
 console.log(numbers); // 20, 40, 60
 ```
 
-- for of
+### for of
+
+- This is equivalent to `for in` syntax of Python. Confusing
 
 ```js
 let numbers = [10, 20, 30];
@@ -33,7 +35,7 @@ for (let number of numbers) {
 console.log(doubled); // 20, 40, 60
 ```
 
-- .foreach()
+### .foreach()
 
 ```js
 let numbers = [10, 20, 30];
@@ -44,7 +46,7 @@ numbers.forEach((value, index) => {
 console.log(numbers); // 20, 40, 60
 ```
 
-- .map()
+### .map()
   - map()は元の配列を変更せず新しい配列を返すが、foreach は元の配列自体を改変し undefined を返す
   - foreach()でできることは map()でもできるし、逆も然り
   - map()を使う例が一番多いと感じる
@@ -93,7 +95,7 @@ filteredNumbers = numbers.filter((value, index) => {
 console.log("filterをかけた結果：", filteredNumbers);
 ```
 
-## 配列のソート
+## Sort an Array
 
 - sort()は破壊的メソッド
 

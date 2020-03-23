@@ -36,4 +36,13 @@
   - JS本体に外部モジュールを読み込む機能が無いことにキレたMozillaの人が始めた、新しい仕様
   - `require`を用いて外部のコードを読み込めるようにした
 
+## Console
+
+```js
+console.log("hello");
+console.error("Error");
+console.debug("here we go");
+console.dir(req); // Return interactive hierarchical structure
+```
+
 

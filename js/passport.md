@@ -254,53 +254,72 @@ passport/lib/index.js
       passport/lib/middleware/authenticate.js
         passport/lib/http/request.js`
         passport/lib/errors/authenticationerror.js`
-        passport/lib/framework/connect.js` (duplicate)
+        passport/lib/framework/connect.js` (duplicate: connect.js & authenticate.js require each other.. is it possible?)
 
 ```
+
+### Passport-related Data in Request
+
+- `req._passport`
+- `req._passport.session`
+- `req._passport.session.user`
+- `req._passport.instance._userProperty`
 
 ### `index.js`
 
 ### `strategies/session.js`
 
+- Export an object `SessionStrategy`
+- `function SessionStrategy(options, deserializeUser)`
+  - params:
+    - options: Object
+    - deserializeUser: Function
 
+### `authenticator.js`
 
-### `serializeUser`  @ `authenticator.js`
+- Export an object `Authenticator`
+- params:
+  - void
+- property:
+- member function:
+  - `init()`
 
 ```js
 Authenticator.prototype.serializeUser = function(fn, req, done) {
-  if (typeof fn === 'function') {
+  if (typeof fn === "function") {
     return this._serializers.push(fn);
   }
-  
+
   // private implementation that traverses the chain of serializers, attempting
   // to serialize a user
   var user = fn;
 
   // For backwards compatibility
-  if (typeof req === 'function') {
+  if (typeof req === "function") {
     done = req;
     req = undefined;
   }
-  
+
   var stack = this._serializers;
   (function pass(i, err, obj) {
     // serializers use 'pass' as an error to skip processing
-    if ('pass' === err) {
+    if ("pass" === err) {
       err = undefined;
     }
     // an error or serialized object was obtained, done
-    if (err || obj || obj === 0) { return done(err, obj); }
-    
+    if (err || obj || obj === 0) {
+      return done(err, obj);
+    }
+
     var layer = stack[i];
     if (!layer) {
-      return done(new Error('Failed to serialize user into session'));
+      return done(new Error("Failed to serialize user into session"));
     }
-    
-    
+
     function serialized(e, o) {
       pass(i + 1, e, o);
     }
-    
+
     try {
       var arity = layer.length;
       if (arity == 3) {
@@ -308,15 +327,14 @@ Authenticator.prototype.serializeUser = function(fn, req, done) {
       } else {
         layer(user, serialized);
       }
-    } catch(e) {
+    } catch (e) {
       return done(e);
     }
   })(0);
 };
-
 ```
 
-## `passport-strategy` Code Overview  <a id="ppstcode" name="ppstcode"></a>
+## `passport-strategy` Code Overview <a id="ppstcode" name="ppstcode"></a>
 
 - "done()" is defined in `strategy.js`
 - File relations:
@@ -351,10 +369,15 @@ return done(null, false, { message: "incorrect password" });
 
 ## Serialization / Deserialization <a id="serial" name="serial"></a>
 
+### Definition in the general context of programming
+
 - 例えば数字の 10 をバイナリデータに変換すれば 1010 になるのはどこでも同じ
 - しかし、それよりも複雑なプログラム上のオブジェクトなどをどうバイナリデータに変換するのかは自明ではない
 - プログラミングにおける Serialization とは、オブジェクトなどを自分の決めた手順でバイナリ化すること
 - Deserialization はその逆で、バイナリデータを実際に使える形に「解凍」して戻す動作
+
+### Definition at Passport
+
 - Passport における serialize / deserialize の意味は、「user オブジェクト全体から id を取り出す」「id を基に user 全体を検索して復元する」の意味っぽい
 - この serializeUser は、`done()`すると呼ばれる?しかし、serializeUser 関数自体の内部でも done が実行されているな...
 

@@ -1,13 +1,11 @@
-# JavaScript における this
+# this, apply, bind, call
 
-- JavaScript における this が何を指すのか？は初学者の壁
-- this が何を示すのかを自分で自由に変える手段として`call()`, `apply()`. `bind()`というのも登場する
+- What does `this` refer to? This is a bit confusing
+- With `call()`, `apply()`. `bind()`, you can modify its reference by yourself
 
-## this がオブジェクトになる場合
+## Cases `this` refers to the object
 
-ほぼ説明不要だと思うが
-
-- Class だと
+- Object (w/ class keyword)
 
 ```js
 class Person {
@@ -20,7 +18,7 @@ class Person {
 }
 ```
 
-- Object Literal だと
+- Object Literal
 
 ```js
 var person = {
@@ -31,9 +29,31 @@ var person = {
 };
 ```
 
-## this が Global Variable になる場合
+- Object (w/ function keyword)
 
-- これは基本的にやってはいけないことに該当する（いわゆるグローバル汚染）
+```js
+// Constructor
+function Person(name){
+  this.name = name;
+  this.greet = function(){
+    console.log("Hello, I'm", this.name);
+  }
+}
+
+// Check if what "this" refers to
+Person.prototype.getThis(){
+  return this;
+};
+
+var person = new Person('John');
+person.greet();
+console.log(person === person.getThis()); // true
+
+```
+
+## Cases where `this` is Global Variable
+
+- Anti-pattern (global namespace pollution)!
 
 ```js
 function show() {
@@ -41,32 +61,31 @@ function show() {
   this.value1 = 999; //　global objectにvalueを設定する、つまりglobal変数になっている
   value2 = 111;
 }
+
+// When this is "new"ed, its scope will be the object, tho
 show();
 
 console.log(value1); // 999。value1はグローバル変数なので（グローバル汚染）
 console.log(value2); // undefined。value2はshow()内部をスコープとするローカル変数なので
 ```
 
-## `= this`
+- Inside the browser, global object will be Window Object
 
 ```js
-function Note() {
-  var self = this; // global object
-```
-
-##
-
-```js
-// thisの中身を表示する
 function test() {
-  console.log(this); // Google Chrome Console上だと Global ObjectはWindow Object
+  console.log(this); // Window Object @ Google Chrome
 }
 
 var obj = { name: "obj", test: test };
 obj.test();
 ```
 
-## コンストラクタ
+- `= this` is frequent expression
+
+```js
+function Note() {
+  var self = this; // global object
+```
 
 ```js
 function MyObject(num) {
@@ -76,7 +95,6 @@ function MyObject(num) {
   };
 }
 
-// 関数をnewするのは初めて見たが...
 var obj1 = new MyObject(0);
 console.log(obj1.value); // 0
 
@@ -88,9 +106,9 @@ console.log(obj2.value); // undefined. なぜなら、this.valueのthisはグロ
 console.log(value); // 999
 ```
 
-## this を使って Method Chain をつくる
+## Create Method Chain with `this`
 
-- JS の buit-in 関数でも`.toUpperCase`や`reverse()`などをたくさんつけて順に処理できる
+- JS の buit-in 関数でも`.toUpperCase`や`.reverse()`などをたくさんつけて順に処理できる
 - これを method chain なしで実装しようとすると、callback 地獄となる
 - 同様の機能は自分でも作成できる
 - `return this`でオブジェクト自身を返すことがポイント
@@ -123,7 +141,11 @@ mod
   .deleteChar(); // HELLO, world
 ```
 
-## apply(), call()によって this の中身を自由に設定する
+## apply(), bind(), call()
+
+- いずれもオブジェクトの参照先を変更するためのメソッド
+- もっぱら`this`の参照先を変更するのに使われる
+
 
 ```js
 var myObject = {
@@ -142,7 +164,7 @@ myObject.show.apply(yourObject); // 3
 myObject.show.call(yourObject); // 3
 ```
 
-- 以下のようなcarオブジェクトが存在する
+- 以下のような car オブジェクトが存在する
 
 ```js
 var car = {
@@ -157,7 +179,9 @@ var car = {
 
 ```js
 // 通常の関数は、参照を作れる
-function logging(log) {console.log(log)};
+function logging(log) {
+  console.log(log);
+}
 var loggingRef = logging;
 loggingRef("bonjour!");
 
@@ -169,13 +193,12 @@ var car = {
 };
 
 // carオブジェクトのメソッドの参照を作りたい
-var carDetail =  car.displayDetails;
+var carDetail = car.displayDetails;
 
 // これは失敗する
 // なぜなら、displayDetailsは内部でthisと書いているが、
 // 参照の関数のthisはglobal objectであり、carオブジェクトにはなっていないため
 carDetail(); // undefined
-
 ```
 
 - 以下のように`bind()`を使うと解決
@@ -188,11 +211,41 @@ var car = {
   }
 };
 // carオブジェクトのメソッドの参照を作る
-var carDetail =  car.displayDetails.bind(car);
+var carDetail = car.displayDetails.bind(car);
 
 // これは失敗する
 // なぜなら、displayDetailsは内部でthisと書いているが、
 // 参照の関数のthisはglobal objectであり、carオブジェクトにはなっていないため
 carDetail(); // "GA12345"
+```
 
+
+## Reference
+
+- Qiita https://qiita.com/39_isao/items/c00a200b158ba057363f
+
+## 他人のメソッ
+
+```js
+// ペンギンくん
+var Penguin = {
+  name: "ペンギン"
+};
+
+// 鷹
+var Falcon = {
+  name: "鷹",
+  fly: function() {
+    console.log(this.name + "が大空を飛びました");
+  }
+};
+
+Falcon.fly(); // '鷹が大空を飛びました
+
+// call
+Falcon.fly.call(Penguin); // ペンギンが大空を飛びました
+
+// bind は一旦変数にしまって使う
+var flyPenguin = Falcon.fly.bind(Penguin);
+flyPenguin(); // ペンギンが大空を飛びました
 ```
