@@ -1,7 +1,87 @@
 # this, apply, bind, call
 
-- What does `this` refer to? This is a bit confusing
+- What does `this` refer to? This question often confuses JS beginners
 - With `call()`, `apply()`. `bind()`, you can modify its reference by yourself
+
+## ToC
+
+1. [](#)
+1. [](#)
+1. [](#)
+
+## Content of `this`
+
+- Reference: [Qiita: JavaScriptの「this」は「4種類」？？](https://qiita.com/takeharu/items/9935ce476a17d6258e27)
+
+
+### A. `this` inside the object method
+
+```js
+var myObject = {
+  value: 10,
+  show: function() {
+    console.log(this.value);
+  }
+}
+myObject.show(); // 10
+```
+
+### B. `this` inside the function
+
+```js
+function show() {
+  console.log(this); // Global object
+  this.value = 1; // Pollute global namespace
+}
+show();
+```
+
+```js
+var myObject = {
+  value: 1,
+  show: function() {
+    console.log(this.value); // 注１
+
+    function show() {
+      console.log(this.value); // 注２
+    }
+    show();
+  }
+};
+myObject.show();
+```
+
+```js
+var myObject = {
+  value: 1,
+  show: function() {
+    var self = this;
+    console.log(self.value); // 1
+
+    function show() {
+      console.log(self.value); // 1
+    }
+    show();
+  }
+};
+myObject.show();
+```
+
+### C. `this` in the Constructor
+
+```js
+function MyObject(value) {
+  this.value = value;
+  this.increment = function() {
+    this.value++;
+  };
+}
+var myObject = new MyObject(0);
+console.log(myObject.value); // 0
+
+myObject.increment();
+console.log(myObject.value); // 1
+```
 
 ## Cases `this` refers to the object
 
