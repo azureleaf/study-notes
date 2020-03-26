@@ -51,6 +51,10 @@
   - Git をインストールした直後に設定
 - `git config --global user.email johndoe@example.com`
   - Git をインストールした直後に設定
+- `git checkout MyFile.js`
+  - Reset the specified file(s) to `HEAD`
+- `git chekcout HEAD myfile.js`
+  - Restore delete file which is not committed yet
 
 ## Remote
 
@@ -71,8 +75,9 @@
 - `git branch -a` / `git branch --all`
 - `git branch NEW_BRANCH_NAME`
 - `git checkout BRANCH_NAME`
-- `git push -d <remote_name> <branch_name>`
+- `git push origin --delete MyBranch`
   - Delete the branch on the remote
+  - Not `branch` but `push`
 - `git branch -d <branch_name>`
   - Delete the local branch
 - `git branch -m NEW_BRANCH_NAME`

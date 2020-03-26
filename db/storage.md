@@ -72,7 +72,8 @@
 
 ## RESTful API
 
-- REST: REpresentational State Transfer とは、分散型システムにおける複数のソフトウェアを連携させるための設計原則のこと
+- REST: REpresentational State Transfer
+  - 分散型システムにおける複数のソフトウェアを連携させるための設計原則のこと
 - REST は 4 原則からなる
 - Addressability
   - 全ての情報は URI で表現される一意なアドレスをもつ
@@ -90,8 +91,8 @@
 
 ## GraphQL API
 
-https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが詳しい
-
+- References
+  - https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000
 - GraphQL は Web API の規格
 - 世界で一般人から嫌われまくってる Facebook だが、GraphQL と React はエンジニアから支持されてる気がする
 - GraphQL はクエリ言語、スキーマ言語の２つの言語がある
@@ -132,7 +133,7 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
   - Additional storage consumption
   - Slow UPDATE / DELETE because Index will be also altered as well as records
 
-## Parts of the DB
+## DB Parts
 
 | RDBS     | MongoDB    |
 | -------- | ---------- |
@@ -165,6 +166,7 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
   - Firebase
 - Cloud Storage Service
   - AWS S3
+  - Alicloud
 - File hosting Service
   - Google Drive
   - Microsoft OneDrive
@@ -179,12 +181,13 @@ https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000　とかが�
 
 - TypeORM
   - MYSQL, Postgres, SQLite3, MongoDB, MariaDB, MSSQL, Oracle
-- Mongoose
-  - MongoDB
-  - No SQL としては筆頭格でよく使われる
 - Sequelize
   - MySQL, Postgres, SQLite3, MariaDB, MSSQL
-  - 伝統があるが、TypeORM に乗り換えていっている人が多い印象
+  - Traditional and reliable
+  - Not so good at collaboration with TypeScript
+  -
+- Mongoose
+  - MongoDB
 
 ### Node 使いには重要じゃなさそうな ORM
 

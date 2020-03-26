@@ -1,5 +1,10 @@
 # Promise と Async/Await と友達になる
 
+## ToC
+
+1. [Promise](#promise)
+1. [Async / Await](#async)
+
 ## Promise とは何なのか？
 
 - Promise は、オブジェクトである
@@ -65,7 +70,46 @@ doA()
   1. そのような関数を全ての処理段階についてそれぞれ作る
   1. `.then()`を使ってそれらを順番につなげていく
 
-## ひとつの値をリレーしていく場合
+## `then()`内部の関数の書式
+
+- "Promise を返す"という原則さえ守ればよい
+- いくつかのケースが考えられる
+
+```js
+function returnPromise() {
+  // Promiseをnewして返却する
+  return new Promise((resolve, reject) => {
+    if (Math.rand() > 0.5) resolve();
+    else reject()
+    }
+  });
+}
+
+returnPromise().then(val => {return returnPromise()})
+```
+
+- `Promise.resolve()`, `Promise.reject()`で pending 状態でない Promise を即時作ることもできる
+- また、`then()`が２つの引数を取ることもできる
+  - チェーンの前から渡された Promise が fulfilled だったら、第一引数の関数が実行される
+  - チェーンの前から渡された Promise が rejected だったら、第二引数の関数が実行される
+- チェーンのどこかで`rejected()`が呼ばれたら.then のチェーンは途中終了する
+  - rejected()は、then 内部で明示的に呼ばれているかもしれない
+  - rejected()は、then 内部で呼ばれている外部の関数で呼ばれており、ぱっと見ではわからないかもしれない
+
+```js
+Promise.resolve().then(
+  val => {
+    // 一つ前のPromiseがfulfulledだった場合
+    Promise.resolve();
+  },
+  val => {
+    // 一つ前のPromiseがrejectedだった場合
+    Promise.reject();
+  }
+);
+```
+
+## ひとつの値をリレーしていく場合 <a name="promise" id="promise"></a>
 
 ```javascript
 // 値を受け取って１秒待ってから２倍した値を返却するPromise...を返却する関数
@@ -159,7 +203,7 @@ returnPromise()
   });
 ```
 
-##  Promise.all()と Promise.race()の直列
+## Promise.all()と Promise.race()の直列
 
 - 通常の Promise、Promise.all()、Promise.race()を順に実行するだけ。
 - 思い通りの順序で実行されているのか確認するため、所要時間を計測している。
@@ -229,7 +273,7 @@ promiseStart
   });
 ```
 
-##  Promise.all()、Promise.race()の並列（入れ子）
+## Promise.all()、Promise.race()の並列（入れ子）
 
 - Promise 同士をネストさせることができる。
 - 下では、c2_1 の実行後に c2_2 を実行するようにしているが、その合計時間が c1 よりも遅い場合（then して長くなっている分、だいたい c2 の方が遅いだろうが）は親の Promise.all()は c2 が終了したかどうかを気にしない。
@@ -360,7 +404,7 @@ Promise.all(
 });
 ```
 
-## async の登場
+## async の登場 <a name="async" id="async"></a>
 
 - async/await を使う利点
   - then, resolve, reject キーワードをあまり書かずにすむ

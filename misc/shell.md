@@ -44,6 +44,8 @@
 - `ls -a`
   - show hidden files as well
 - `ls -a | grep app`
+- `whereis python3`
+- `which python3`
 
 ## Archive
 

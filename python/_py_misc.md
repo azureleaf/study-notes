@@ -76,13 +76,56 @@
 - pyenv
   - Can switch python interpreter
 
-### Venv
+## `venv`
 
 - `python3 -m venv /path/to/new/virtual/environment`
 - `source myvenv/bin/activate` (Unix / MacOS)
 - `myvenv\Scripts\activate.bat` (Windows)
 - `exit`
 - Ctrl + D
+
+## `pipenv`
+
+### `Pipfile`
+
+- Equivalent to `package.json`
+- You can register shorthands for commands:
+
+```
+[scripts]
+start = "python main.py runserver"
+test = "python -m unittest discover -v"
+format = "autopep8 -ivr ."
+lint = "flake8 --show-source ."
+```
+### `Pipfile.lock`
+
+- Equivalent to `package-lock.json`
+
+### Commands
+
+- `pipenv --python 3`
+  - Initialize with Python 3, generate `Pipfile`
+- `pip3 install pipenv`
+- `pipenv install numpy`
+- `pipenv install --dev autopep8 flake8`
+- `pipenv install`
+  - Install from `Pipfile`
+- `pipenv install --dev`
+- `pipenv install numpy==1.14`
+- `pipenv install -r ./requirements.txt`
+- `pipenv shell`
+  - Activate virtualenv
+- `exit`
+  - Deactivate virtual env
+- `pipenv --rm`
+  - Remove the virtual environemnt
+- `pipenv --venv`
+  - Return where the pipenv virtual environment is saved
+- `pipenv update`
+  - Update all the packages
+- `pipenv graph`
+  - Show dependencies of packages
 
 ## `pip`
 

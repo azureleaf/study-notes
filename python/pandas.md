@@ -21,6 +21,7 @@ df.index
 df.columns
 df.to_numpy()
 df.describe()
+df.columns.values # Show headers only
 df.T
 df.sort_index(axis=1, ascending=False)
 df.sort_values(by='B')
