@@ -142,12 +142,12 @@ document.getElementById("myBtn").addEventListener("click", displayDate);
 
 ### `preventDefault()`
 
-- What are the important default behaviors?
-  - When you click on the checkbox
-    - Value inverted and "checked" symbol will appear
-  - `touchmove` event
-    - Scroll
-  - Click on `<a>` event
-    - redirect to new page
-  - Click on `<input type="submite">` button
-    -
+### Important default events
+- When you click on the checkbox
+  - Value inverted and "checked" symbol will appear
+- `touchmove` event
+  - Scroll
+- Click on `<a>` event
+  - redirect to new page
+- Click on `<input type="submite">` button
+  -

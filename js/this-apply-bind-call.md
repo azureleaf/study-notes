@@ -5,14 +5,23 @@
 
 ## ToC
 
-1. [](#)
-1. [](#)
-1. [](#)
+- [this, apply, bind, call](#this-apply-bind-call)
+  - [ToC](#toc)
+  - [Content of `this`](#content-of-this)
+    - [A. `this` inside the object method](#a-this-inside-the-object-method)
+    - [B. `this` inside the function](#b-this-inside-the-function)
+    - [C. `this` in the Constructor](#c-this-in-the-constructor)
+  - [Cases `this` refers to the object](#cases-this-refers-to-the-object)
+  - [Cases where `this` is Global Variable](#cases-where-this-is-global-variable)
+  - [Create Method Chain with `this`](#create-method-chain-with-this)
+  - [apply(), bind(), call()](#apply-bind-call)
+    - [Summary](#summary)
+    - [`call()` & `apply()`](#call--apply)
+    - [`bind()`](#bind)
 
 ## Content of `this`
 
-- Reference: [Qiita: JavaScriptの「this」は「4種類」？？](https://qiita.com/takeharu/items/9935ce476a17d6258e27)
-
+- Reference: [Qiita: JavaScript の「this」は「4 種類」？？](https://qiita.com/takeharu/items/9935ce476a17d6258e27)
 
 ### A. `this` inside the object method
 
@@ -22,7 +31,7 @@ var myObject = {
   show: function() {
     console.log(this.value);
   }
-}
+};
 myObject.show(); // 10
 ```
 
@@ -223,88 +232,30 @@ mod
 
 ## apply(), bind(), call()
 
+### Summary
+
 - いずれもオブジェクトの参照先を変更するためのメソッド
 - もっぱら`this`の参照先を変更するのに使われる
-
-
-```js
-var myObject = {
-  value: 1,
-  show: function() {
-    console.log(this.value);
-  }
-};
-var yourObject = {
-  value: 3
-};
-
-myObject.show(); // 1
-
-myObject.show.apply(yourObject); // 3
-myObject.show.call(yourObject); // 3
-```
-
-- 以下のような car オブジェクトが存在する
+- 要するに「本来の自分は持っていない他人のメソッドを、自分が持っているプロパティなどについて使えるようにする」機能
+  - つまり自分と他人に名前が共通するプロパティが無い場合にはこれらを使う意義はない？
+- 一時的に呼び出すだけなら、`call()`や`apply()`
+- それを恒久的に何度も呼び出して使うなら`bind()`
+- Reference:
+  - https://qiita.com/39_isao/items/c00a200b158ba057363f
+  - https://qiita.com/hosomichi/items/e11ad0c4ea79db2dee84
+  - https://www.codementor.io/@niladrisekhardutta/how-to-call-apply-and-bind-in-javascript-8i1jca6jp ありがとう謎のインド人
 
 ```js
-var car = {
-  registrationNumber: "GA12345",
-  displayDetails: function() {
-    console.log(this.registrationNumber);
-  }
-};
+他人.他人のメソッド.call(自分, 他人のメソッドの引数);
+他人.他人のメソッド.apply(自分, 他人のメソッドの引数の配列);
+
+const 収納先 = 他人.他人のメソッド.bind(自分); // これにより、自分に新しいメソッドが追加されるわけではない
+収納先(引数);
 ```
 
-- そして、以下のような使い方をしたいとする
+### `call()` & `apply()`
 
-```js
-// 通常の関数は、参照を作れる
-function logging(log) {
-  console.log(log);
-}
-var loggingRef = logging;
-loggingRef("bonjour!");
-
-var car = {
-  registrationNumber: "GA12345",
-  displayDetails: function() {
-    console.log(this.registrationNumber);
-  }
-};
-
-// carオブジェクトのメソッドの参照を作りたい
-var carDetail = car.displayDetails;
-
-// これは失敗する
-// なぜなら、displayDetailsは内部でthisと書いているが、
-// 参照の関数のthisはglobal objectであり、carオブジェクトにはなっていないため
-carDetail(); // undefined
-```
-
-- 以下のように`bind()`を使うと解決
-
-```js
-var car = {
-  registrationNumber: "GA12345",
-  displayDetails: function() {
-    console.log(this.registrationNumber);
-  }
-};
-// carオブジェクトのメソッドの参照を作る
-var carDetail = car.displayDetails.bind(car);
-
-// これは失敗する
-// なぜなら、displayDetailsは内部でthisと書いているが、
-// 参照の関数のthisはglobal objectであり、carオブジェクトにはなっていないため
-carDetail(); // "GA12345"
-```
-
-
-## Reference
-
-- Qiita https://qiita.com/39_isao/items/c00a200b158ba057363f
-
-## 他人のメソッ
+- ペンギンが他人である鷹のメソッドを利用する
 
 ```js
 // ペンギンくん
@@ -328,4 +279,77 @@ Falcon.fly.call(Penguin); // ペンギンが大空を飛びました
 // bind は一旦変数にしまって使う
 var flyPenguin = Falcon.fly.bind(Penguin);
 flyPenguin(); // ペンギンが大空を飛びました
+```
+
+- くっつけるメソッドに引数が無い場合には、applyとcallは全く同じ書き方になる
+- 引数がある場合には記述方法が変わる
+  - rest parameterとbindを組み合わせれば`call()`は要らない子だったということか
+
+```js
+
+var Basket1 = {
+  name: "Fruit basket #1",
+  show: function(apple = 0, orange = 0) {
+    console.log(this.name, "has", (apple + orange), "fruits");
+  }
+};
+var Basket2 = {
+  name: "Bruit basket #2",
+};
+
+Basket1.show(2, 3); // 5
+
+Basket1.show.apply(Basket2, [10, 20]); // 30 引数は配列で指定
+Basket1.show.call(Basket2, 10, 20); // 30 引数はそのまま指定
+```
+
+### `bind()`
+
+- まず前提として、通常の関数は参照を作ることができる
+
+```js
+function logging(log) {
+  console.log(log);
+}
+var loggingRef = logging;
+
+// 別名として振る舞っている
+loggingRef("bonjour!"); // bonjour
+```
+
+- しかし、同じことをオブジェクト内部のメソッドに対してもやろうとすると失敗する
+
+```js
+var car = {
+  registrationNumber: "GA12345",
+
+  // このメソッドの参照を作りたい
+  displayDetails: function() {
+    console.log(this.registrationNumber);
+  }
+};
+
+// carオブジェクトのメソッドの参照を作ったつもり
+var carDetail = car.displayDetails;
+
+// これは失敗する
+// なぜなら、displayDetailsは内部でthisと書いているが、
+// 参照の関数のthisはglobal objectであり、carオブジェクトにはなっていないため
+carDetail(); // undefined
+```
+
+- 以下のように`bind()`を使うと解決
+- `bind()`により、`this`の示す内容が置換された新しい関数を作れる
+
+```js
+var car = {
+  registrationNumber: "GA12345",
+  displayDetails: function() {
+    console.log(this.registrationNumber);
+  }
+};
+// carオブジェクトのメソッドの参照を作る
+var carDetail = car.displayDetails.bind(car);
+
+carDetail(); // "GA12345"
 ```

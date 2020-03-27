@@ -1,8 +1,38 @@
 # Laravel Study Note
 
-- Laravel で勉強したことを記録することで、自分の学習モチベーションを高めたい
+## ToC
 
-## misc
+- [Laravel Study Note](#laravel-study-note)
+  - [ToC](#toc)
+  - [MISC](#misc)
+  - [Lifecycle](#lifecycle)
+  - [(Install Composer)](#install-composer)
+  - [(Install Laravel)](#install-laravel)
+  - [Set up Middlewares](#set-up-middlewares)
+  - [Set up Migrations & Seeders](#set-up-migrations--seeders)
+  - [Set up Controllers](#set-up-controllers)
+  - [Set up Service Providers](#set-up-service-providers)
+  - [Composer](#composer)
+  - [Event Broadcasting](#event-broadcasting)
+    - [What is "event" in the first place?](#what-is-%22event%22-in-the-first-place)
+    - [What's this?](#whats-this)
+    - [How to broadcast](#how-to-broadcast)
+    - [Procedure to add broadcasting](#procedure-to-add-broadcasting)
+  - [Job & Queue & Worker](#job--queue--worker)
+  - [Mail](#mail)
+    - [How to send emails:](#how-to-send-emails)
+    - [Set up](#set-up)
+  - [Maintenance](#maintenance)
+  - [Bootstrap](#bootstrap)
+  - [DB Facade vs Eloquent](#db-facade-vs-eloquent)
+  - [Debug inside app](#debug-inside-app)
+    - [`dd()`](#dd)
+    - [`var_export()`](#varexport)
+    - [`var_dump()`](#vardump)
+    - [`print_r()`](#printr)
+  - [Laravel 実行環境の選択肢](#laravel-%e5%ae%9f%e8%a1%8c%e7%92%b0%e5%a2%83%e3%81%ae%e9%81%b8%e6%8a%9e%e8%82%a2)
+
+## MISC
 
 - IoC:
 - Contract:

@@ -41,11 +41,9 @@
 - docker-compose down
   - コンテナを停止＆削除
 
-## Docker を使うとどんないいことがあるの？
+## Terminology
 
-## 用語集
-
-### 超重要
+### ★★★
 
 - Kubernetes (k8s)
 - Docker Swarm
@@ -59,7 +57,7 @@
 - Dockerhub
   - Place to share images
 
-### 周辺知識
+### ★
 
 - Hyper-V
 - Virtual Machine
