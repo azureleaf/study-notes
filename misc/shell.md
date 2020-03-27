@@ -2,13 +2,27 @@
 
 ## ToC
 
-1. [Basic](#Basic)
-1. [curl](#curl)
-1. [wget](#wget)
-1. [grep](#grep)
-1. [](#)
-1. [](#)
-1. [](#)
+- [shell](#shell)
+  - [ToC](#toc)
+  - [MISC](#misc)
+  - [Files](#files)
+  - [Archive](#archive)
+  - [Text](#text)
+  - [curl](#curl)
+  - [wget](#wget)
+  - [grep](#grep)
+  - [chmod](#chmod)
+    - [`ls -l mydir`](#ls--l-mydir)
+    - [Command Samples](#command-samples)
+  - [Shell types](#shell-types)
+  - [bash とは](#bash-%e3%81%a8%e3%81%af)
+  - [Config](#config)
+    - [.bashrc](#bashrc)
+    - [.bash_profile](#bashprofile)
+    - [Order of config file to be read on login shell](#order-of-config-file-to-be-read-on-login-shell)
+  - [bash のなかまたち](#bash-%e3%81%ae%e3%81%aa%e3%81%8b%e3%81%be%e3%81%9f%e3%81%a1)
+  - [Setup fish](#setup-fish)
+    - [misc](#misc-1)
 
 ## MISC
 
@@ -19,6 +33,7 @@
 - `sudo su`
   - You can't do even `cd` in some dir, so you need this
 - rsync
+
   - conditional copying / mirroring
   - ファイルのバックアップなどに活躍する
 
@@ -34,10 +49,12 @@
 - rm
 - mkdir src
 - rmdir
-- rm -rf node_modules
+- `rm -rf node_modules`
   - `-f` is very dangerous; you can break your OS easily
 - `rm -v !("hello.txt")`
   - Remove all files but hello.txt
+- `rm -rf !(triangle|fractal)`
+  - Remove all but specified files/directories
 - ls
 - `ls *.txt`
 - `ls vue*`
@@ -50,10 +67,9 @@
 ## Archive
 
 - `tar -zxvf yourfile.tar.gz`
-  - eXtract, Verbose, Filename, 
+  - eXtract, Verbose, Filename,
 - `sudo tar -xzf jetbrains-toolbox-1.13.4801.tar.gz -C /opt`
   - "C"hange directory: set destination to decompress
-
 
 ## Text
 

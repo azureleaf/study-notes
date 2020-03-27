@@ -1,14 +1,32 @@
 # Learn Git
 
+- [Learn Git](#learn-git)
+  - [ToC](#toc)
+  - [Local](#local)
+  - [Remote](#remote)
+  - [Branch](#branch)
+  - [Clarification](#clarification)
+    - [`git fetch` vs `git pull`](#git-fetch-vs-git-pull)
+    - [`git merge` vs `git rebase`](#git-merge-vs-git-rebase)
+    - [CLONE vs FORK](#clone-vs-fork)
+    - [MERGE REQUEST vs PULL REQUEST](#merge-request-vs-pull-request)
+  - [Git レポジトリの付替え](#git-%e3%83%ac%e3%83%9d%e3%82%b8%e3%83%88%e3%83%aa%e3%81%ae%e4%bb%98%e6%9b%bf%e3%81%88)
+  - [Troubleshooting](#troubleshooting)
+    - [Trouble: GitLab で２段階認証を設定したらそれ以降の Git 動作が失敗する](#trouble-gitlab-%e3%81%a7%ef%bc%92%e6%ae%b5%e9%9a%8e%e8%aa%8d%e8%a8%bc%e3%82%92%e8%a8%ad%e5%ae%9a%e3%81%97%e3%81%9f%e3%82%89%e3%81%9d%e3%82%8c%e4%bb%a5%e9%99%8d%e3%81%ae-git-%e5%8b%95%e4%bd%9c%e3%81%8c%e5%a4%b1%e6%95%97%e3%81%99%e3%82%8b)
+    - [Trouble: Permission denied (publickey) @ GitLab](#trouble-permission-denied-publickey--gitlab)
+  - [Good Tutorials](#good-tutorials)
+  - [Git 管理すると何がいいの？](#git-%e7%ae%a1%e7%90%86%e3%81%99%e3%82%8b%e3%81%a8%e4%bd%95%e3%81%8c%e3%81%84%e3%81%84%e3%81%ae)
+  - [Keywords](#keywords)
+    - [Pull Request / Merge Request](#pull-request--merge-request)
+    - [Subversion (svn)](#subversion-svn)
+    - [GitHub / GitLab / BitBucket](#github--gitlab--bitbucket)
+    - [SourceTree](#sourcetree)
+    - [CI/CD: Continuous Integration + Continuous Deployment （もしくは Continuous Delivery）](#cicd-continuous-integration--continuous-deployment-%e3%82%82%e3%81%97%e3%81%8f%e3%81%af-continuous-delivery)
+  - [Naming Branch](#naming-branch)
+  - [Commit Message Format](#commit-message-format)
 ## ToC
 
-1. [Local](#Local)
-1. [Remote](#Remote)
-1. [Branch](#Branch)
-1. [](#)
-1. [](#)
-1. [](#)
-1. [](#)
+
 
 ## Local
 
@@ -123,6 +141,13 @@
 1. `git remote add origin git@gitlab.com:mydevelopgroup/helloworldproj.git`
 1. `git push -u origin --all`
 1. `git push -u origin --tags`
+
+Upstream Branch を変更するため、以下のコマンドが必要になる可能性がある
+
+- `git branch --set-upstream-to origin/master`
+  - VS Code の左下などの数字は、ここで設定した remote branch を基準にしているっぽい
+  - なので、remote が複数ある場合にはこれを設定する必要がある
+  - `git status`ででてくる`Your branch is up to date with 'origin/master'.`も恐らくこれが基準
 
 ## Troubleshooting
 
