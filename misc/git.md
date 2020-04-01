@@ -85,6 +85,8 @@
 - `git remote rename origin gitlab`
 - `git remote add origin https://username@your.bitbucket.domain:7999/yourproject/repo.git`
   - 新しい remote を追加（例：GitHub に上げてたリポジトリを、GitLab にも上げられるようにするとか）
+- `git config --get remote.origin.url`
+  - Show the remote branch URL
 
 ## Branch
 

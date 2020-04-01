@@ -4,6 +4,7 @@
 
 - [shell](#shell)
   - [ToC](#toc)
+  - [Repository](#repository)
   - [MISC](#misc)
   - [Files](#files)
   - [Archive](#archive)
@@ -13,7 +14,7 @@
   - [grep](#grep)
   - [chmod](#chmod)
     - [`ls -l mydir`](#ls--l-mydir)
-    - [Command Samples](#command-samples)
+    - [chmod](#chmod-1)
   - [Shell types](#shell-types)
   - [bash とは](#bash-%e3%81%a8%e3%81%af)
   - [Config](#config)
@@ -24,21 +25,34 @@
   - [Setup fish](#setup-fish)
     - [misc](#misc-1)
 
-## MISC
+## Repository
 
 - `sudo apt update`
 - `sudo apt upgrade`
+- `sudo apt purge blahblah`
+- `sudo apt remove blahblah`
+- `sudo apt autoremove`
+- `grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/*`
+  - list packages
+- `sudo apt-key list`
+  - Last 8 Digits in the HEX numbers will be the key number for each package
+- `sudo apt-key del 86E50310`
+- `curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -`
+  - Add public key
+
+## MISC
+
 - ctrl + C
   - 現在実行中のコマンドを強制終了する
 - `sudo su`
   - You can't do even `cd` in some dir, so you need this
 - rsync
-
   - conditional copying / mirroring
   - ファイルのバックアップなどに活躍する
-
 - ps
 - top
+- `pulseaudio -k && sudo alsa force-reload`
+  - Ubuntuで音が出なくなった時の対処
 
 ## Files
 
@@ -85,9 +99,12 @@
 
 ## grep
 
-## chmod
+## Permission
 
-### `ls -l mydir`
+- `chmod` stands for "Change Mode"
+- `chown` stands for "Change Owner"
+
+### How to see `ls -l mydir` results
 
 - This command lists files with permission info
 - `-rw-r--r-- 1 root root 209 Mar 30 17:41 printcap`
@@ -113,7 +130,7 @@
   - `printcap`
     - file name
 
-### Command Samples
+### `chmod`
 
 - `chmod +x script.sh`
 - `chmod -x script.sh`
@@ -123,9 +140,8 @@
 - `chmod o-x script.sh`
 - `chmod 750 script.sh`
 - `chmod a=xwr,g-x,o-xw script.sh`
-- ``
-- ``
-- ``
+
+### `chown`
 
 ## Shell types
 
