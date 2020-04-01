@@ -163,7 +163,10 @@
 ## Cloud DB
 
 - Server-less Service
-  - Firebase
+  - Google Firebase
+  - Amazon DynamoDB
+  - mLab
+    - for MongoDB
 - Cloud Storage Service
   - AWS S3
   - Alicloud

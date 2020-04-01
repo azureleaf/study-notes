@@ -12,9 +12,10 @@
   - [curl](#curl)
   - [wget](#wget)
   - [grep](#grep)
-  - [chmod](#chmod)
-    - [`ls -l mydir`](#ls--l-mydir)
-    - [chmod](#chmod-1)
+  - [Permission](#permission)
+    - [How to see `ls -l mydir` results](#how-to-see-ls--l-mydir-results)
+    - [`chmod`](#chmod)
+    - [`chown`](#chown)
   - [Shell types](#shell-types)
   - [bash とは](#bash-%e3%81%a8%e3%81%af)
   - [Config](#config)
@@ -52,7 +53,7 @@
 - ps
 - top
 - `pulseaudio -k && sudo alsa force-reload`
-  - Ubuntuで音が出なくなった時の対処
+  - Ubuntu で音が出なくなった時の対処
 
 ## Files
 
@@ -132,14 +133,44 @@
 
 ### `chmod`
 
+- permission の指定方法は２つ
+  - by numbers
+  - by letters
+- By Letters
+  - `r`: Read
+  - `w`: Write
+  - `x`: Execute
+  - `u`: User
+  - `g`: Group
+  - `o`: Others
+  - `a`: All
+- By Numbers
+  - 4 points: read
+  - 2 points: write
+  - 1 points: execute
+  - この和によって権限を実現する。おもしろい。
+  - user, group, othersの順
+  - 7: rwx
+  - 6: rw
+  - 5: rx
+  - 4: r
+  - 3: wx
+  - 2: w
+  - 1: x
 - `chmod +x script.sh`
 - `chmod -x script.sh`
 - `chmod u+x script.sh`
 - `chmod ugo-x script.sh`
+  - これは`a`と同じだと思われる
 - `chmod a-x script.sh`
 - `chmod o-x script.sh`
 - `chmod 750 script.sh`
 - `chmod a=xwr,g-x,o-xw script.sh`
+  - `=`はsetの意味
+  - `+`や`-`が現状からの権限の差分しか指定できないのに対して、`=`はフルに設定するんだと思う
+- `chmod -R 644 important-files/`
+  - ディレクトリに対してやる場合
+  - `-R`: recursive
 
 ### `chown`
 

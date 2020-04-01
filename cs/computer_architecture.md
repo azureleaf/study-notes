@@ -57,3 +57,7 @@
 
 ## ASIC: Application-Specific Integration Circuit
 
+## UEFI vs BIOS
+
+- BIOSと組み合わせて使うのがMBR
+- MBRではpartition tableの幅が32bit分しかないので、$2^(32) * 512 = 2199023255552$ バイトまでしか分けられないので

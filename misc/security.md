@@ -1,25 +1,68 @@
-# 最低限のセキュリティ知識
+# Security
 
-## ToC
+- セキュリティそのものはWebでの体験になんの付加価値も生まないが、悪いやつがいるからやるしかないっていう面倒臭さ
+- ただし、セキュリティはなかなか頭脳戦なので、面白い面もある
 
-1. [misc](#misc)
-1. [Attacks](#Attacks)
-1. [Encryption](#Encryption)
-1. [SSL/TLS](#SSL%2FTLS)
-1. [SSH](#SSH)
-1. [Hash](#Hash)
-1. [Authentication](#Authentication)
+# ToC
 
+- [Security](#security)
+- [ToC](#toc)
+- [misc](#misc)
+  - [CORS:](#cors)
+  - [Same-origin Policy](#same-origin-policy)
+- [Attacks](#attacks)
+  - [DDoS](#ddos)
+  - [CSRF: Cross-site Resource Forging](#csrf-cross-site-resource-forging)
+  - [XSS: Cross-site Scripting](#xss-cross-site-scripting)
+  - [SQL Injection](#sql-injection)
+  - [Unauthorized Access](#unauthorized-access)
+  - [Gumblar](#gumblar)
+  - [Session Riding](#session-riding)
+  - [One-click Attack](#one-click-attack)
+  - [Spoofing](#spoofing)
+  - [Computer Virus](#computer-virus)
+  - [Adware & Spyware](#adware--spyware)
+  - [Phishing](#phishing)
+  - [Rootkit](#rootkit)
+  - [Mass Assignment](#mass-assignment)
+  - [Clickjacking](#clickjacking)
+- [Security Tools](#security-tools)
+  - [Firewall](#firewall)
+  - [Antivirus](#antivirus)
+  - [WAF: Web Application Firewall](#waf-web-application-firewall)
+- [Encryption](#encryption)
+  - [RSA](#rsa)
+  - [Triple DES](#triple-des)
+  - [Twofish](#twofish)
+  - [Blowfish](#blowfish)
+  - [AES](#aes)
+- [Key](#key)
+- [SSL/TLS](#ssltls)
+  - [OpenSSL](#openssl)
+- [SSH](#ssh)
+- [Hash](#hash)
+  - [Hash とパスワードの保存](#hash-%e3%81%a8%e3%83%91%e3%82%b9%e3%83%af%e3%83%bc%e3%83%89%e3%81%ae%e4%bf%9d%e5%ad%98)
+  - [Hash Algorithm](#hash-algorithm)
+- [Messeage Authentication Code (MAC)](#messeage-authentication-code-mac)
+- [Authentication](#authentication)
+  - [Username + Password](#username--password)
+    - [Basic auth](#basic-auth)
+    - [Digest Auth](#digest-auth)
+  - [JWT](#jwt)
+  - [OpenID](#openid)
+  - [OAuth2.0](#oauth20)
+  - [Social Login](#social-login)
+  - [apt システムにおける package の認証](#apt-%e3%82%b7%e3%82%b9%e3%83%86%e3%83%a0%e3%81%ab%e3%81%8a%e3%81%91%e3%82%8b-package-%e3%81%ae%e8%aa%8d%e8%a8%bc)
 
-## misc
+# misc
 
 - Checksum
 
-### CORS:
+## CORS:
 
 - Same-origin policy に反して resource sharing すること
 
-### Same-origin Policy
+## Same-origin Policy
 
 - あるページを開いた時に、その同じ origin からしかリソース（画像とか、JS とか）を取得しないというルール
 - SOP に則ってるかどうかを判断するのはブラウザ側である（最近のブラウザなら対応してる）
@@ -40,11 +83,11 @@
   - Canvas
   - Web Storage
 
-## Attacks
+# Attacks
 
-### DDoS
+## DDoS
 
-### CSRF: Cross-site Resource Forging
+## CSRF: Cross-site Resource Forging
 
 - 以下が揃ったときに起きる
   - 攻撃者がなりすましたい操作が存在する
@@ -60,33 +103,33 @@
 - CSRF Token とは
   - Laravel の Blade でさんざん`{{ csrf-token}}`とか書いてるのはこれ
 
-### XSS: Cross-site Scripting
+## XSS: Cross-site Scripting
 
-### SQL Injection
+## SQL Injection
 
-### Unauthorized Access
+## Unauthorized Access
 
 - 単なる不正アクセス
 
-### Gumblar
+## Gumblar
 
 -
 
-### Session Riding
+## Session Riding
 
-### One-click Attack
+## One-click Attack
 
-### Spoofing
+## Spoofing
 
-### Computer Virus
+## Computer Virus
 
-### Adware & Spyware
+## Adware & Spyware
 
-### Phishing
+## Phishing
 
-### Rootkit
+## Rootkit
 
-### Mass Assignment
+## Mass Assignment
 
 - 脆弱性
 - HTTP Request で value 列（name=john&email=john@example.com）を送ってアカウントを作成するとする
@@ -95,7 +138,7 @@
 - app 側では、カラムのそれぞれについていちいち判定条件をつけず、一括で値を変更してしまうのでこのような脆弱性が生まれる
 - Laravel では、$guardと$fillable によってカラム毎の mass assignment の可否を制限することでこの脆弱性を防ぐ
 
-### Clickjacking
+## Clickjacking
 
 - ページの中に`<iframe> <frame>`などを使って別のサイトのサービスを埋め込む時に起きる
   - Google のソーシャルログインとか、Twitter とか、JSFiddle のコード埋め込みとか、そういうとき
@@ -110,33 +153,33 @@
   - `x-frame-options: allow-from https://www.example.com/`
   - `x-frame-options:`
 
-## Security Tools
+# Security Tools
 
-### Firewall
+## Firewall
 
-### Antivirus
+## Antivirus
 
-### WAF: Web Application Firewall
+## WAF: Web Application Firewall
 
-## Encryption
+# Encryption
 
 - PGP Encryption
 
-### RSA
+## RSA
 
 - とても有名
 
-### Triple DES
+## Triple DES
 
-### Twofish
+## Twofish
 
-### Blowfish
+## Blowfish
 
-### AES
+## AES
 
 - 現在の主流の暗号化方式
 
-## Key
+# Key
 
 - Public Key 公開鍵
   - サーバ側が秘密鍵と一緒に作成する
@@ -159,7 +202,7 @@
 - (Symmetric Key 対称鍵)
   - 暗号化と復号化に同じ鍵を使うアルゴリズムのこと？鍵自体というよりも、鍵の分類という感じ？
 
-## SSL/TLS
+# SSL/TLS
 
 - SSL: Secure Sockets Layer
   - Security Protocol
@@ -189,13 +232,13 @@
   - 本人確認をするのが、Verisign などの認証局。ただし「信頼できない認証局」もあり、Symantec の証明書が信頼できないと何年か前に Google が騒ぎ立てて話題になった。信頼できない認証局によって提供される SSL は、当然信頼できない。
   - HTTP のポート番号 80 に対して、HTTPS は 443
 
-### OpenSSL
+## OpenSSL
 
 - Open-Source SSL/TLS
 - Laravel でも使われている
 - OpenSSL のライブラリはパソコンにインストールできる。手元で秘密鍵・公開鍵を生成できる。
 
-## SSH
+# SSH
 
 - SSH: Secure SHell
 - SSL と名前がちょっと似てるが基本的には別物
@@ -212,7 +255,7 @@
 | 秘密鍵でテストデータを復号化し、サーバ側に戻す |                                                  |
 |                                                | 正しく復号化されていれば、本人であると確認できる |  |
 
-## Hash
+# Hash
 
 - 任意長のビット列から規則性のない固定長のビット列を生成する関数をハッシュ関数という
   - 高速なハッシュ関数ほど良質
@@ -223,7 +266,7 @@
 - ハッシュの敵は Brute-force Attach である
 - hush ではなく hash。hash は本来、調理した肉を刻んで、それを再度料理の一部に使うこと。これが由来っぽい
 
-### Hash とパスワードの保存
+## Hash とパスワードの保存
 
 - データベースにユーザログイン情報を格納する時、情報漏洩防止のため、パスワード本体ではなくそのハッシュ値を保存すべきである
 - パスワードを保存する時には、salt（ランダムに生成した文字列）を付け加えて文字数を増やすべき(Salting)
@@ -238,7 +281,7 @@
   - PBKDF2
     - もう死んだ？
 
-### Hash Algorithm
+## Hash Algorithm
 
 - SHA-1
   - 160bit のハッシュ値を返す
@@ -250,7 +293,7 @@
 - MD5
   - Dead
 
-## Messeage Authentication Code (MAC)
+# Messeage Authentication Code (MAC)
 
 - 送られたメッセージが改竄されていないかを保証するための仕組み
   - メッセージを暗号化するわけではないので、機密情報を守ることはできない？
@@ -267,15 +310,26 @@
   1. 受信者は、共通鍵とメッセージを使って MAC を計算する
   1. 自分で計算した MAC と、送信された MAC が一致することを確認する
 
-## Authentication
+# Authentication
 
 - 認証方式はたくさんある
 
-### Username + Password
+## Username + Password
 
 - 基本中の基本
+- Basic Auth, Digest Authがある
+### Basic auth
 
-### JWT
+- username / passwordをbase64で変換して送る
+- 漏洩するので危険
+
+### Digest Auth
+
+- username /passwordをMD5でハッシュ化して送る
+- 現在の主流
+- しかしMD5はもう安全ではないのでは？
+
+## JWT
 
 - 発音はjotらしい
 - 文字列になっている：`eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IuWxseeUsCIsImV4cCI6IjIwMTkvMDQvMDEifQ.u8TT4ySJhBiMod1rNqCxiISXwCXqddVSJE5gncSCGD7RPHigHoZiDnLfwcIIGij-ARBrswe4eluMUgaQwS7FUdN8IVwKkFUY1533TQZZYhTUzobO3q_PnDyPi8cPDmkSTJHzBhT298G7fNZENUUo8fmCjOkYC9FibTMrF6Aij4w`
@@ -299,12 +353,12 @@
 
 
 
-### OpenID
-### OAuth2.0
-### Social Login
+## OpenID
+## OAuth2.0
+## Social Login
 
 
-### apt システムにおける package の認証
+## apt システムにおける package の認証
 
 - 例として、MongoDB だと以下のようにする
 
