@@ -1,12 +1,18 @@
 # Operation System
 
 
-## ToC
+# ToC
 
 - [Operation System](#operation-system)
-  - [ToC](#toc)
-  - [Kernel Achitecture](#kernel-achitecture)
-  - [Process & Thread](#process--thread)
+- [ToC](#toc)
+- [MISC](#misc)
+- [Kernel](#kernel)
+  - [Kernel Architecture](#kernel-architecture)
+  - [Linux Kernel](#linux-kernel)
+  - [Kernel Version](#kernel-version)
+- [Unix-like Family](#unix-like-family)
+  - [Linux Desktop](#linux-desktop)
+- [Process & Thread](#process--thread)
   - [Memory](#memory)
     - [MMU: Memory Management Unit](#mmu-memory-management-unit)
   - [Register](#register)
@@ -16,9 +22,33 @@
   - [実行様式](#%e5%ae%9f%e8%a1%8c%e6%a7%98%e5%bc%8f)
   - [実行制御](#%e5%ae%9f%e8%a1%8c%e5%88%b6%e5%be%a1)
     - [Services offered by System Call](#services-offered-by-system-call)
+- [Packet Filtering](#packet-filtering)
+    - [五大装置](#%e4%ba%94%e5%a4%a7%e8%a3%85%e7%bd%ae)
+  - [HDD vs SSD](#hdd-vs-ssd)
+  - [CPU](#cpu)
+    - [Package](#package)
+    - [Bus Inteface](#bus-inteface)
+    - [Cache Memory](#cache-memory)
+    - [Control Unit](#control-unit)
+    - [Processing Unit](#processing-unit)
+    - [Pin](#pin)
+  - [GPU](#gpu)
+  - [FPGA](#fpga)
+  - [ARM Processor](#arm-processor)
+  - [TPU: Tensor Processing Unit](#tpu-tensor-processing-unit)
+  - [ASIC: Application-Specific Integration Circuit](#asic-application-specific-integration-circuit)
+  - [UEFI vs BIOS](#uefi-vs-bios)
+
+# MISC
+
+- POSIX
+  - ソフトウェアの異なるOS間での移植性を確保するため、OSのAPIの仕様を定めたもの
+- ALU: arithmetic logic unit
 
 
-## Kernel Achitecture
+# Kernel
+
+## Kernel Architecture
 
 1. Shell
 1. System Call
@@ -31,10 +61,46 @@
 
 
 - Shell is the interface to run the kernel program
-- 
 
 
-## Process & Thread
+## Linux Kernel
+
+- Versions 
+  - Ubuntu 18.04で見たらversion5.3
+
+## Kernel Version
+
+# Unix-like Family
+
+- Linux
+  - Debian
+    - Ubuntu
+      - Linux Mint
+      - Kubuntu
+      - Lubuntu
+      - Xubuntu
+      - Ubuntu MATE
+      - Elementary OS
+      - KDE Neon
+    - Kali Linux
+  - Fedora
+    - RHEL
+    - CentOS
+  - Arch
+    - Manjaro
+  - Android
+  - Chromium OS
+- FreeBSD
+- MacOS
+
+## Linux Desktop
+
+- Gnome
+- KDE
+- Xfce
+- Unity
+
+# Process & Thread
 
 - Process
   - 一つのアプリケーション
@@ -98,3 +164,69 @@
 - Device I/O
 - Protection
 - Networking
+
+
+# Packet Filtering
+
+- 一定の基準に従ってパケットを検査し、不可のパケットは破棄して通さない
+- BPF: Berkely Packet Filter
+- Netfilter
+
+
+
+### 五大装置
+
+- 制御装置
+- 演算装置
+- 入力装置
+- 記憶装置
+- 出力装置
+
+## HDD vs SSD
+
+
+
+## CPU
+
+### Package
+- CPUの基盤
+
+### Bus Inteface
+- コンピューティングにおける「バス」とは、装置間の伝送路のこと
+- 以下のように機能によって３つに分類される
+    - Address Bus
+        - メモリ内部の物理アドレスを指定するためのバス
+        - データの流れは常に一方向
+    - Data Bus
+        - データの伝送のためのバス
+    - Control Bus
+- バスの物理的な位置によってCPU内部を結ぶ「内部バス」、CPUとメモリを結ぶ「外部バス」に区別することもある
+
+
+### Cache Memory
+
+### Control Unit
+- Fetch Unit
+- Register
+- Decoder
+
+### Processing Unit
+
+### Pin
+
+## GPU
+
+## FPGA
+
+## ARM Processor
+
+## TPU: Tensor Processing Unit
+- Machine Learning
+- Googleが開発
+
+## ASIC: Application-Specific Integration Circuit
+
+## UEFI vs BIOS
+
+- BIOSと組み合わせて使うのがMBR
+- MBRではpartition tableの幅が32bit分しかないので、$2^(32) * 512 = 2199023255552$ バイトまでしか分けられないので

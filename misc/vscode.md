@@ -1,17 +1,32 @@
 # Visual Studio Code
 
-## Extensions List (Details below)
+# ToC
 
-- Linting / Formatting
-  - Prettier
-  - ESLint
-  - TSLint
-  - Vetur: Prettier があれば不要？
-- Others
-  - Docker
-  - ~~Code Runner~~
+- [Visual Studio Code](#visual-studio-code)
+- [ToC](#toc)
+- [Extensionss](#extensionss)
+- [Keyboard Shortcuts (for Linux)](#keyboard-shortcuts-for-linux)
+  - [VSCode Settings](#vscode-settings)
 
-## Keyboard Shortcuts (for Linux)
+# Extensionss
+
+- Prettier
+- ESLint
+- TSLint
+- Vetur
+  - Prettier があれば不要?
+- Docker
+- php cs fixer
+- PHP Intelephense
+- Python
+- C/C++
+- Excel Viewer
+- Markdown All in One
+- Markdown+Math
+- Night Owl Theme
+- ~~Code Runner~~
+
+# Keyboard Shortcuts (for Linux)
 
 - `ctrl ,`
   - show setting
