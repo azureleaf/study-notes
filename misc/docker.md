@@ -9,7 +9,8 @@
   - [Commands: MISC](#commands-misc)
   - [Commands: Docker Hub](#commands-docker-hub)
   - [Commands: docker-composer](#commands-docker-composer)
-  - [Docker Process](#docker-process)
+  - [Command: Docker Process](#command-docker-process)
+  - [Data Persistence](#data-persistence)
   - [Terminology](#terminology)
     - [★★★](#%e2%98%85%e2%98%85%e2%98%85)
     - [★](#%e2%98%85)
@@ -69,6 +70,7 @@
   - `docker-whale`: Name of the image to be created
   - `.`: Build Context
 - `docker build —no-cache -t docker-whale`
+  - May need this on re-building from the Dockerfile
 - `docker run --name some-nginx -d -p 8080:80 nginx`
 - `docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7`
 - `docker run --name some-wordpress -e WORDPRESS_DB_PASSWORD=my-secret-pw --link some-mysql:mysql -d -p 8080:80 wordpress`
@@ -99,7 +101,7 @@
 - docker-compose down
   - コンテナを停止＆削除
 
-## Docker Process
+## Command: Docker Process
 
 - `systemctl start docker`
 - `systemctl status docker`
@@ -114,6 +116,8 @@
 
 ### ★★★
 
+- Dockerの環境
+  - Container > Docker Engine > Host OS > Hardware
 - Kubernetes (k8s)
 - Docker Swarm
 - Dockerfile
@@ -121,6 +125,9 @@
 - Image
   - Snapshot of the Docker VM at the specific time point
   - You can't modify image
+- To get images
+  - Download from Docker Hub
+  - Build from Dockerfile
 - Container
   - Instance of Image
 - Dockerhub

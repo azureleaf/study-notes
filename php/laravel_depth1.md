@@ -77,6 +77,17 @@
 
 # Architecture Concepts
 
+## Request Lifecycle
+
+1. Apache/Nginxがリクエストを受け取る
+1. `public/index.php`
+
+## Service Container
+## Service Provider
+## Facade
+## Contract
+
+
 # The Basics
 
 ## Routing
@@ -109,6 +120,17 @@
 ## Responses
 
 ## Views
+
+- Bladeというtemplate engine
+- `view('admin.greeting', ['name' => 'James']);`
+  - `resources/views/admin/greeting.blade.js`に変数を埋め込み描画
+  - `resources/views/`をルートとして、ドットでディレクトリ構造を表現
+- `View::` facade
+- View Composer
+  - Viewがレンダーされたときに呼ばれる関数・クラスメソッド
+  - Service Providerで登録する
+  - 
+- View関係のartisan
 
 ## URL Generation
 

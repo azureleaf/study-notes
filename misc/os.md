@@ -1,6 +1,5 @@
 # Operation System
 
-
 # ToC
 
 - [Operation System](#operation-system)
@@ -12,6 +11,10 @@
   - [Kernel Version](#kernel-version)
 - [Unix-like Family](#unix-like-family)
   - [Linux Desktop](#linux-desktop)
+- [Windows](#windows)
+  - [Windows NT Family](#windows-nt-family)
+  - [Windows Family](#windows-family)
+  - [MS-DOS Family](#ms-dos-family)
 - [Process & Thread](#process--thread)
   - [Memory](#memory)
     - [MMU: Memory Management Unit](#mmu-memory-management-unit)
@@ -23,28 +26,33 @@
   - [実行制御](#%e5%ae%9f%e8%a1%8c%e5%88%b6%e5%be%a1)
     - [Services offered by System Call](#services-offered-by-system-call)
 - [Packet Filtering](#packet-filtering)
-    - [五大装置](#%e4%ba%94%e5%a4%a7%e8%a3%85%e7%bd%ae)
-  - [HDD vs SSD](#hdd-vs-ssd)
-  - [CPU](#cpu)
-    - [Package](#package)
-    - [Bus Inteface](#bus-inteface)
-    - [Cache Memory](#cache-memory)
-    - [Control Unit](#control-unit)
-    - [Processing Unit](#processing-unit)
-    - [Pin](#pin)
-  - [GPU](#gpu)
-  - [FPGA](#fpga)
-  - [ARM Processor](#arm-processor)
-  - [TPU: Tensor Processing Unit](#tpu-tensor-processing-unit)
-  - [ASIC: Application-Specific Integration Circuit](#asic-application-specific-integration-circuit)
-  - [UEFI vs BIOS](#uefi-vs-bios)
+- [IPC: Interprocess Communication](#ipc-interprocess-communication)
+  - [Shared Memory](#shared-memory)
+  - [Semapho](#semapho)
+  - [Mapped Memory](#mapped-memory)
+  - [Pipe](#pipe)
+  - [Unix Domain Socket](#unix-domain-socket)
+- [五大装置](#%e4%ba%94%e5%a4%a7%e8%a3%85%e7%bd%ae)
+- [HDD vs SSD](#hdd-vs-ssd)
+- [CPU](#cpu)
+  - [Package](#package)
+  - [Bus Inteface](#bus-inteface)
+  - [Cache Memory](#cache-memory)
+  - [Control Unit](#control-unit)
+  - [Processing Unit](#processing-unit)
+  - [Pin](#pin)
+- [GPU](#gpu)
+- [FPGA](#fpga)
+- [ARM Processor](#arm-processor)
+- [TPU: Tensor Processing Unit](#tpu-tensor-processing-unit)
+- [ASIC: Application-Specific Integration Circuit](#asic-application-specific-integration-circuit)
+- [UEFI vs BIOS](#uefi-vs-bios)
 
 # MISC
 
 - POSIX
-  - ソフトウェアの異なるOS間での移植性を確保するため、OSのAPIの仕様を定めたもの
+  - ソフトウェアの異なる OS 間での移植性を確保するため、OS の API の仕様を定めたもの
 - ALU: arithmetic logic unit
-
 
 # Kernel
 
@@ -52,21 +60,22 @@
 
 1. Shell
 1. System Call
-  - Request the service from the OS kernel
-  
-1. Kernel
-  - Core programs of the OS
-  - Offer the same environment on the various hardwares
-1. Hardware
 
+- Request the service from the OS kernel
+
+1. Kernel
+
+- Core programs of the OS
+- Offer the same environment on the various hardwares
+
+1. Hardware
 
 - Shell is the interface to run the kernel program
 
-
 ## Linux Kernel
 
-- Versions 
-  - Ubuntu 18.04で見たらversion5.3
+- Versions
+  - Ubuntu 18.04 で見たら version5.3
 
 ## Kernel Version
 
@@ -100,14 +109,40 @@
 - Xfce
 - Unity
 
+# Windows
+
+- WSL
+- Active Directory
+- .NET Framework
+- "Task"
+
+## Windows NT Family
+
+- Windows NT
+- Windows 2000
+- XP
+- Vista
+- 7
+- 8
+- 10
+
+## Windows Family
+
+- Windows 1.0
+- 95
+- 98
+- 2000
+- ME
+
+## MS-DOS Family
+
 # Process & Thread
 
 - Process
   - 一つのアプリケーション
-  - メモリ上に置いたデータに対して演算する（CPUから直接HDDを読み込むことはない...のか？）
+  - メモリ上に置いたデータに対して演算する（CPU から直接 HDD を読み込むことはない...のか？）
 - Multitask
   - 実行する複数のアプリケーションを超短時間で切り替えまくることで、同時に動いてるように見せること
-
 
 ## Memory
 
@@ -123,41 +158,39 @@
   - プロセスごとの物理メモリ領域を確保
   - 確保した物理メモリについて仮想アドレスを用意
     - 一つのプロセスが使う物理メモリは連続していなくてもいい
-  - 以降、仮想アドレスと物理アドレスの間のmappingを行う
-  - このmapping情報自体も"Page Table"としてメモリ上に記憶される
+  - 以降、仮想アドレスと物理アドレスの間の mapping を行う
+  - この mapping 情報自体も"Page Table"としてメモリ上に記憶される
   - あるプロセスが使っているメモリ領域は、他のプロセスが使わないようにする
-- 32 bit CPUでは、4GBまでのメモリしか使えない理由
-  - 1つのアドレスについて、１byteが割り当てられる
-  - ２の32乗は4294967296だが、これは4GB強しかないので
-
+- 32 bit CPU では、4GB までのメモリしか使えない理由
+  - 1 つのアドレスについて、１ byte が割り当てられる
+  - ２の 32 乗は 4294967296 だが、これは 4GB 強しかないので
 
 ## Register
 
 ### 32 bit vs 64 bit
 
-- OSのビット数は、CPUのレジスタの容量である
-- 16bitは2の16乗で65536
-- 64bitだと18446744073709551616で2000京くらい
-- ちなみにx86は32bit CPUだが、これはインテルの最初の32 bit CPUが「80386」という名前だったことに由来
+- OS のビット数は、CPU のレジスタの容量である
+- 16bit は 2 の 16 乗で 65536
+- 64bit だと 18446744073709551616 で 2000 京くらい
+- ちなみに x86 は 32bit CPU だが、これはインテルの最初の 32 bit CPU が「80386」という名前だったことに由来
 
 ### Register vs Cache
 
-- どちらもCPUの上にある
-- Registerはキャッシュよりもずっと速く、小さい
+- どちらも CPU の上にある
+- Register はキャッシュよりもずっと速く、小さい
 
 ## System Call
 
-
 ## 実行様式
-
 
 ## 実行制御
 
 - 排他制御
 - セマフォ
-- 
+-
 
 ### Services offered by System Call
+
 - Process creation and management
 - Main mamory management
 - File system
@@ -165,16 +198,32 @@
 - Protection
 - Networking
 
-
 # Packet Filtering
 
 - 一定の基準に従ってパケットを検査し、不可のパケットは破棄して通さない
 - BPF: Berkely Packet Filter
 - Netfilter
 
+# IPC: Interprocess Communication
 
+## Shared Memory
 
-### 五大装置
+## Semapho
+
+## Mapped Memory
+
+## Pipe
+
+## Unix Domain Socket
+
+- カーネル内部でしか使えないが、高速
+- 2 種類ある
+  - TCP 型：Stream
+  - UDP 型：Datagram
+- Server Process
+- Client Process
+
+# 五大装置
 
 - 制御装置
 - 演算装置
@@ -182,51 +231,52 @@
 - 記憶装置
 - 出力装置
 
-## HDD vs SSD
+# HDD vs SSD
 
+# CPU
 
+## Package
 
-## CPU
+- CPU の基盤
 
-### Package
-- CPUの基盤
+## Bus Inteface
 
-### Bus Inteface
 - コンピューティングにおける「バス」とは、装置間の伝送路のこと
 - 以下のように機能によって３つに分類される
-    - Address Bus
-        - メモリ内部の物理アドレスを指定するためのバス
-        - データの流れは常に一方向
-    - Data Bus
-        - データの伝送のためのバス
-    - Control Bus
-- バスの物理的な位置によってCPU内部を結ぶ「内部バス」、CPUとメモリを結ぶ「外部バス」に区別することもある
+  - Address Bus
+    - メモリ内部の物理アドレスを指定するためのバス
+    - データの流れは常に一方向
+  - Data Bus
+    - データの伝送のためのバス
+  - Control Bus
+- バスの物理的な位置によって CPU 内部を結ぶ「内部バス」、CPU とメモリを結ぶ「外部バス」に区別することもある
 
+## Cache Memory
 
-### Cache Memory
+## Control Unit
 
-### Control Unit
 - Fetch Unit
 - Register
 - Decoder
 
-### Processing Unit
+## Processing Unit
 
-### Pin
+## Pin
 
-## GPU
+# GPU
 
-## FPGA
+# FPGA
 
-## ARM Processor
+# ARM Processor
 
-## TPU: Tensor Processing Unit
+# TPU: Tensor Processing Unit
+
 - Machine Learning
-- Googleが開発
+- Google が開発
 
-## ASIC: Application-Specific Integration Circuit
+# ASIC: Application-Specific Integration Circuit
 
-## UEFI vs BIOS
+# UEFI vs BIOS
 
-- BIOSと組み合わせて使うのがMBR
-- MBRではpartition tableの幅が32bit分しかないので、$2^(32) * 512 = 2199023255552$ バイトまでしか分けられないので
+- BIOS と組み合わせて使うのが MBR
+- MBR では partition table の幅が 32bit 分しかないので、$2^(32) * 512 = 2199023255552$ バイトまでしか分けられないので
