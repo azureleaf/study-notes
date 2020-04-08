@@ -4,26 +4,35 @@
 
 - [Meet Docker](#meet-docker)
   - [ToC](#toc)
-  - [Commands: Process](#commands-process)
-  - [Commands: info](#commands-info)
-  - [Commands: MISC](#commands-misc)
-  - [Commands: Docker Hub](#commands-docker-hub)
-  - [Commands: docker-composer](#commands-docker-composer)
-  - [Command: Docker Process](#command-docker-process)
-  - [Data Persistence](#data-persistence)
-  - [Terminology](#terminology)
-    - [★★★](#%e2%98%85%e2%98%85%e2%98%85)
-    - [★](#%e2%98%85)
-  - [Dockerfile](#dockerfile)
-  - [Run MySQL container](#run-mysql-container)
+- [Commands](#commands)
+  - [Process](#process)
+  - [Info](#info)
+  - [Container](#container)
+  - [Docker Hub](#docker-hub)
+  - [Network](#network)
+  - [Docker Compose](#docker-compose)
+- [Terminology](#terminology)
+  - [Docker Compose](#docker-compose-1)
+  - [Tag](#tag)
+  - [Docker Network](#docker-network)
+  - [MISC](#misc)
+- [Docker におけるデータ共有](#docker-%e3%81%ab%e3%81%8a%e3%81%91%e3%82%8b%e3%83%87%e3%83%bc%e3%82%bf%e5%85%b1%e6%9c%89)
+    - [Volume](#volume)
+    - [Bind Mount](#bind-mount)
+    - [tmpfs](#tmpfs)
+- [Dockerfile](#dockerfile)
+- [Run MySQL container](#run-mysql-container)
 
-## Commands: Process
+# Commands
 
-- `sudo systemctl start docker`
-- `sudo service start docker`
+## Process
+
+- `systemctl start docker`
+- `service start docker`
   - Same as `systemctl`
+- `systemctl status docker`
 
-## Commands: info
+## Info
 
 - `docker –version`
 - `docker info`
@@ -34,8 +43,7 @@
 - `docker inspect my-container`
 - `docker images`
 
-
-## Commands: MISC
+## Container
 
 - **`docker pull ubuntu:xenial`**
 - `docker create —name my-ubuntu-ontainer -it ubuntu /bin/bash`
@@ -47,15 +55,15 @@
 - `docker start fe6e270a1c9c`
   - Start with container ID
 - `docker start my-ubuntu-container`
-  - Start with container name 
+  - Start with container name
 - `docker restart my-ubuntu-container`
 - `docker stop my-ubuntu-container`
 - `docker pause my-ubuntu-container`
 - `docker unpause my-ubuntu-container`
-- `docker attach my-ubuntu-container`
-  - Access to the running container (A)
-- `docker exec -it my-ubuntu-container bash`
-  - Access to the running container (B)
+- 2 ways to access to the running Container
+  - `docker attach my-ubuntu-container`
+  - `docker exec -it my-ubuntu-container bash`
+  - `exit` inside the container: getting out of the container without terminating it
 - `docker kill fe6e270a1c9c`
 - `docker commit my-ubuntu-container my-ubuntu-image:mytag`
   - Create the image from the container
@@ -75,13 +83,21 @@
 - `docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7`
 - `docker run --name some-wordpress -e WORDPRESS_DB_PASSWORD=my-secret-pw --link some-mysql:mysql -d -p 8080:80 wordpress`
 
-## Commands: Docker Hub
+## Docker Hub
 
 - `docker login`
 - `docker push`
 - `docker tag`
 
-## Commands: docker-composer
+## Network
+
+- `docker network ls`
+- `docker network create apline-net`
+- `docker network inspect alpine-net`
+- `docker network connect alpine-net alpine4`
+- `docker network disconnect alpine-net alpine4`
+
+## Docker Compose
 
 - docker-compose ps
   - List Containers
@@ -101,44 +117,60 @@
 - docker-compose down
   - コンテナを停止＆削除
 
-## Command: Docker Process
+# Terminology
 
-- `systemctl start docker`
-- `systemctl status docker`
-
-## Data Persistence
-
-3 Methods
-
-- 
-
-## Terminology
-
-### ★★★
-
-- Dockerの環境
+- Docker の環境
   - Container > Docker Engine > Host OS > Hardware
 - Kubernetes (k8s)
-- Docker Swarm
 - Dockerfile
-- docker-compose.yml
 - Image
   - Snapshot of the Docker VM at the specific time point
   - You can't modify image
 - To get images
   - Download from Docker Hub
   - Build from Dockerfile
+  - Commit from the container: Not recommended, because `docker history` can't be used for such images
 - Container
   - Instance of Image
 - Dockerhub
   - Place to share images
-- Tag
-  - Version of the image
-  - `latest` or `1.14-perl` in `nginx:1.14-perl` `nginx:latest` are tags
-  - When you don't specify the tag, it will be set as `latest` by default
 - Docker Engine
+- Docker Machine
 
-### ★
+# Docker Compose 
+
+- 複数のコマンドを
+- 利点
+  - dockerのコンテナをどのようにネットワークに接続するのか長々と設定コマンドを打たずに済む
+- docker-compose.yml
+
+## Docker Compose vs K8s
+
+- どちらも複数のコンテナ間での通信を設定する
+- Docker Composeは単一ホスト上での複数コンテナ
+- K8sは複数ホスト上での複数コンテナ
+
+## Docker Swarm vs Docker Compose
+
+## Tag
+
+- Tag is the version of a image
+- `latest` or `1.14-perl` in `nginx:1.14-perl` `nginx:latest` are tags
+- When you don't specify the tag, it will be set as `latest` by default
+
+## Docker Network
+
+- 複数のコンテナ間で通信するためのネットワーク
+- Bridge Network
+  - Default
+- Host Network
+- Overlay Network
+- Macvlan Network
+- None Network
+- User-defined Brdge Network
+- Third-party Network Plugin
+
+## MISC
 
 - Hyper-V
 - Virtual Machine
@@ -151,9 +183,22 @@
   - VirtualBox みたいなもん
   - VirtualBox が主流なので、あまり見ない気がする
 
-## Dockerfile
+# Docker におけるデータ共有
 
-## Run MySQL container
+- ホスト側とコンテナ内部とでデータを共有しないといけない場面は多々ある
+- 実現する方法は３つある
+
+### Volume
+
+- `docker volume create
+
+### Bind Mount
+
+### tmpfs
+
+# Dockerfile
+
+# Run MySQL container
 
 1. Create `docker-compose.yml`
 
@@ -180,3 +225,19 @@ services:
    - Check if the container is up
 1. `mysql -uroot -p -h 127.0.0.1 --port 13306`
    - Connect to MySQL container
+
+# Kubernetes
+
+## Terminology
+
+- Cluster
+- Node
+- Pod
+- Label
+- Replica Set
+- Service
+- Secret
+- Namespace
+- Annotation
+- kubectl
+- Deployment

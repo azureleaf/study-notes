@@ -42,9 +42,20 @@
 
 - urllib
 - Selenium
+- `lxml`
+  - BeautifulSoupと違ってxpathが使える
 - BeautifulSoup
 - Django
 - Flask
+- `logging`
+  - `print()`によるログよりも機能的
+  - `log.debug()` < `log.info()` < `log.warning()` < `log.error()` < `log.critical()`
+  - エラーの日時や場所を明示できる。以下により`2015-03-15 12:20:02,469 CRITICAL -- MainProcess simple_example.py:13 -- CRIT` が出力
+
+```py
+format_str = '%(asctime)s\t%(levelname)s -- %(processName)s %(filename)s:%(lineno)s -- %(message)s'
+console.setFormatter(logging.Formatter(format_str))
+```
 
 ## Python3 vs Python 2
 
@@ -57,7 +68,7 @@
   - Anaconda
   - Docker
 
-## Virtual Environment Options
+## Which virtual environment should I use?
 
 - venv
   - python3 built-in
@@ -98,6 +109,7 @@ test = "python -m unittest discover -v"
 format = "autopep8 -ivr ."
 lint = "flake8 --show-source ."
 ```
+
 ### `Pipfile.lock`
 
 - Equivalent to `package-lock.json`
