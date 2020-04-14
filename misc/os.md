@@ -47,6 +47,12 @@
 - [TPU: Tensor Processing Unit](#tpu-tensor-processing-unit)
 - [ASIC: Application-Specific Integration Circuit](#asic-application-specific-integration-circuit)
 - [UEFI vs BIOS](#uefi-vs-bios)
+- [RAID](#raid)
+  - [RAID0](#raid0)
+  - [RAID1](#raid1)
+  - [RAID5](#raid5)
+  - [RAID10](#raid10)
+  - [RAID50](#raid50)
 
 # MISC
 
@@ -92,8 +98,9 @@
       - Elementary OS
       - KDE Neon
     - Kali Linux
+  - OpenSUSE
   - Fedora
-    - RHEL
+    - RHEL (not same as Red Hat Linux)
     - CentOS
   - Arch
     - Manjaro
@@ -280,3 +287,28 @@
 
 - BIOS と組み合わせて使うのが MBR
 - MBR では partition table の幅が 32bit 分しかないので、$2^(32) * 512 = 2199023255552$ バイトまでしか分けられないので
+
+# RAID
+
+- RAID: Redundant Alley of Inexpensive Disks
+
+## RAID0
+
+- More than 2 disks
+- Each disk has different data
+- Advantage: More I/O speed than single disk, because of the simultaneous access to the multiple disks
+- No redundancy
+
+
+## RAID1
+
+- More than 2 disks
+- Each disk has identical data
+- Advantage: Redundancy
+- Disadvantage: 
+
+## RAID5
+
+## RAID10
+
+## RAID50

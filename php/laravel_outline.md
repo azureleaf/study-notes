@@ -9,7 +9,7 @@
   - [Directory Structure](#directory-structure)
 - [Architecture Concepts](#architecture-concepts)
   - [Request Lifecycle](#request-lifecycle)
-  - [Service Container](#service-container)
+  - [Service Container & Service Provider](#service-container--service-provider)
     - [DI](#di)
     - [Binding](#binding)
     - [Resolving](#resolving)
@@ -19,6 +19,12 @@
   - [Contract](#contract)
 - [The Basics](#the-basics)
   - [Routing](#routing)
+    - [Redirections](#redirections)
+    - [View](#view)
+    - [Route params](#route-params)
+    - [Named Route](#named-route)
+    - [Route Group](#route-group)
+    - [Route Model Binding](#route-model-binding)
   - [Middleware](#middleware)
   - [CSRF Protection](#csrf-protection)
   - [Controllers](#controllers)
@@ -26,8 +32,14 @@
   - [Responses](#responses)
   - [Views](#views)
   - [URL Generation](#url-generation)
+    - [Options](#options)
   - [Session](#session)
   - [Validation](#validation)
+    - [Working with `$error`](#working-with-error)
+    - [Validation Rules (default)](#validation-rules-default)
+    - [Validation Rules (user-defined)](#validation-rules-user-defined)
+    - [Conditionally adding rules](#conditionally-adding-rules)
+    - [Validation Arrays](#validation-arrays)
   - [Error Handling](#error-handling)
   - [Logging](#logging)
 - [Frontend](#frontend)
@@ -36,11 +48,33 @@
   - [Frontend Scaffolding](#frontend-scaffolding)
   - [Compiling Assets](#compiling-assets)
 - [Security](#security)
+  - [Facades for security](#facades-for-security)
+  - [Helpers for security](#helpers-for-security)
+  - [Controllers for security](#controllers-for-security)
+  - [Config files for security](#config-files-for-security)
+  - [artisan commands for security](#artisan-commands-for-security)
   - [Authentication](#authentication)
+  - [API Authentication](#api-authentication)
+  - [Authorization](#authorization)
+  - [Email Verification](#email-verification)
+  - [Encryption](#encryption)
+  - [Hashing](#hashing)
+  - [Password Reset](#password-reset)
 - [Digging Deeper](#digging-deeper)
-- [Database](#database)
+- [DB](#db)
+  - [DB Summary](#db-summary)
+  - [DB Syntax](#db-syntax)
+  - [Query Builder](#query-builder)
+  - [Pagination](#pagination)
+  - [Migration](#migration)
+  - [Seeding](#seeding)
+  - [Redis](#redis)
 - [Eloquent ORM](#eloquent-orm)
+  - [Summary](#summary)
+  - [Eloquent Syntax](#eloquent-syntax)
+  - [Models](#models)
 - [Testing](#testing)
+  - [Mocking](#mocking)
 - [Official Packages](#official-packages)
 
 # Getting Started
@@ -91,7 +125,7 @@
 1. Apache/Nginx がリクエストを受け取る
 1. `public/index.php`
 
-## Service Container
+## Service Container & Service Provider
 
 - Service Container は、クラスの依存関係と DI を行うツール
 
@@ -104,22 +138,21 @@
 ### Binding
 
 - `$this->app->bind('bind対象', クラスを返すクロージャ);`
-- Bindできるのはいろいろある
+- Bind できるのはいろいろある
   - Class
   - Interface
   - Instance
   - Primitive
-- 一回のみresolveされる場合は`$this->app->singleton()`
-- BindingはService Provider に登録される
+- 一回のみ resolve される場合は`$this->app->singleton()`
+- Binding は Service Provider に登録される
 
 ### Resolving
 
-- resolveというのは、ある名前を元にして実体を見つけにいくことか？
+- resolve というのは、ある名前を元にして実体を見つけにいくことか？
 - `$api = $this->app->make('HelpSpot\API');`
-- 
+-
 
 ### Container Events
-
 
 ## Service Provider
 
@@ -135,18 +168,18 @@
 
 ## Facade
 
-- 外部ファイルのクラスをインポートする際のPathを短縮表記をするProxyのように振る舞うが、実際はそうではない
+- 外部ファイルのクラスをインポートする際の Path を短縮表記をする Proxy のように振る舞うが、実際はそうではない
   1. `Cache`ファサードで`Cache::get()`を呼ぶ
   2. `Cache`クラスの`getFacadeAccessor()`が呼ばれる
-  3. このメソッドはbindingが名前`cache`を設定するので、これに対応するサービスコンテナが呼ばれる
+  3. このメソッドは binding が名前`cache`を設定するので、これに対応するサービスコンテナが呼ばれる
 - Real-time Facade
-  - Facadeは本来`Illuminate\Support\Facades\`に定義される
-  - Real-time Facadeでは任意のクラスを「Facadeっぽく」使うことができる
+  - Facade は本来`Illuminate\Support\Facades\`に定義される
+  - Real-time Facade では任意のクラスを「Facade っぽく」使うことができる
   - これにより、記述量を減らせる
-  - `use`でインポートする時にnamespace`Facades\`を追加するだけで実現できる
+  - `use`でインポートする時に namespace`Facades\`を追加するだけで実現できる
 - Facades vs DI
 - Facades vs Helper Functions
-  - そもそもhelper functionが何かと言うと、viewの生成やイベント発火など様々な仕事をする関数
+  - そもそも helper function が何かと言うと、view の生成やイベント発火など様々な仕事をする関数
   - ヘルパー関数は多くの場合対応するファサードで書き換え可能
 
 ## Contract
@@ -169,17 +202,32 @@
 - ルーティングの記述ファイル
   - `routes/web.php`は一般の Web 用のルート定義。メジャー
   - `routes/api.php`は API 用の stateless なルート定義。ちょっとマイナー
+
+### Redirections
+
 - `Route::redirect('/here', '/there', 301);`
+
+### View
+
 - Routing の clojure で`view()`する場合、短縮表記で`Route::view()`も可
+
+### Route params
+
 - `Route::get('user/{name?}', function ($name = 'John') { return $name;});`
+
   - optional route parameter
-- Named Route
-  - 既に定義された route への参照を楽にする
-  - `Route::get()->name()`で定義
-- Route Group
-- Route Model Binding
-  - ルーティングの callback 内で Eloquent のモデルを呼び出す必要があるときに記述を楽にする仕組み
-  -
+
+### Named Route
+
+- 既に定義された route への参照を楽にする
+- `Route::get()->name()`で定義
+
+### Route Group
+
+### Route Model Binding
+
+- ルーティングの callback 内で Eloquent のモデルを呼び出す必要があるときに記述を楽にする仕組み
+-
 
 ## Middleware
 
@@ -216,21 +264,94 @@
 
 ## URL Generation
 
+- When you want to get the URL inside the project, you don't have to fully specify it; you can "generate" it
+
+### Options
+
+- Using helper function `url()`
+- Using helper function `route()`
+- Using helper function `action()`
+  - To access controller action
+- Using facade `URL::`
+
 ## Session
+
+- Session is necessary because you want these features while HTTP is stateless:
+  - You want to identify the user after login
+- Session Driver:
+- You can use multiple session drivers; so DB isn't the only session storage for server-side
+  - file
+  - cookie
+  - database
+    - You need to create a table in advance
+  - memcached
+  - redis
+  - array (not persistent)
 
 ## Validation
 
-- 既定の検証も使えるし、自分で定義した検証方法も可能
-- 
+- Validate the `$request` inside controllers
+- 3 ways to validate:
+  - For simple validation: `$request->validate([検証ルールの組]);`
+  - For mildly complex validation: Create "Form Request Class" and add its method `rules(){return [検証ルールの組]}`
+  - For complex validation: Create validator with `Validator::make()` Facade
+- When the validation failed, you need to feedback to the user
+  - Validation error will be flashed session
+  - When the validation failed, exception is thrown and the remaining procedures will be aborted
+  - In `Blade`, use `$errors` directive to catch the validation error from the Laravel
+- Using Form Request
+  1. Create template with artisan
+  2. Define rules in `rules()`
+  3. Validate in the controller with DI: `store(form requestの名前 $request)`
+  4. `$validated = $request->validated()`で検証済みデータを引き出せる
+  - What's "validated data"??? How is it altered from the original request?
+- Form Request methods inside a controller:
+  - `rules(){return [検証ルール]}`
+  - `authorize()`
+  - `messages(){return [フォームのフィールド名＆それに対応するエラーメッセージの組]}`
+  - `attributes(){}`
+  - `prepareForValidation(){}`
+- `Validator::` Facade inside a controller:
+  - `$validator = Validator::make($request->all(), [RULES_HERE]);`
+    - Define validator
+    - 1st arg is the data to be validated
+  - `$validator->fails()`
+    - Get boolean to get the result of validation
+
+### Working with `$error`
+
+- `\$errors
+
+### Validation Rules (default)
+
+### Validation Rules (user-defined)
+
+- Use this when you wanna use complex rules for a field, such as:
+  - Check if the input text are all in uppercase
+- Ways to define user-defined rule
+  - Using Rule object
+  - Using clojures
+  - Using extensions
+  - Using implicit extensions
+- Rule Object
+  - create with `artisan make:rule`
+  - `passes()` method returns bool which tells the result of validation
+  - `message()` method defines validation error message
+
+### Conditionally adding rules
+
+### Validation Arrays
 
 ## Error Handling
+
+- Exception handler class has 2 methods: `report()` and `render()`
 
 ## Logging
 
 - Configure in `config/logging.php`
-- Channelとは
-- Chennel Driverとは
-- 
+- Channel とは
+- Chennel Driver とは
+-
 - Log stack: 複数のログチャンネルを一つに連結したもの
 - Log level: Seemingly same as Python `logging` lib
   - `Log::emergency($message);`
@@ -241,33 +362,35 @@
   - `Log::notice($message);`
   - `Log::info($message);`
   - `Log::debug($message);`
+
 # Frontend
 
 ## Blade
 
-- Pug とほとんど同じ
-- Vue.js をフロントに使うなら覚える必要なし
+- Almost same as `Pug`
+- You don't need to know Blade as long as you use Vue.js as the frontend
 - Express の`res.render()`に相当するのが`return view()`っぽい
-- 値の埋め込みは Vue や Pug と同じく`{{ $name }}`
+- Embed values with `{{ $name }}`
 - `@extends`, `@section`, `@yield`みたいなコンポーネント系
 - `@if`, `@foreach`みたいな制御構文系
-- `@auth`は便利かも
-- `@php`は生の php
-- `@csrf` HTML の form では必須のやつ
+- `@auth` to know if the user is authed
+- `@php` to use raw Php
+- `@csrf` required for all the pages with input forms
 - `{{ $slot }}`
 
 ## Localization
 
-- `setLocale(言語名)`を使って多言語対応
-- `resources/lang`で一対一の翻訳対応を定義
+- `setLocale(LANG_HERE)` to support multi-language
+- `resources/lang` to define one-on-one translation for each lang
 
 ## Frontend Scaffolding
 
-- フロントエンドは以下については Laravel 側に基本的な用意がされている
+- Convenient to use these because Laravel is already prepared for these:
   - Bootstrap
-  - 特に Vue, だが React も
+  - Vue
+  - React
   - Less / SASS
-- それらは npm で管理
+- Manage these with `npm`
 - Laravel との接続は`composer require laravel/ui`が必要
 - `php artisan ui`系で各種フロントエンドツールと連携
 
@@ -280,19 +403,190 @@
 
 # Security
 
+## Facades for security
+
+- `Hash::make()`
+  - Hash the password
+- `Hash::check()`
+  - Verify the password
+- `Hash::needsRehash()`
+  - Check if the work factor has changed
+-
+
+## Helpers for security
+
+- `encrypt()`
+
+## Controllers for security
+
+- `LoginController`
+  - Uses Bcrypt by default
+- `RegisterController`
+  - Uses Bcrypt by default
+- `UpdatePasswordController`
+  - `update()` Hash the password in the `$request`
+
+## Config files for security
+
+- `config/app.php`
+- `config/hashing.php`
+
+## artisan commands for security
+
+- `php artisan key:generate`
+
 ## Authentication
 
 - Guard, Provider の 2 つを抑える
 - ユーザ情報を記憶するためには当然 DB が必要。ユーザー用の Eloquent Model は既定で用意されている
 
-##
+## API Authentication
+
+## Authorization
+
+## Email Verification
+
+## Encryption
+
+- Encrypter for laravel is OpenSSL (AES-256, AES-128)
+-
+
+## Hashing
+
+- Hashing is needed to store the password to DB securely
+- Support 3 hashing drivers:
+  - Bcrypt
+  - Argon2i
+  - Argon2id
+- Work factor
+
+## Password Reset
 
 # Digging Deeper
 
-# Database
+# DB
+
+## DB Summary
+
+- 3 Ways to access to DB
+  - Raw SQL
+  - Fluent Query Builder
+  - Eloquent ORM
+- 4 DBs supported
+  - MySQL
+  - PostgreSQL
+  - SQLite
+  - SQL Server
+- Listen to query events
+
+## DB Syntax
+
+- `config/database.php`
+- `class RedisSubscribe extends Command`
+- `DB::select()`
+- `DB::insert()`
+- `DB::update()`
+- `DB::delete()`
+- `DB::statement()`
+- `DB::transaction()`
+- `DB::beginTransaction()`
+- `DB::table()`
+- `DB::rollBack()`
+- `DB::commit()`
+- `DB::()`
+- `Redis::get()`
+- `Redis::lrange()`
+- `Redis::set()`
+- `Redis::command()`
+- `Redis::connection()`
+- `Redis::pipeline()`
+- `Redis::publish()`
+- `Redis::psubscribe()`
+- `Redis::()`
+-
+
+## Query Builder
+
+## Pagination
+
+## Migration
+
+## Seeding
+
+## Redis
+
+- Seemingly, for Laravel, Redis is recommended over memcached?
+- What's Redis?
+  - Key-value store
+  - However key can contain: `string`, `hash`, `list`, `set`, `sorted set`
+  - Redis can form "cluster"; group of Redis master nodes & Redis slave nodes
+- Use either extension of the 2:
+  - `PhpRedis` by PECL: Better performance than `predis`
+  - `predis/predis` by composer
+- Configure `config/database.php`
+  - use of phpredis / predis
+  - host URL & port
+  - password
+  - cluster setting
+- Access
+- Publish / Subscribe
 
 # Eloquent ORM
 
+## Summary
+
+- Model:
+
+- Collections:
+  - Returned values from the Eloquent (such as `get()`) are Collection object
+  - Collections are iterable
+  - Collections have convenient methods
+- Accessors:
+  - Accessors are defined in the model class
+
+
+## Eloquent Syntax
+
+- `php artisan make:model Flight`
+- `php artisan make:model Flight --migration`
+- `php artisan make:model Flight -m`
+- `ucfirst()`
+
+## Models
+
+- Naming convention: `Flight` model will be associated with `flights`
+  - Table name is lower-case, snake case, plural
+- You can override default behavior
+  - `$primaryKey` overrides the PK column (`id` by default)
+  - `$incrementing` overrides auto-increment (`true` by default)
+  - `$keyType` overrides PK types (integer by default)
+  - `$timestamps` overrides automatic addition of `created_at` & `updated_at` (true by default)
+  - `$dateFormat`
+  - `$connection`
+- Retrieval
+  - `all()`
+  - `all()`
+  - `all()`
+  - `all()`
+
 # Testing
+
+- `PHPUnit`
+- `php artisan make:test UserTest --unit`
+- Test Types
+  - Unit Test
+  - Console Test
+  - Browser Test
+  - DB Test
+
+## Mocking
+
+- Mock Object
+- Bus fake
+- Event fake
+- Mail fake
+- Notification fake
+- Queue
+- Storage
 
 # Official Packages

@@ -2,22 +2,25 @@
 
 ## ToC
 
-1. [Class Method](#method)
-1. [Callback](#callback)
-1. [Arrow Function](#arrow)
-1. [Default Parameter](#default)
-1. [Destructuring Assignment](#)
-1. [](#)
-1. [Higher-Order Function](#higher)
+- [Functions](#functions)
+  - [ToC](#toc)
+  - [Class Method <a id="method" name="method"></a>](#class-method)
+  - [Callback <a name="callback" id="callback"></a>](#callback)
+  - [Arrow Function <a id="arrow" name="arrow"></a>](#arrow-function)
+  - [Default Parameter <a name="default" id="default"></a>](#default-parameter)
+  - [Parameter as an Object Literal](#parameter-as-an-object-literal)
+  - [Spread Operator vs Rest Parameters <a name="spread" id="spread"></a>](#spread-operator-vs-rest-parameters)
+  - [Destructuring Assignment <a name="" id=""></a>](#destructuring-assignment)
+  - [Higher-order Function <a id="higher" name="higher"></a>](#higher-order-function)
 
 ## Class Method <a id="method" name="method"></a>
 
 ```js
 John = {
   origin: "UK",
-  greet: function() {
+  greet: function () {
     console.log("I'm from", this.origin);
-  }
+  },
 };
 John.greet();
 ```
@@ -29,13 +32,12 @@ var sayHello = () => {
   return "hello";
 };
 
-var sayHelloWorld = callback => {
+var sayHelloWorld = (callback) => {
   console.log(callback(), ", world!");
 };
 
 sayHelloWorld(sayHello);
 ```
-
 
 ## Arrow Function <a id="arrow" name="arrow"></a>
 
@@ -66,10 +68,35 @@ var greet4 = (name, origin) => {
     console.log("Hello, I'm", name, "I'm from" country)
 };
 greet4("Mike", "UK");
-
 ```
 
-## Default Parameter  <a name="default" id="default"></a>
+- 関数定義がreturnの一行しか無い場合は`{}`とreturnを省略可
+- ただし、オブジェクトを返す場合は`()`で囲む
+
+```js
+// return number
+var getDouble = (num) => num * 2;
+var double = getDouble(10);
+console.log(double);
+
+// return object
+var getObj = () => ({capital: "Tokyo"}); // Parenthesis required
+console.log(getObj());
+
+// object as an arg
+class Person {
+  constructor(name, country) {
+    this.name = name;
+    this.country = country;
+  }
+}
+var John = new Person("John", "UK");
+var getProfile = (person) => person.name + " is from " + person.country;
+var profile = getProfile(John);
+console.log(profile);
+```
+
+## Default Parameter <a name="default" id="default"></a>
 
 ```js
 function greet(name, country = "UK") {
@@ -94,7 +121,7 @@ var greet = ({ country, age, name }) => {
 greet({ name: "John", country: "USA", age: 20 });
 ```
 
-## Spread Operator vs Rest Parameters  <a name="spread" id="spread"></a>
+## Spread Operator vs Rest Parameters <a name="spread" id="spread"></a>
 
 - 見た目は同じ（...を使う）だが何が違う？
 - 可変長引数
@@ -103,7 +130,7 @@ greet({ name: "John", country: "USA", age: 20 });
 // Spread Operatorを使って配列を展開する
 function sum(...nums) {
   let sum = 0;
-  nums.forEach(num => {
+  nums.forEach((num) => {
     sum += num;
   });
   return sum;
@@ -181,11 +208,11 @@ console.log(blah); // 99
 - There're many built-in high-order functions:
 
 ```js
-data.forEach(function(value, index, array) {
+data.forEach(function (value, index, array) {
   console.log(value * value); //25 , 36, 49, 64
 });
 
-mypromise.then(function(value) {
+mypromise.then(function (value) {
   console.log(value);
 });
 ```
