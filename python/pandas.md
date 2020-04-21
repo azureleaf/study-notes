@@ -7,10 +7,9 @@
 ## Data Structure
 
 - Series
-    - Is dict-like
+  - Is dict-like
 - df: DataFrame
 - df2
-
 
 ## Key Expressions
 
@@ -26,7 +25,6 @@ df.T
 df.sort_index(axis=1, ascending=False)
 df.sort_values(by='B')
 ```
-
 
 ```py
 df['A']
@@ -59,9 +57,23 @@ df.apply(lambda x: x.max() - x.min())
 
 ```
 
-
 ## Output
+
 ```py
 df.to_csv('foo.csv')
+
+```
+
+# Multiple Index
+
+```py
+import pandas as pd
+
+matrix = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
+df = pd.DataFrame(matrix)
+new_columns = [("japan", "tokyo"), ("japan", "osaka"), ("china", "beijing"), ("china", "shanghai")]
+df.columns=pd.MultiIndex.from_tuples(new_columns)
+
+df[("japan", "osaka")][1] # 6
 
 ```

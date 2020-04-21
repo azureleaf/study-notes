@@ -2,8 +2,26 @@
 
 ## ToC
 
-1. [Promise](#promise)
-1. [Async / Await](#async)
+- [Promise と Async/Await と友達になる](#promise-%e3%81%a8-asyncawait-%e3%81%a8%e5%8f%8b%e9%81%94%e3%81%ab%e3%81%aa%e3%82%8b)
+  - [ToC](#toc)
+  - [Promise とは何なのか？](#promise-%e3%81%a8%e3%81%af%e4%bd%95%e3%81%aa%e3%81%ae%e3%81%8b)
+  - [Promise を使うとどんないいことがある？](#promise-%e3%82%92%e4%bd%bf%e3%81%86%e3%81%a8%e3%81%a9%e3%82%93%e3%81%aa%e3%81%84%e3%81%84%e3%81%93%e3%81%a8%e3%81%8c%e3%81%82%e3%82%8b)
+  - [Promise: これだけは覚えて帰る](#promise-%e3%81%93%e3%82%8c%e3%81%a0%e3%81%91%e3%81%af%e8%a6%9a%e3%81%88%e3%81%a6%e5%b8%b0%e3%82%8b)
+  - [`then()`内部の関数の書式](#then%e5%86%85%e9%83%a8%e3%81%ae%e9%96%a2%e6%95%b0%e3%81%ae%e6%9b%b8%e5%bc%8f)
+  - [ひとつの値をリレーしていく場合 <a name="promise" id="promise"></a>](#%e3%81%b2%e3%81%a8%e3%81%a4%e3%81%ae%e5%80%a4%e3%82%92%e3%83%aa%e3%83%ac%e3%83%bc%e3%81%97%e3%81%a6%e3%81%84%e3%81%8f%e5%a0%b4%e5%90%88)
+  - [複数の値をリレーしていく場合](#%e8%a4%87%e6%95%b0%e3%81%ae%e5%80%a4%e3%82%92%e3%83%aa%e3%83%ac%e3%83%bc%e3%81%97%e3%81%a6%e3%81%84%e3%81%8f%e5%a0%b4%e5%90%88)
+  - [エラー処理を丁寧にやる場合](#%e3%82%a8%e3%83%a9%e3%83%bc%e5%87%a6%e7%90%86%e3%82%92%e4%b8%81%e5%af%a7%e3%81%ab%e3%82%84%e3%82%8b%e5%a0%b4%e5%90%88)
+  - [Promise.all()と Promise.race()の直列](#promiseall%e3%81%a8-promiserace%e3%81%ae%e7%9b%b4%e5%88%97)
+  - [Promise.all()、Promise.race()の並列（入れ子）](#promiseallpromiserace%e3%81%ae%e4%b8%a6%e5%88%97%e5%85%a5%e3%82%8c%e5%ad%90)
+  - [Promise.all()の resolve()内容を確認する](#promiseall%e3%81%ae-resolve%e5%86%85%e5%ae%b9%e3%82%92%e7%a2%ba%e8%aa%8d%e3%81%99%e3%82%8b)
+  - [Promise.all()の nest で配列を扱う](#promiseall%e3%81%ae-nest-%e3%81%a7%e9%85%8d%e5%88%97%e3%82%92%e6%89%b1%e3%81%86)
+  - [async の登場 <a name="async" id="async"></a>](#async-%e3%81%ae%e7%99%bb%e5%a0%b4)
+  - [await の登場](#await-%e3%81%ae%e7%99%bb%e5%a0%b4)
+  - [async / await で実際に記述量が減ってありがたみを感じる書き方](#async--await-%e3%81%a7%e5%ae%9f%e9%9a%9b%e3%81%ab%e8%a8%98%e8%bf%b0%e9%87%8f%e3%81%8c%e6%b8%9b%e3%81%a3%e3%81%a6%e3%81%82%e3%82%8a%e3%81%8c%e3%81%9f%e3%81%bf%e3%82%92%e6%84%9f%e3%81%98%e3%82%8b%e6%9b%b8%e3%81%8d%e6%96%b9)
+  - [await で書いた行は、普通の行と同じように for 文とか制御構造に組み込める](#await-%e3%81%a7%e6%9b%b8%e3%81%84%e3%81%9f%e8%a1%8c%e3%81%af%e6%99%ae%e9%80%9a%e3%81%ae%e8%a1%8c%e3%81%a8%e5%90%8c%e3%81%98%e3%82%88%e3%81%86%e3%81%ab-for-%e6%96%87%e3%81%a8%e3%81%8b%e5%88%b6%e5%be%a1%e6%a7%8b%e9%80%a0%e3%81%ab%e7%b5%84%e3%81%bf%e8%be%bc%e3%82%81%e3%82%8b)
+  - [async / await のエラー処理は、普通の try catch 構文で書ける](#async--await-%e3%81%ae%e3%82%a8%e3%83%a9%e3%83%bc%e5%87%a6%e7%90%86%e3%81%af%e6%99%ae%e9%80%9a%e3%81%ae-try-catch-%e6%a7%8b%e6%96%87%e3%81%a7%e6%9b%b8%e3%81%91%e3%82%8b)
+  - [並列処理`Promise.all()`を await と使う](#%e4%b8%a6%e5%88%97%e5%87%a6%e7%90%86promiseall%e3%82%92-await-%e3%81%a8%e4%bd%bf%e3%81%86)
+  - [ちょっと実用的な疑似コード](#%e3%81%a1%e3%82%87%e3%81%a3%e3%81%a8%e5%ae%9f%e7%94%a8%e7%9a%84%e3%81%aa%e7%96%91%e4%bc%bc%e3%82%b3%e3%83%bc%e3%83%89)
 
 ## Promise とは何なのか？
 
