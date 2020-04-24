@@ -5,7 +5,7 @@
 1. `php artisan ui vue --auth`
    - Install Vue & Laravel Auth function
 1. `npm install`
-1. ~~`npm install vue`~~ 不要？
+1. ~~`npm install vue`~~ 不要
 1. `npm install vue-router`
 1. `npm run dev`
 1. `touch resources/js/components/MyComponent.vue` and edit it:
