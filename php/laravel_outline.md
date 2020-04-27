@@ -511,6 +511,8 @@
 
 ## Migration
 
+- `php artisan make:migration create_users_table`
+
 ## Seeding
 
 ## Redis
@@ -538,7 +540,7 @@
 - Model:
 
 - Collections:
-  - Returned values from the Eloquent (such as `get()`) are Collection object
+  - Returned value with Eloquent by `get()` are Collection object
   - Collections are iterable
   - Collections have convenient methods
 - Accessors:
@@ -548,15 +550,14 @@
 ## Eloquent Syntax
 
 - `php artisan make:model Flight`
-- `php artisan make:model Flight --migration`
-- `php artisan make:model Flight -m`
+- `php artisan make:model Flight -m` / `--migration`
 - `ucfirst()`
 
 ## Models
 
 - Naming convention: `Flight` model will be associated with `flights`
   - Table name is lower-case, snake case, plural
-- You can override default behavior
+- You can override default behavior if you want
   - `$primaryKey` overrides the PK column (`id` by default)
   - `$incrementing` overrides auto-increment (`true` by default)
   - `$keyType` overrides PK types (integer by default)

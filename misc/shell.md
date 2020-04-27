@@ -13,6 +13,7 @@
   - [wget](#wget)
   - [grep](#grep)
   - [Permission](#permission)
+  - [User & User Group of Linux](#user--user-group-of-linux)
     - [How to see `ls -l mydir` results](#how-to-see-ls--l-mydir-results)
     - [`chmod`](#chmod)
     - [`chown`](#chown)
@@ -105,6 +106,15 @@
 - `chmod` stands for "Change Mode"
 - `chown` stands for "Change Owner"
 
+## User & User Group of Linux
+
+- An user can belong to multiple groups
+- UPG: User private group (for Ubuntu, CentOS)
+- Primary group
+- Secondary group
+- `/etc/passwd`
+- `/etc/group`
+
 ### How to see `ls -l mydir` results
 
 - This command lists files with permission info
@@ -149,7 +159,7 @@
   - 2 points: write
   - 1 points: execute
   - この和によって権限を実現する。おもしろい。
-  - user, group, othersの順
+  - user, group, others の順
   - 7: rwx
   - 6: rw
   - 5: rx
@@ -166,7 +176,7 @@
 - `chmod o-x script.sh`
 - `chmod 750 script.sh`
 - `chmod a=xwr,g-x,o-xw script.sh`
-  - `=`はsetの意味
+  - `=`は set の意味
   - `+`や`-`が現状からの権限の差分しか指定できないのに対して、`=`はフルに設定するんだと思う
 - `chmod -R 644 important-files/`
   - ディレクトリに対してやる場合

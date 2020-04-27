@@ -11,6 +11,7 @@
   - [Debug](#debug)
   - [Predefined Constants](#predefined-constants)
 - [Module](#module)
+- [DB](#db)
 - [Scopes](#scopes)
   - [Scope Resolution Operator `::`](#scope-resolution-operator)
   - [`::class` Class Name Resolution](#class-class-name-resolution)
@@ -22,6 +23,10 @@
   - [MISC](#misc)
   - [Access Modifier](#access-modifier)
   - [Interface vs Abstract Class vs Trait](#interface-vs-abstract-class-vs-trait)
+- [`php.ini`](#phpini)
+  - [What's php.ini?](#whats-phpini)
+  - [Some common options in php.ini](#some-common-options-in-phpini)
+  - [Location](#location)
 
 # My impression on PHP
 
@@ -219,3 +224,29 @@ test('hoge');    // Catchable fatal error: Argument 1 passed to test() must be o
   - Advantage:
     - Can force the classes to have the specified methods
     - Enable multiple inheritance
+
+# `php.ini`
+
+
+## What's php.ini?
+
+- This configures PHP
+- PHP web server checks this file on server start
+- Most lines are commented out with `;` symbol
+
+## Some common options in php.ini
+
+- `safe_mode`
+- `register_globals`
+- `upload_max_filesize`
+- `post_max_size`
+- `max_execution_time`
+
+## Location
+
+1. `vim index.php`
+2. `<?php phpinfo(); ?>`
+3. `php index.php`
+4. 結果の中に「Configuration File (php.ini) Path」があり、そこに`php.ini`の場所が書かれている（今回は`/etc/php/7.2/cli/php.ini`）
+
+
