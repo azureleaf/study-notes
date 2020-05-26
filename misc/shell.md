@@ -55,6 +55,8 @@
 - top
 - `pulseaudio -k && sudo alsa force-reload`
   - Ubuntu で音が出なくなった時の対処
+- ctrl + Shift + drag / drop
+  - Create link to the file
 
 ## Files
 

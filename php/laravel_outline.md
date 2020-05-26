@@ -70,9 +70,14 @@
   - [Seeding](#seeding)
   - [Redis](#redis)
 - [Eloquent ORM](#eloquent-orm)
-  - [Summary](#summary)
-  - [Eloquent Syntax](#eloquent-syntax)
+  - [At a glance](#at-a-glance)
+  - [Eloquent Artisan Commands](#eloquent-artisan-commands)
   - [Models](#models)
+  - [Relationships](#relationships)
+  - [Collections](#collections)
+  - [Mutators & Accessor](#mutators--accessor)
+  - [API Resources](#api-resources)
+  - [Serialization](#serialization)
 - [Testing](#testing)
   - [Mocking](#mocking)
 - [Official Packages](#official-packages)
@@ -192,7 +197,16 @@
 
 ## Routing
 
-- `Route::get('/user', 'UserController@index');`
+```php
+// 1st arg: route
+// 2nd arg: callback / controller + action
+Route::get('/user', 'UserController@index');
+
+
+/* specify route with regex */
+
+```
+
 - URI に正規表現を使いフィルタリングできる
   - `Route::get()->where()`で設定
   - Global Constraints (全ルートに対して正規表現でフィルター)もできる
@@ -511,6 +525,9 @@
 
 ## Migration
 
+- Migration is benefitial because you can version-control the DB schemas
+- `Schema` facade
+- `databse/migrations`
 - `php artisan make:migration create_users_table`
 
 ## Seeding
@@ -535,40 +552,129 @@
 
 # Eloquent ORM
 
-## Summary
+## At a glance
 
 - Model:
-
-- Collections:
+  - Model defines links between DB tables & PHP objects
+  - Model is a class
+- Collection:
   - Returned value with Eloquent by `get()` are Collection object
   - Collections are iterable
   - Collections have convenient methods
-- Accessors:
+- Relationship
+- Accessor & Mutator
+  - Automatically apply methods to the Eloquent attributes
+  - Similar to "computed property" of Vue.js
+  - When the attr is accessed as getter, accessor works
+  - When the attr is accessed as setter, mutator works
   - Accessors are defined in the model class
 
-
-## Eloquent Syntax
+## Eloquent Artisan Commands
 
 - `php artisan make:model Flight`
-- `php artisan make:model Flight -m` / `--migration`
+- `php artisan make:model Flight -m`
 - `ucfirst()`
 
 ## Models
 
-- Naming convention: `Flight` model will be associated with `flights`
-  - Table name is lower-case, snake case, plural
-- You can override default behavior if you want
-  - `$primaryKey` overrides the PK column (`id` by default)
-  - `$incrementing` overrides auto-increment (`true` by default)
-  - `$keyType` overrides PK types (integer by default)
-  - `$timestamps` overrides automatic addition of `created_at` & `updated_at` (true by default)
-  - `$dateFormat`
-  - `$connection`
-- Retrieval
-  - `all()`
-  - `all()`
-  - `all()`
-  - `all()`
+- Define a model
+
+```php
+class Flight extends Model
+{
+  // related table name is plural, model is singular
+  protected $table = 'my_flights';
+
+  // set default values
+  protected $attributes = [
+    'delayed' => false,
+  ];
+
+}
+
+```
+
+- Using a model
+
+```php
+$flights = App\Flight::all();
+
+foreach ($flights as $flight) {
+    echo $flight->name;
+}
+
+// you can use query builder
+$flights = App\Flight::where('active', 1)
+               ->orderBy('name', 'desc')
+               ->take(10)
+               ->get();
+$flight = App\Flight::where('number', 'FR 900')->first();
+
+// force re-retrieval from the DB
+$freshFlight = $flight->fresh();
+
+// Retrieval: by its primary key...
+$flight = App\Flight::find(1);
+$flights = App\Flight::find([1, 2, 3]);
+
+
+// Retrieval: the first model matching the query constraints
+$flight = App\Flight::where('active', 1)->first();
+$flight = App\Flight::firstWhere('active', 1);
+
+```
+
+## Relationships
+
+## Collections
+
+```php
+// vanilla PHP methods
+foreach ($users as $user) {
+    echo $user->name;
+}
+
+// filter active users, return list of their names
+$names = $users->reject(function ($user) {
+    return $user->active === false;
+})
+->map(function ($user) {
+    return $user->name;
+});
+
+```
+
+## Mutators & Accessor
+
+- Purpose
+  - Format strings
+  - 
+
+```php
+class User extends Model
+{
+  // accessor
+  // must be "get" + attr name + "Attribute"
+  public function getFirstNameAttribute($value)
+  {
+    // always convert the string to upper case
+    return ucfirst($value);
+  }
+
+  // mutator
+  // must be "set" + attr name + "Attribute"
+  public function setFirstNameAttribute($value)
+  {
+    // always convert the string to lower case
+    $this->attributes['first_name'] = strtolower($value);
+  }
+}
+
+```
+
+## API Resources
+
+## Serialization
 
 # Testing
 
