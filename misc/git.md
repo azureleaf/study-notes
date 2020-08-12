@@ -10,18 +10,18 @@
     - [`git merge` vs `git rebase`](#git-merge-vs-git-rebase)
     - [CLONE vs FORK](#clone-vs-fork)
     - [MERGE REQUEST vs PULL REQUEST](#merge-request-vs-pull-request)
-  - [Git レポジトリの付替え](#git-%e3%83%ac%e3%83%9d%e3%82%b8%e3%83%88%e3%83%aa%e3%81%ae%e4%bb%98%e6%9b%bf%e3%81%88)
+  - [Git レポジトリの付替え](#git-レポジトリの付替え)
   - [Troubleshooting](#troubleshooting)
-    - [Trouble: GitLab で２段階認証を設定したらそれ以降の Git 動作が失敗する](#trouble-gitlab-%e3%81%a7%ef%bc%92%e6%ae%b5%e9%9a%8e%e8%aa%8d%e8%a8%bc%e3%82%92%e8%a8%ad%e5%ae%9a%e3%81%97%e3%81%9f%e3%82%89%e3%81%9d%e3%82%8c%e4%bb%a5%e9%99%8d%e3%81%ae-git-%e5%8b%95%e4%bd%9c%e3%81%8c%e5%a4%b1%e6%95%97%e3%81%99%e3%82%8b)
+    - [Trouble: GitLab で２段階認証を設定したらそれ以降の Git 動作が失敗する](#trouble-gitlab-で２段階認証を設定したらそれ以降の-git-動作が失敗する)
     - [Trouble: Permission denied (publickey) @ GitLab](#trouble-permission-denied-publickey--gitlab)
   - [Good Tutorials](#good-tutorials)
-  - [Git 管理すると何がいいの？](#git-%e7%ae%a1%e7%90%86%e3%81%99%e3%82%8b%e3%81%a8%e4%bd%95%e3%81%8c%e3%81%84%e3%81%84%e3%81%ae)
+  - [Git 管理すると何がいいの？](#git-管理すると何がいいの)
   - [Keywords](#keywords)
     - [Pull Request / Merge Request](#pull-request--merge-request)
     - [Subversion (svn)](#subversion-svn)
     - [GitHub / GitLab / BitBucket](#github--gitlab--bitbucket)
     - [SourceTree](#sourcetree)
-    - [CI/CD: Continuous Integration + Continuous Deployment （もしくは Continuous Delivery）](#cicd-continuous-integration--continuous-deployment-%e3%82%82%e3%81%97%e3%81%8f%e3%81%af-continuous-delivery)
+    - [CI/CD: Continuous Integration + Continuous Deployment （もしくは Continuous Delivery）](#cicd-continuous-integration--continuous-deployment-もしくは-continuous-delivery)
   - [Naming Branch](#naming-branch)
   - [Commit Message Format](#commit-message-format)
 ## ToC
@@ -87,6 +87,8 @@
   - 新しい remote を追加（例：GitHub に上げてたリポジトリを、GitLab にも上げられるようにするとか）
 - `git config --get remote.origin.url`
   - Show the remote branch URL
+- `git branch --set-upstream-to myfork/master`
+  - Set the default remote. Default remote is used for `git status` comparison
 
 ## Branch
 
