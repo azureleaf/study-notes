@@ -1,7 +1,6 @@
 <?php
 // Run this file with "php -f oop.php" (-f can be omitted)
 
-
 function test_normal_class()
 {
     class Car
@@ -71,11 +70,54 @@ function test_inheritance()
         }
     }
 
-    // Using the parent constructor here
+    // Because Berry class doesn't have the constructor,
+    // constructor for parental Fruit class is applied here
     $myFruit = new Berry("red",  "strawberry");
     $myFruit->describe();
 }
 
-test_normal_class();
-test_inheritance();
 
+function test_override()
+{
+    class Rodentia
+    {
+        protected $name;
+
+        function __construct($name)
+        {
+            $this->name = $name;
+        }
+
+        public function describe()
+        {
+            echo "This is {$this->name}.\n";
+        }
+    }
+
+    class Degu extends Rodentia
+    {
+        public $color;
+
+        function __construct($name, $color)
+        {
+            // Call the constructor of the parent
+            parent::__construct($name);
+
+            $this->color = $color;
+        }
+
+        // describe() method in the parent class will be overridden
+        public function describe()
+        {
+            // Partially use the parent method
+            echo parent::describe() . "he's {$this->color}.\n";
+        }
+    }
+
+    $myDegu = new Degu("mickey", "white");
+    $myDegu->describe();
+}
+
+// test_normal_class();
+// test_inheritance();
+test_override();
