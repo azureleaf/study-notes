@@ -1,9 +1,40 @@
-# Laravel Authentication & Authorization
+# Laravel
 
-- Authentication（認証）は「本人確認すること」
-- Authorization（認可）は「権限を与えること」。Authenticate されたら、だいたい同時に authorize もされる（個人ページを見る権限とか）
+- [Laravel](#laravel)
+  - [Authentication vs Authorization](#authentication-vs-authorization)
+  - [My Questions to be solved](#my-questions-to-be-solved)
+    - [Auth MISC](#auth-misc)
+  - [Files created by artisan `laravel/ui`](#files-created-by-artisan-laravelui)
+  - [Terminology](#terminology)
+  - [Review: How the session works](#review-how-the-session-works)
+    - [Session Terminology](#session-terminology)
+    - [How session is passed between the client & the server?](#how-session-is-passed-between-the-client--the-server)
+    - [Security of the session](#security-of-the-session)
+  - [Authentication Types](#authentication-types)
+    - [Laravel Passport](#laravel-passport)
+  - [Set up project with auth](#set-up-project-with-auth)
+    - [Add auth to your project](#add-auth-to-your-project)
+    - [Guard](#guard)
+  - [Authorization](#authorization)
+    - [Gate による認可](#gate-による認可)
+    - [Policy による認可](#policy-による認可)
+    - [他の便利機能](#他の便利機能)
+  - [Encryption vs Hashing](#encryption-vs-hashing)
+  - [Encryption](#encryption)
+  - [Hashing](#hashing)
 
-### misc
+## Authentication vs Authorization
+
+- Authentication（認証） is to indentify who the user is.
+- Authorization（認可） is to grant the privilege to the user. In most cases authorization happends just after the authorirzation.
+
+## My Questions to be solved
+
+- ログインを要求するページとログイン不要の公開ページをどのようにして一括登録するのか？
+  - おそらく middleware group だと思うが
+- ログインページをどのようにしてカスタマイズするのか？
+
+### Auth MISC
 
 - "localhost:8000/login"などのルートは web.php ではなく、`Illuminate\Routing\Router.php`にある
 - `@if(Auth::user()->id === $post->user_id)`
@@ -14,7 +45,25 @@
 - `if(Auth::check());`
   - Return true when the user is logged in
 
-## 抑えるべき用語
+## Files created by artisan `laravel/ui`
+
+- `users` table
+  - `email` column
+  - `password` column
+  - `name` column
+  - `remember_token` column (nullable): store cookie info
+- `password_resets` table
+  - `email` column
+  - `token` column
+- `Controllers/HomeController`
+- `Controllers/Auth/` Controllers
+- `web.php` with `Auth::routes()`
+- `welcome.blade.php` with
+- `resource/views/auth` will have multiple Blade files
+
+###
+
+## Terminology
 
 - Guard
   - リクエスト内容に応じて、各ユーザがどのように認証されているべきなのかを決める機能
@@ -43,15 +92,65 @@
   - ユーザ登録情報が記憶されるテーブル
   - デフォルトで migration file が定義されている
 
-## 認証の種類
+## Review: How the session works
 
-- ログイン認証: ユーザ名＋パスワード
-- Laravel Passport：　 OAuth2.0 に沿ったログイン。公式で推奨されている
-- API 認証：
+### Session Terminology
 
-- ログインを要求するページとログイン不要の公開ページをどのようにして一括登録するのか？
-  - おそらく middleware group だと思うが
-- ログインページをどのようにしてカスタマイズするのか？
+- `Session ID`
+  - `Session ID` is shared between the client & the server
+  - Client side keeps the session ID as `Cookie`
+  - Server side keeps the session ID as `Session`
+- Session can be stored as:
+  - DB
+  - File
+  - Server-side cookies
+  - Redis
+- At the client side, typical session contains:
+  - Session ID (decrypted)
+  - User ID (NULL when the user isn't logged in)
+  - IP Address
+  - Last Activity: UNIX timestamp. Updated every time the user accesses
+  - Payload (This also looks random string, but this isn't encrypted; this is just base64-encoded)
+    - Previous URL: can be used to redirection after login
+    - Token
+    - Values for the form input
+    - Error messages
+    - Server-side can add arbitrary key:value pairs
+- At the client side, typical cookie contains:
+  - name: Laravel Session, value: blahblah (this is the encrypted session ID), expiration: blah
+  - name: XSRF-Token, value: blahblah, expiration: blah
+
+```php
+/** Useful expressions in Laravel */
+
+session()->all(); // show all the session contents
+```
+
+### How session is passed between the client & the server?
+
+1. The client accesses to the webpage which requires session ->
+2. <- The server responds with `Set-cookie: PHPSESSID=32geasfal3lf234e2332534; path=/`
+3. The client sends request with `Cookie: PHPSESSID=32geasfal3lf234e2332534` ->
+4. <- The server updates the "last activity" in the DB, returns HTTP response
+5. (repeat)
+6. The client removes the cookie:
+   - When the cookie expires (Expiration on the client side doesn't update after the first "set cookie")
+   - When the browser is closed
+   - When the cookie storage is full; older cookie will be removed first
+
+### Security of the session
+
+- Session Hijacking: Peek "set-cookie" message. To prevent this, don't include session ID in the URL.
+- Session fixation:
+
+## Authentication Types
+
+- Login Auth
+  - ユーザ名＋パスワード
+- Laravel Passport
+  - OAuth2.0
+  - Recommended in the official doc
+- API Authentication
 
 ### Laravel Passport
 
@@ -64,7 +163,7 @@
 
 ## Set up project with auth
 
-1. `laravel new myapp`
+1. `laravel new myapp` (`laravel new myapp --auth` is better?)
 1. `cd myapp`
 1. `composer install`
 1. `cp .env.sample .env`
@@ -117,33 +216,54 @@
 `Route::redirect('/here', '/there', 301);`
 `Route::view('/welcome', 'welcome', ['name' => 'Taylor']);`
 
+## Encryption vs Hashing
+
+- Original data can be restored?
+  - Encryption is **two-way**; encrypted values can be restored by the key.
+  - Hashing is **two-way**; you can't get the original data from a hash.
+- How does the result string look like?
+  - Encryption always returns the identical string from the same origin with the same key
+  - Hashing returns the different values every time even for the same origin
+- How long is the result string?
+  - Encryption returns the longer string for larger original data
+  - Hashing returns the string with the certain length
 
 ## Encryption
 
-- Laravelは暗号通信プロトコルのOpenSSLを使っている
-- 暗号化方式はAES-256（暗号鍵が256bit）かAES-128
+```php
+// Encrypt the single value
+$secret = encrypt("admin1234");
+$original = decrypt($secret); // admin1234
+
+// Array can be encrypted too
+$arr = array("japan" => "tokyo", "china" => "beijing");
+$secretArr = encrypt($arr);
+$originalArr = decrypt($secretArr)
+```
+
+- Laravel uses **OpenSSL** for encryption
+- 暗号化方式は AES-256（暗号鍵が 256bit）か AES-128
 - MAC(Message Authentication Code)によって改竄されていないことを確認する
-- PHPでは、defaultの動作として暗号化の間にserializeを行う
-   - オプションでserializeしないこともできる
-   - serializeとは、配列やオブジェクトなどを保存に適した形式に変換すること
-   - serializeしたものを元に戻す動作はunserialize
-   - PHPにserialize()という関数がある
-   - Laravelでは
 - 復号化は`decrypt($encryptedValue)`
+- `php artisan key:generate` generates encryption key
+- `config/app.php`で key option を設定
+- PHP では、default の動作として暗号化の間に serialize を行う
+  - オプションで serialize しないこともできる
+  - serialize とは、配列やオブジェクトなどを保存に適した形式に変換すること
+  - serialize したものを元に戻す動作は unserialize
+  - PHP に serialize()という関数がある
+  - Laravel では
 
 ## Hashing
 
-- データベースにユーザログイン情報を格納する時、情報漏洩防止のため、パスワード本体ではなくそのハッシュ値を保存すべきである
-- 
-- LaravelのHashingの種類
-   - Bcrypt
-      - Password Hashing Function
-   - Argon2 Hashing
-- `Hash` Facadeを使う
+```php
+$hashed = Hash::make("admin123");
+Hash::check("admin123", $hashed); // true
+Hash::check("hello999", $hashed); // false
+```
 
-
-### Config
-
-- `config/app.php`でkey optionを設定
-- `php artisan key:generate`でkeyを生成する
--
+- In order to store the password to the DB, you need to put **hash of the password** rather than password itself!
+- Hashing Libs at Laravel
+  - Bcrypt
+  - Argon2 Hashing
+- Use `Hash` Facade

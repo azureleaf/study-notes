@@ -14,7 +14,7 @@
   - [Set up Service Providers](#set-up-service-providers)
   - [Composer](#composer)
   - [Event Broadcasting](#event-broadcasting)
-    - [What is "event" in the first place?](#what-is-%22event%22-in-the-first-place)
+    - [What is "event" in the first place?](#what-is-event-in-the-first-place)
     - [What's this?](#whats-this)
     - [How to broadcast](#how-to-broadcast)
     - [Procedure to add broadcasting](#procedure-to-add-broadcasting)
@@ -27,10 +27,11 @@
   - [DB Facade vs Eloquent](#db-facade-vs-eloquent)
   - [Debug inside app](#debug-inside-app)
     - [`dd()`](#dd)
-    - [`var_export()`](#varexport)
-    - [`var_dump()`](#vardump)
-    - [`print_r()`](#printr)
-  - [Laravel 実行環境の選択肢](#laravel-%e5%ae%9f%e8%a1%8c%e7%92%b0%e5%a2%83%e3%81%ae%e9%81%b8%e6%8a%9e%e8%82%a2)
+    - [`var_export()`](#var_export)
+    - [`var_dump()`](#var_dump)
+    - [`print_r()`](#print_r)
+    - [`echo `](#echo)
+  - [Laravel 実行環境の選択肢](#laravel-実行環境の選択肢)
 
 ## MISC
 
@@ -236,6 +237,8 @@
 ### `var_dump()`
 - PHP built-in
 ### `print_r()`
+- PHP built-in
+### `echo `
 - PHP built-in
 
 ## Laravel 実行環境の選択肢
