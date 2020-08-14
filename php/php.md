@@ -4,16 +4,17 @@
 
 - [PHP Syntax MISC](#php-syntax-misc)
 - [ToC](#toc)
+- [Topics to be checked later](#topics-to-be-checked-later)
 - [My impression on PHP](#my-impression-on-php)
 - [Running php casually](#running-php-casually)
 - [Syntax](#syntax)
-  - [`??`: Coalescing Operator](#coalescing-operator)
+  - [`??`: Coalescing Operator](#-coalescing-operator)
   - [Debug](#debug)
   - [Predefined Constants](#predefined-constants)
 - [Module](#module)
 - [DB](#db)
 - [Scopes](#scopes)
-  - [Scope Resolution Operator `::`](#scope-resolution-operator)
+  - [Scope Resolution Operator `::`](#scope-resolution-operator-)
   - [`::class` Class Name Resolution](#class-class-name-resolution)
 - [Control flow](#control-flow)
   - [loop](#loop)
@@ -27,6 +28,17 @@
   - [What's php.ini?](#whats-phpini)
   - [Some common options in php.ini](#some-common-options-in-phpini)
   - [Location](#location)
+
+# Topics to be checked later
+
+- `__clone()`
+- `__wakeup()`
+- `??`
+- `<=>`
+- Deep-copy array
+- Pop / push array & change of the index
+- `::`
+- `$this` vs `self::`
 
 # My impression on PHP
 
