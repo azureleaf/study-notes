@@ -18,14 +18,19 @@
     - [`chmod`](#chmod)
     - [`chown`](#chown)
   - [Shell types](#shell-types)
-  - [bash とは](#bash-%e3%81%a8%e3%81%af)
+  - [bash とは](#bash-とは)
   - [Config](#config)
     - [.bashrc](#bashrc)
-    - [.bash_profile](#bashprofile)
+    - [.bash_profile](#bash_profile)
     - [Order of config file to be read on login shell](#order-of-config-file-to-be-read-on-login-shell)
-  - [bash のなかまたち](#bash-%e3%81%ae%e3%81%aa%e3%81%8b%e3%81%be%e3%81%9f%e3%81%a1)
+  - [bash のなかまたち](#bash-のなかまたち)
   - [Setup fish](#setup-fish)
     - [misc](#misc-1)
+- [Text Processing](#text-processing)
+  - [`echo`](#echo)
+  - [`cat`](#cat)
+  - [`jq`](#jq)
+  - [`awk`](#awk)
 
 ## Repository
 
@@ -81,6 +86,9 @@
 - `ls -a | grep app`
 - `whereis python3`
 - `which python3`
+- `ln test/data100.dat d01`
+  - Create the "link" (alias?) of the file
+  - By creating the link, `cat d01` show the identical result with `cat test/data01.dat` 
 
 ## Archive
 
@@ -107,6 +115,10 @@
 
 - `chmod` stands for "Change Mode"
 - `chown` stands for "Change Owner"
+
+
+
+
 
 ## User & User Group of Linux
 
@@ -272,3 +284,33 @@ All the shells are text-based.
 - Create config file
   1. `mkdir -p ~/.config/fish`
   1. `vim ~/.config/fish/config.fish`
+
+# Text Processing
+
+## `echo`
+
+
+## `cat`
+
+## `jq`
+
+- Text-format the JSON
+- `$ echo '{"items":[{"item_id":1,"name":"すてきな雑貨","price":2500},{"item_id":2,"name":"格好いい置物","price":4500}]}' | jq '.items[].name'`
+  - "すてきな雑貨"
+  - "格好いい置物"`
+
+## `awk`
+
+```bash
+# Show all the lines in the file
+awk '{print}' employee.txt
+
+# show the 1st & 4th columns only for every line
+awk '{print $1,$4}' employee.txt 
+
+# pattern matching: show the whole line with the keyword "manager"
+awk '/manager/ {print}' employee.txt 
+
+```
+
+
