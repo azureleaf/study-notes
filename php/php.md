@@ -42,14 +42,14 @@
 
 # My impression on PHP
 
-- 基本的に JS とほとんど同じ：PHP と JS は対応するメソッドや構造がある
-  - これが理由で、PHP を改めて勉強する必要性をあまり感じられない
-- 変数にいちいち\$をつけるのがめんどくさい
-- 連想配列へのアクセス・クラスメンバへのアクセスで`->`と`=>`を未だに混同する
-- JS, Python, Java の隆盛を見ていると、PHP の重要性が正直不明
-- PHP 陣営は、世界のサーバ（と Wordpress）で PHP がどれだけ使われているか強調する
-- しかし、それは過去のレガシーという面が強いのでは？今から勉強すべき言語かというと疑問が残る（実際、Web 記事などでのプログラミング学習者への推奨言語からはいつも外れている）
-- Laravel はともかく、それ以外のフレームワークは国内でのみ使われているものがあるが、これはユーザコミュニティが小さいということで将来性が疑問
+- Very similar to JS; easy & confusing for me
+- Adding `\$` to every variables is annoying (the sign is called "sigil")
+- Arrows are confusing for beginners; `->` is for associative array, `=>` is for class member
+- PHP is a legacy language;
+  - pros: matured library
+  - pros: large community; easy to employ the coders, find online supports
+  - cons: old-fashioned syntax
+  - cons: new learners of PHP aren't so many as popular languages such as JS, Python, C#
 
 # Running php casually
 
