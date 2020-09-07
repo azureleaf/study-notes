@@ -206,16 +206,28 @@ test('hoge');    // Catchable fatal error: Argument 1 passed to test() must be o
 
 ## Access Modifier
 
-- `public`
-- `protected`
-  - Can NOT be accessed outside the class
-  - Can be accessed in the derived class
-- `private`
-  - Can NOT be accessed outside the class
-  - Can NOT be accessed in the derived class
+|           | Accessable outside the class? | Accessable in the inherited class? |
+| :-------: | :---------------------------: | :--------------------------------: |
+|  public   |              yes              |                yes                 |
+| protected |              no               |                yes                 |
+|  private  |              no               |                 no                 |
+
+
+
+
 
 
 ## Interface vs Abstract Class vs Trait
+
+|                | newable | import to the class | def property |                      def method                       | def constructor |                         import                          |
+| :------------: | :-----: | :-----------------: | :----------: | :---------------------------------------------------: | :-------------: | :-----------------------------------------------------: |
+|     class      |   yes   |       extends       |     yes      |                          yes                          |       yes       |                         single                          |
+| abstract class |   no    |       extends       |     yes      | yes (for normal method) <br> no (for abstract method) |       yes       |                         single                          |
+|   interface    |   no    |     implements      |              |                          no                           |       no        | multiple (into class) <br> single (into abstract class) |
+|     trait      |   no    |         use         |      no      |                          yes                          |       no        |                        multiple                         |
+
+- https://coinbaby8.com/php-class-abstract-interface-trait-di.html
+
 
 - Abstract Class
   - Use with `extends`
