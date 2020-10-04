@@ -14,7 +14,7 @@
 ## Key Expressions
 
 ```py
-df.head()
+df.head(5)
 df.tail(3)
 df.index
 df.columns
@@ -57,14 +57,50 @@ df.apply(lambda x: x.max() - x.min())
 
 ```
 
-## Output
+## File I/O
 
 ```py
-df.to_csv('foo.csv')
+df.read_csv('foo.csv', encoding="shift-jis")
+df.to_csv('bar.csv')
 
 ```
 
-# Multiple Index
+## Grouping
+
+```py
+# Create a df
+df = pd.DataFrame({'A': ['foo', 'bar', 'foo', 'bar',
+                         'foo', 'bar', 'foo', 'foo'],
+                   'B': ['one', 'one', 'two', 'three',
+                         'two', 'two', 'one', 'three']})
+
+# Grouping
+# By default, NaN is ignored as the group value
+grouped = df.groupby('A')
+grouped_double = df.groupby(['A', 'B'])
+
+# Iteration within groups
+for name, group in grouped:
+  print(name)
+  print(group)
+
+# Specify the group by value
+grouped.get_group('bar')
+
+# New group
+grouped_b = grouped["B"]
+
+# Aggregation
+grouped.aggregate(np.sum)
+
+
+# 
+df2 = pd.DataFrame({'X': ['B', 'B', 'A', 'A'], 'Y': [1, 2, 3, 4]})
+df2.groupby(['X']).sum()
+
+```
+
+## Multiple Index
 
 ```py
 import pandas as pd
