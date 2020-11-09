@@ -11,9 +11,9 @@
 2. Tick `Windows Subsystem for Linux`
 3. Reboot
 4. Open Microsoft Store
-5. Install `Ubuntu` (Better choose the Ubuntu app without LTS notations)
+5. Install `Ubuntu` (Better choose the Ubuntu app without LTS notations!)
 6. Open `Ubuntu`
-7. Set username & pw (Totally irrelevant to Windows username / pw)
+7. Set username & PW (Totally irrelevant to Windows username / PW)
 
 ## Set up WSL + VS Code + Git
 
@@ -35,9 +35,12 @@ If the solution above is rejected by `operation not permitted` error, `vim .git/
 2. `wsl`
 3. `mv ~/repos/hello` Go to the repo dir
 4. `code .`
-    - This install the `VS Code Server` when it's the 1st run
+    - This install the `VS Code Server` when it's the 1st run / when update is available
     - `WSL: Ubuntu` will be shown on the bottom-left of the VS Code
 6. `sudo apt install python3-pip`
+7. `pip3 install pipenv`
+    - Don't install pipenv with `sudo apt install pipenv`! This brought the installation error on every `pipenv shell`
+    - `sudo apt autoremove pipenv` to remove it.
 
 ### Ref on VS Code + WSL
 
