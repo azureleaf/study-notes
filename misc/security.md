@@ -41,7 +41,7 @@
   - [OpenSSL](#openssl)
 - [SSH](#ssh)
 - [Hash](#hash)
-  - [Hash とパスワードの保存](#hash-%e3%81%a8%e3%83%91%e3%82%b9%e3%83%af%e3%83%bc%e3%83%89%e3%81%ae%e4%bf%9d%e5%ad%98)
+  - [Hash とパスワードの保存](#hash-とパスワードの保存)
   - [Hash Algorithm](#hash-algorithm)
 - [Messeage Authentication Code (MAC)](#messeage-authentication-code-mac)
 - [Authentication](#authentication)
@@ -52,7 +52,22 @@
   - [OpenID](#openid)
   - [OAuth2.0](#oauth20)
   - [Social Login](#social-login)
-  - [apt システムにおける package の認証](#apt-%e3%82%b7%e3%82%b9%e3%83%86%e3%83%a0%e3%81%ab%e3%81%8a%e3%81%91%e3%82%8b-package-%e3%81%ae%e8%aa%8d%e8%a8%bc)
+  - [apt システムにおける package の認証](#apt-システムにおける-package-の認証)
+  - [Attacks](#attacks-1)
+  - [Encrytion Keywords](#encrytion-keywords)
+  - [Public-key Cryptography](#public-key-cryptography)
+  - [How login works with SSH](#how-login-works-with-ssh)
+    - [On registration](#on-registration)
+    - [On login](#on-login)
+  - [SSH: Secure SHell](#ssh-secure-shell)
+    - [SSH vs SSL](#ssh-vs-ssl)
+  - [CORS](#cors-1)
+  - [CSRF](#csrf)
+- [Authentication & Authorization](#authentication--authorization)
+  - [JWT](#jwt-1)
+  - [Social Login](#social-login-1)
+  - [Passport](#passport)
+  - [Cookie & Session](#cookie--session)
 
 # misc
 
@@ -405,3 +420,83 @@
    ```
 
 1. `echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list`
+
+
+
+## Attacks
+
+- DDoS
+
+
+>>>
+
+
+## Encrytion Keywords
+
+- Public-key Cryptography
+- Symmetric key algorithms
+- SSH is for secure connection to the server
+- SSL is for secure display of the web page
+  - HTTPS website uses SSL
+  - Uses both public-key crypt & symmetric key crypt
+- Digital Signature
+- PKI: Public Key Infrastructure
+
+>>>
+
+## Public-key Cryptography
+
+1. Recipient: Create the pair of **public key** & **private key**
+2. Recipient: Send the **public key** to the sender
+3. Sender: Get the public key of the recipient
+4. Sender: Encrypt the contents with **public key**
+5. Sender: Send the encrypted contents
+6. Recipient: Decrypt the encrypted contents with **private key**
+
+>>>
+
+## How login works with SSH
+
+### On registration
+
+1. Client generates the key pair
+2. Client sends the public key to the server
+
+### On login
+
+1. Client tells the server that he wants to login
+2. Server creates encrypted content with the **public key**
+3. Client decrypts the content with **private key, then give it to the server
+4. Now the server can know that the client is authentic
+
+>>>
+
+## SSH: Secure SHell
+
+
+
+### SSH vs SSL
+
+
+>>>
+
+## CORS
+
+>>>
+
+## CSRF
+
+
+# Authentication & Authorization
+
+>>>
+
+## JWT
+
+## Social Login
+
+## Passport
+
+>>>
+
+## Cookie & Session

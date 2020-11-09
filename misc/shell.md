@@ -31,6 +31,26 @@
   - [`cat`](#cat)
   - [`jq`](#jq)
   - [`awk`](#awk)
+  - [Mutual Exclusion](#mutual-exclusion)
+  - [Automaton](#automaton)
+  - [`service` command](#service-command)
+  - [File permission](#file-permission)
+  - [User Group](#user-group)
+    - [Primary Group vs Secondary Group](#primary-group-vs-secondary-group)
+    - [bash](#bash)
+    - [UID vs GID](#uid-vs-gid)
+    - [ref.](#ref)
+  - [chmod: ls -l](#chmod-ls--l)
+    - [rwx](#rwx)
+    - [`drwxr-xr-x`](#drwxr-xr-x)
+  - [chmod: permission](#chmod-permission)
+    - [Specify all the actions](#specify-all-the-actions)
+    - [Specify one action](#specify-one-action)
+  - [chmod: Use with find command](#chmod-use-with-find-command)
+    - [Syntax](#syntax)
+    - [Samples](#samples)
+  - [chown](#chown-1)
+  - [`xargs`](#xargs)
 
 ## Repository
 
@@ -314,3 +334,128 @@ awk '/manager/ {print}' employee.txt
 ```
 
 
+
+## Mutual Exclusion
+
+>>>
+
+
+## Automaton
+
+>>>
+
+## `service` command
+
+- Used to start / stop / check services
+- Then: wrapper for `/etc/init.d`, `initctl`
+- Now:  wrapper for `/etc/init.d`, `initctl`, `systemctl`
+
+>>>
+
+## File permission
+
+- chmod: Change mode (about permission)
+- chown: Change owner
+- chgrp: Change group
+
+https://qiita.com/t-a-run/items/239ed690ece7a011804a
+
+
+>>>
+
+## User Group
+
+### Primary Group vs Secondary Group
+
+- Primary group (aka Login group)
+  - Each user can belong to single primary group only
+- Secondary Group (aka Supplementary Group)
+
+### bash
+
+- `$ groups`
+- `$ groups john`
+
+### UID vs GID
+
+### ref.
+
+- https://www.networkworld.com/article/3409781/mastering-user-groups-on-linux.html
+
+>>>
+
+## chmod: ls -l
+
+### rwx
+
+- `r` or `4`: readable
+- `w` or `2`: writable
+- `x` or `1`: executable
+- Therefore `drwxr-xr-x` is equivalent to `755`
+
+### `drwxr-xr-x`
+
+1. `d`: this is a dir
+2. `rwx`: **owner** can read, write, execute
+3. `r-x`: **group** can read, execute
+4. `r-x`: **others** can read, execute
+
+>>>
+
+## chmod: permission
+
+### Specify all the actions
+
+- `chmod 775 /var/www`
+  - rwx (owner), rwx (group), rx (others)
+- `chmod 664 /var/www`
+  - rw (owner), rw (group), r (others)
+- `chmod -R 775 /var`
+  - Change for all the files in the dir **Recursively **
+- `chmod 2775 /var/www`
+  - Here "2" digit is for `setgid` (set group ID)
+
+
+### Specify one action
+
+- `u` User (owner)
+- `g` Group
+- `o` Other
+- `a` All (user, group, other)
+- `chmod g+x /var/www`
+  - Add permission
+- `chmod ugo-wx /var/www`
+  - Revoke permission
+
+>>>
+
+## chmod: Use with find command
+
+Find command takes "action" to execute the commands
+
+### Syntax
+
+- `{} +`
+
+### Samples
+
+- `find . -type f -exec chmod 600 {} +`
+- `find . -type f | xargs chmod 600`
+- `find /var/www -type d -exec sudo chmod 2775 {} \;`
+- `find /var/www -type f -exec sudo chmod 0664 {} \;`
+
+
+
+>>>
+
+## chown
+
+- `chown john /var/www`
+- `chown john -R var`: All the files in the dir
+- `chown john:staff /var/www`: Owner is john, group is staff
+
+>>>
+
+## `xargs`
+
+- 

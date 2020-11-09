@@ -2,11 +2,11 @@
 
 # ToC
 
-- [ネットワーク基礎の基礎](#%e3%83%8d%e3%83%83%e3%83%88%e3%83%af%e3%83%bc%e3%82%af%e5%9f%ba%e7%a4%8e%e3%81%ae%e5%9f%ba%e7%a4%8e)
+- [ネットワーク基礎の基礎](#ネットワーク基礎の基礎)
 - [ToC](#toc)
 - [MISC](#misc)
-- [通信プロトコルって何？](#%e9%80%9a%e4%bf%a1%e3%83%97%e3%83%ad%e3%83%88%e3%82%b3%e3%83%ab%e3%81%a3%e3%81%a6%e4%bd%95)
-- [これを勉強するとなんの役に立つの？](#%e3%81%93%e3%82%8c%e3%82%92%e5%8b%89%e5%bc%b7%e3%81%99%e3%82%8b%e3%81%a8%e3%81%aa%e3%82%93%e3%81%ae%e5%bd%b9%e3%81%ab%e7%ab%8b%e3%81%a4%e3%81%ae)
+- [通信プロトコルって何？](#通信プロトコルって何)
+- [これを勉強するとなんの役に立つの？](#これを勉強するとなんの役に立つの)
 - [TCP/IP Model vs OSI Model](#tcpip-model-vs-osi-model)
 - [OSI Model](#osi-model)
 - [TCP/IP Model](#tcpip-model)
@@ -24,7 +24,7 @@
   - [TCP vs UDP](#tcp-vs-udp)
   - [TCP Header](#tcp-header)
   - [UDP Header](#udp-header)
-  - [TCP のしくみ](#tcp-%e3%81%ae%e3%81%97%e3%81%8f%e3%81%bf)
+  - [TCP のしくみ](#tcp-のしくみ)
 - [2. Internet Layer (TCP/IP)](#2-internet-layer-tcpip)
   - [IP Address (IPv4)](#ip-address-ipv4)
   - [IPv4 Header](#ipv4-header)
@@ -35,8 +35,8 @@
   - [DNS: Domain Name System](#dns-domain-name-system)
 - [1. Network Interface Layer (TCP/IP)](#1-network-interface-layer-tcpip)
   - [Keywords](#keywords)
-  - [宛先の把握](#%e5%ae%9b%e5%85%88%e3%81%ae%e6%8a%8a%e6%8f%a1)
-  - [Data Link の種類](#data-link-%e3%81%ae%e7%a8%ae%e9%a1%9e)
+  - [宛先の把握](#宛先の把握)
+  - [Data Link の種類](#data-link-の種類)
   - [Ethernet](#ethernet)
   - [PPP](#ppp)
 - [Topics](#topics)
@@ -45,11 +45,37 @@
   - [IntServ (Integrated Services)](#intserv-integrated-services)
   - [Best Effort](#best-effort)
 - [Queueing](#queueing)
-- [Delay 遅延](#delay-%e9%81%85%e5%bb%b6)
-  - [Processing Delay プロセス遅延](#processing-delay-%e3%83%97%e3%83%ad%e3%82%bb%e3%82%b9%e9%81%85%e5%bb%b6)
-  - [Queueing Delay 輻輳遅延](#queueing-delay-%e8%bc%bb%e8%bc%b3%e9%81%85%e5%bb%b6)
-  - [Serialization Delay 伝送遅延](#serialization-delay-%e4%bc%9d%e9%80%81%e9%81%85%e5%bb%b6)
-  - [Propagation Delay 伝搬遅延](#propagation-delay-%e4%bc%9d%e6%90%ac%e9%81%85%e5%bb%b6)
+- [Delay 遅延](#delay-遅延)
+  - [Processing Delay プロセス遅延](#processing-delay-プロセス遅延)
+  - [Queueing Delay 輻輳遅延](#queueing-delay-輻輳遅延)
+  - [Serialization Delay 伝送遅延](#serialization-delay-伝送遅延)
+  - [Propagation Delay 伝搬遅延](#propagation-delay-伝搬遅延)
+  - [Network: MISC](#network-misc)
+  - [Xaas](#xaas)
+  - [XaaS Comparison](#xaas-comparison)
+  - [Latency vs Bandwidth](#latency-vs-bandwidth)
+- [IP Addresses](#ip-addresses)
+  - [DNS](#dns)
+  - [IPv4](#ipv4)
+  - [IP Addressing: Classful vs Classless](#ip-addressing-classful-vs-classless)
+  - [IPv4: Reserved IP Addresses](#ipv4-reserved-ip-addresses)
+  - [IPv6:](#ipv6)
+  - [TCP / IP Model](#tcp--ip-model)
+  - [OSI Model](#osi-model-1)
+  - [Tools](#tools)
+  - [Network Devices](#network-devices)
+  - [LAN Topology](#lan-topology)
+  - [LAN Access Control Methods](#lan-access-control-methods)
+  - [WLAN](#wlan)
+  - [Network Cables](#network-cables)
+  - [TCP / IP](#tcp--ip)
+  - [Cache](#cache)
+- [VPN](#vpn)
+  - [What's VPN?](#whats-vpn)
+    - [Types](#types)
+  - [VPN vs Leased Line](#vpn-vs-leased-line)
+  - [Internet VPN technologies](#internet-vpn-technologies)
+  - [Protocols](#protocols)
 
 # MISC
 
@@ -408,3 +434,200 @@
 
 - 通信路（光ケーブルであれ、銅線であれ）の長さに起因する遅れ
 - 通信装置の上で発生するものではない
+
+## Network: MISC
+
+- NFS: Network File System
+
+
+>>>
+
+## Xaas
+
+- IaaS: Infrastructure
+  - Similar to conventional hosting services, however you can customize hardwares flexibly
+- PaaS: Platform
+- SaaS: Software
+- BaaS / mBaaS: Backend 
+
+>>>
+
+## XaaS Comparison
+
+|                | On-Premises |          IaaS          |                      PaaS                       |                  SaaS                   |
+| -------------- | :---------: | :--------------------: | :---------------------------------------------: | :-------------------------------------: |
+| Application    |    user     |          user          |                      user                       |                provider                 |
+| Data           |    user     |          user          |                      user                       |                provider                 |
+| Runtime        |    user     |          user          |                    provider                     |                provider                 |
+| Middleware     |    user     |          user          |                    provider                     |                provider                 |
+| OS             |    user     |          user          |                    provider                     |                provider                 |
+| Virtualization |    user     |        provider        |                    provider                     |                provider                 |
+| Servers        |    user     |        provider        |                    provider                     |                provider                 |
+| Storage        |    user     |        provider        |                    provider                     |                provider                 |
+| Networking     |    user     |        provider        |                    provider                     |                provider                 |
+| Examples:      |    user     | EC2, GCE, DigitalOcean | GAE, Beanstalk, Heroku, Azure, RedHat OpenShift | Google Apps, Salesforce, Dropbox, Slack |
+
+## Latency vs Bandwidth
+
+---
+
+# IP Addresses
+
+>>>
+
+## DNS
+
+
+
+>>>
+
+## IPv4
+
+- 4 Bytes = 32 Bits
+
+>>>
+
+
+## IP Addressing: Classful vs Classless
+
+|         |         Network Address          |  Host Address  | First Octet |     Mask      | CIDR  |             Range             |
+| :-----: | :------------------------------: | :------------: | :---------: | :-----------: | :---: | :---------------------------: |
+| Class A |   1 Byte = "0" + 7 bits( 2^7)    | 3 Bytes (2^24) |  0xxxxxxx   |   255.0.0.0   |  /8   |   0.0.0.0 - 127.255.255.255   |
+| Class B | 2 Bytes = "10" + 14 bits (2^14)  | 2 Bytes (2^16) |  10xxxxxx   |  255.255.0.0  |  /16  | 128.0.0.0 to 191.255.255.255  |
+| Class C | 3 Bytes = "110" + 21 bits (2^21) |  1 Byte (2^8)  |  110xxxxx   | 255.255.255.0 |  /24  | 192.0.0.0 to 223.255.255.255  |
+| Class D |                -                 |       -        |  1110xxxx   |       -       |   -   | 224.0.0.0 to 239.255.255.255  |
+| Class E |                -                 |       -        |  1111xxxx   |       -       |   -   | 240.0.0.0 and 255.255.255.255 |
+
+- Note that some special addresses such as `0.0.0.0`, `127.x.x.x` are reserved
+
+>>>
+
+## IPv4: Reserved IP Addresses
+
+- 0.0.0.0/8
+  - This network
+- 0.0.0.0/32
+- 127.0.0.0/8
+  - Loop Back
+- 169.254.0.0/16
+  - Link Local
+- 172.16.0.0/12
+- 192.168.0.0/16
+- 224.0.0.0/4 (224.0.0.0 to 224.0.0.255)
+  - Multi Cast
+- 240.0.0.0/4
+  - Includes `255.255.255.255/32` which shows the all the hosts on the network
+
+
+>>>
+
+
+## IPv6:
+
+
+>>>
+
+## TCP / IP Model
+
+>>>
+
+## OSI Model
+
+>>>
+
+## Tools
+
+- Wireshark
+- Firebug (dead?)
+
+>>>
+
+## Network Devices
+
+- DTE: Data Terminal Equipment
+- DCE: Data Circuit Terminating Equipment
+- Hub
+- Repeater
+- Bridge
+- Router
+- Switch
+
+>>>
+
+## LAN Topology
+
+- Bass
+- Star
+- Ring
+
+>>>
+
+## LAN Access Control Methods
+
+- CSMA/CD
+- Token Passing
+
+>>>
+
+## WLAN
+
+- 
+
+>>>
+
+## Network Cables
+
+- 
+
+
+>>>
+
+## TCP / IP
+
+>>>
+
+## Cache
+
+
+
+---
+
+# VPN
+
+>>>
+
+## What's VPN?
+
+- Safe
+
+### Types
+- Internet VPN
+  - Cheap but not so safe as others
+- IP-VPN
+  - Closed network for the ISP and its users
+  - No need for encryption, however expensive
+- Entry VPN
+- WAE: Wide Area Ethernet
+  - Highly customizable, but expensive and narrow
+
+>>>
+
+## VPN vs Leased Line
+
+- Leased Line (専用線) is physical
+
+>>>
+
+## Internet VPN technologies
+
+- Tunneling
+- 
+
+## Protocols
+
+- IPsec-VPN
+- L2TP
+- PPTP
+- SSL-VPN
+
+>>>
