@@ -28,6 +28,23 @@
   - [What's php.ini?](#whats-phpini)
   - [Some common options in php.ini](#some-common-options-in-phpini)
   - [Location](#location)
+  - [PHP Tools](#php-tools)
+  - [Laravel Topics ***](#laravel-topics-)
+  - [Laravel Topics **](#laravel-topics--1)
+  - [Laravel Topics *](#laravel-topics--2)
+  - [PHP: Class Inheritance](#php-class-inheritance)
+  - [PHP Frameworks](#php-frameworks)
+  - [PHP vs JS: Array](#php-vs-js-array)
+  - [PHP vs JS: Class](#php-vs-js-class)
+  - [PHP Modifier](#php-modifier)
+  - [PHP const](#php-const)
+  - [PHP vs JS: Control Statement](#php-vs-js-control-statement)
+  - [Scope Resolution Operator ::](#scope-resolution-operator--1)
+  - [PHP: Abstract class vs Trait vs Interface](#php-abstract-class-vs-trait-vs-interface)
+  - [PHP Logging](#php-logging)
+  - [PHP Interesting Syntax](#php-interesting-syntax)
+  - [PHP Files](#php-files)
+  - [PHP Constants](#php-constants)
 
 # Topics to be checked later
 
@@ -274,3 +291,142 @@ test('hoge');    // Catchable fatal error: Argument 1 passed to test() must be o
 4. 結果の中に「Configuration File (php.ini) Path」があり、そこに`php.ini`の場所が書かれている（今回は`/etc/php/7.2/cli/php.ini`）
 
 
+
+## PHP Tools
+- artisan
+- composer
+- php.ini
+- php -a
+- php -f hello.php
+- phpinfo
+
+>>>
+
+## Laravel Topics ***
+
+- MW
+- Migration / Seeder / Factory
+- Controller / Action / Blade
+- Eloquent ( Collection / Mutator / Serialization)
+- CSRF / Session
+
+>>>
+
+## Laravel Topics **
+
+- Facade / Contract
+- Service Provider / Service Container / Dependency Injection
+- Accessor
+- Auth / Bcrypt
+- Dockerize Laravel App / Homestead
+
+>>>
+
+## Laravel Topics *
+
+- Broadcasting / Job / Queue / Work / Mocking
+
+>>>
+
+## PHP: Class Inheritance
+
+- Interface
+- Trait
+- Abstract Class
+
+>>>
+
+## PHP Frameworks
+- Laravel
+- Symfony
+- CakePHP
+- FuelPHP
+
+>>>
+
+## PHP vs JS: Array
+
+>>>
+
+## PHP vs JS: Class
+
+- public function __construct()
+- public function __destruct()
+- new ReflectionClass()
+- final
+- self::
+- $this->
+
+>>>
+
+## PHP Modifier
+
+- public
+- protected
+- private
+
+>>>
+
+## PHP const
+
+- const
+
+>>>
+
+## PHP vs JS: Control Statement
+
+- foreach()
+
+>>>
+
+## Scope Resolution Operator ::
+
+- parent
+- static
+- self
+
+>>>
+
+## PHP: Abstract class vs Trait vs Interface
+
+>>>
+
+
+## PHP Logging
+
+- dd()
+- for Laravel only
+- var_export()
+- var_dump()
+- print_r()
+
+>>>
+
+## PHP Interesting Syntax
+
+- “??”
+- Coalescing Operator, shorthand for Ternary Operator, maybe
+- “static”
+- “namespace”
+
+>>>
+
+## PHP Files
+
+- `fopen()`
+- `fclose()`
+
+>>>
+
+## PHP Constants
+
+```php
+__DIR__
+__FILE__
+__FUNCTION__
+__CLASS__
+__METHOD__
+__LINE__
+line number
+__NAMESPACE__
+```
