@@ -7,11 +7,12 @@
   - [Install Rbenv](#install-rbenv)
   - [Install Ruby with rbenv](#install-ruby-with-rbenv)
   - [Install Rails and its dependencies](#install-rails-and-its-dependencies)
-  - [Tutorial](#tutorial)
+  - [Official Tutorial](#official-tutorial)
     - [Key files](#key-files)
     - [Functionalities](#functionalities)
     - [Dev Procedures](#dev-procedures)
   - [Rails Command](#rails-command)
+  - [Naming](#naming)
   - [Routing](#routing)
   - [Controller](#controller)
   - [Views](#views)
@@ -89,7 +90,7 @@ yarn # package.json
 rails migrate # if the app uses DB
 ```
 
-## Tutorial
+## Official Tutorial
 
 - Follow the [official tutorial](https://guides.rubyonrails.org/getting_started.html)
 
@@ -139,6 +140,17 @@ rails db:migrate
 rails routes
 
 ```
+
+## Naming
+
+- routes.rb
+  - `resources :articles`
+- views/articles/new.html.erb
+  - `scope: :article`
+- articles_controller.rb
+  - `class ArticlesController < ApplicationController`
+- 
+
 
 ## Routing
 
