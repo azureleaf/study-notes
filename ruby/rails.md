@@ -4,26 +4,39 @@
 
 - [RoR](#ror)
   - [ToC](#toc)
-  - [Install Rbenv](#install-rbenv)
-  - [Install Ruby with rbenv](#install-ruby-with-rbenv)
-  - [Install Rails and its dependencies](#install-rails-and-its-dependencies)
-  - [Official Tutorial](#official-tutorial)
+  - [Installation](#installation)
+    - [Install Ruby with Rbenv](#install-ruby-with-rbenv)
+    - [Install Rails and its dependencies](#install-rails-and-its-dependencies)
+  - [Official Docs](#official-docs)
     - [Key files](#key-files)
     - [Functionalities](#functionalities)
-    - [Dev Procedures](#dev-procedures)
   - [Rails Command](#rails-command)
   - [Naming](#naming)
-  - [Routing](#routing)
-  - [Controller](#controller)
   - [Views](#views)
+    - [Render](#render)
+    - [Section](#section)
+    - [View Helpers](#view-helpers)
+    - [Forms](#forms)
+    - [Validation](#validation)
+    - [Partials](#partials)
+    - [MISC](#misc)
+  - [Controller & Rails Router](#controller--rails-router)
+    - [Params](#params)
+    - [Routing with DSL](#routing-with-dsl)
+    - [Session & Cookie](#session--cookie)
+  - [Models / Active Records](#models--active-records)
+    - [Active Records](#active-records)
+    - [ActiveModel](#activemodel)
+    - [Authentication](#authentication)
+    - [Migration](#migration)
+    - [Association](#association)
+  - [API-only App](#api-only-app)
   - [VS Code](#vs-code)
-    - [Install Robocop](#install-robocop)
-    - [Ruby (by Peng Lv) Extension](#ruby-by-peng-lv-extension)
-    - [ruby-robocop Extension](#ruby-robocop-extension)
-    - [settings.json](#settingsjson)
   - [Troubleshooting](#troubleshooting)
 
-## Install Rbenv
+## Installation
+
+### Install Ruby with Rbenv
 
 - Installed on Oct. 30, 2020 on Ubuntu 20.04 (WSL)
 - [rbenv official](https://github.com/rbenv/rbenv)
@@ -45,11 +58,8 @@ rbenv init
 
 # validate installation
 curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
-```
 
-## Install Ruby with rbenv
-
-```sh
+# install ruby
 rbenv install -l # list the stable ruby versions
 rbenv install 2.7.2
 rbenv install -L # list the local ruby versions
@@ -57,7 +67,7 @@ rbenv global 2.7.2 # use the ruby version globally
 rbenv local 2.7.2 # optional: when you want to use the ruby version inside the specific dir only
 ```
 
-## Install Rails and its dependencies
+### Install Rails and its dependencies
 
 ```sh
 sudo apt update
@@ -90,9 +100,49 @@ yarn # package.json
 rails migrate # if the app uses DB
 ```
 
-## Official Tutorial
+## Official Docs
 
-- Follow the [official tutorial](https://guides.rubyonrails.org/getting_started.html)
+[official Guides](https://guides.rubyonrails.org/)
+
+- Start Here
+  - [ ] Getting started
+    1. Generate the `Welcome` \_VC + routes
+    2. Generate the `Article` MVC + migration + routes
+    3. Generate the `Comment` MVC + migration + routes
+    4. Connect the `Article` model to `Comment` model
+    5. Add auth to `Article` controller
+- Models
+  - [ ] Active Record Basics
+  - [x] Active Record Migrations
+  - [ ] Active Record Validations
+  - [ ] Active Record Callbacks
+  - [ ] Active Record Associations
+  - [ ] Active Record Query Interface
+- Views
+  - [ ] Layouts and Rendering in Rails
+  - [ ] Action View Form Helpers
+- Controllers
+  - [ ] **Action Controller Overview**
+  - [ ] Rails Routing from the Outside In
+- Other Components
+  - [ ] Active Support Core Extensions
+  - [ ] Action Mailer Basics
+  - [ ] Active Job Basics
+  - [ ] Active Storage Overview
+  - [ ] Action Cable Overview
+- Digging Deeper
+  - [ ] Rails Internationalization (I18n) API
+  - [ ] Testing Rails Applications
+  - [ ] Securing Rails Applications
+  - [ ] Debugging Rails Applications
+  - [ ] Configuring Rails Applications
+  - [ ] The Rails Command Line
+  - [ ] The Asset Pipeline
+  - [ ] Working with JavaScript in Rails
+  - [ ] Autoloading and Reloading Constants (Zeitwerk Mode)
+  - [ ] Autoloading and Reloading Constants (Classic Mode)
+  - [ ] Caching with Rails: An Overview
+  - [ ] Using Rails for API-only Applications
 
 ### Key files
 
@@ -103,7 +153,10 @@ app/
   models/
 config/
   routes.rb
-db/migrate/YYYYMMDDHHMMSS_create_articles.rb
+db
+  migrate/YYYYMMDDHHMMSS_create_articles.rb
+  schema.rb
+
 ```
 
 ### Functionalities
@@ -119,119 +172,425 @@ db/migrate/YYYYMMDDHHMMSS_create_articles.rb
   - edit
   - delete
 
-### Dev Procedures
-
-1. Generate the `Welcome` \_VC + routes
-1. Generate the `Article` MVC + migration + routes
-1. Generate the `Comment` MVC + migration + routes
-1. Connect the `Article` model to `Comment` model
-1. Add auth to `Article` controller
-
 ## Rails Command
 
 ```sh
+# use local rail to create project
 rails new MyProject
-rails server
-rails webpacker:install
-rails generate controller Articles index
-rails generate controller Articles
-rails generate model Article title:string text:string
-rails db:migrate
-rails routes
+
+bin/rails webpacker:install
+
+bin/rails server
+
+# show settings
+bin/rails routes
+bin/rails middleware
+
+# controller
+bin/rails generate controller Articles index
+bin/rails generate controller Articles
+
+
+# migration
+# Create Migration & Model
+bin/rails generate model Article title:string text:string
+# Create migration (migration name matters!)
+bin/rails generate migration CreateProducts name:string part_number:string
+bin/rails generate migration AddPartNumberToProducts part_number:string
+bin/rails generate migration AddPartNumberToProducts part_number:string:index
+bin/rails generate migration RemovePartNumberFromProducts part_number:string
+bin/rails generate migration AddUserRefToProducts user:references
+bin/rails db:migrate
 
 ```
 
 ## Naming
 
-- routes.rb
-  - `resources :articles`
-- views/articles/new.html.erb
-  - `scope: :article`
-- articles_controller.rb
-  - `class ArticlesController < ApplicationController`
-- 
+```rb
+# routes.rb
+resources :articles
 
+# Helpers (automatically named after `resources`)
+articles_path # etc.
 
-## Routing
+#views/articles/new.html.erb (named manually)
+scope: :article
+
+# Controller: articles_controller.rb (named by "rails generate controller")
+class ArticlesController < ApplicationController # CamelCase
+
+# Migration
+
+```
+
+## Views
+
+### Render
 
 ```rb
-# config/routes.rb
-# Ruby DSL
-Rails.applicaiton.routes.draw do
-    # route the access to "/welcome/index" to "Welcome" controller "index" action
-    get 'welcome/index'
+render "products/edit"
+redirect_to(@product)	# returns redirection
+head() # returns HTTP header only
+send_file	
+send_data	streaming
 
-    # route the access to "/" to "Welcome" controller "index" action
-    root 'welcome#index'
+# default rendering type is .erb. However it can take various types: plain, html, js, json, etc.
+render plain: "OK"
+render status: 500
+render :json => { name: "yamada" } # json will be serialized
 
-    # route the access to: "/articles/<CRUD actions>
-    resources :articles
+
+redirect_to article_path, status: 301
+redirect_to @article
 
 
 ```
 
-## Controller
+### Section
+
+```rb
+yield
+yield :head # Placeholder
+content_for :head do # Content to be inserted
+
+```
+
+### View Helpers
+
+```rb
+form_with() # create form
+link_to() # create link
+button_to() # create button
+
+data: {
+  confrim: 'are you sure?', # will be "data-confirm"
+  "disable-with": "Saving...",
+}
+
+
+# form_with
+scope: # ???
+url:
+local: true # true for HTML form submission, false for Ajax submimission
+
+```
+
+### Forms
+
+```rb
+<form action=""></form>
+
+# Embed hidden input of CSRF token. Yields Form Builder Object
+form_with scope: :article, url: articles_path, local: true do |f|
+form_with(url: "/search", method: "get") do |f|
+form_with model: @article do |f|
+
+
+# Generate sub-tags inside <form>
+f.label :title
+f.text_field :title
+f.text_area :text
+f.submit data:  { "disable-with": "Saving..." }
+
+label_tag(:q, "Search for:")
+text_field_tag(:q)
+submit_tag("Search")
+
+check_box_tag(:pet_dog)
+
+radio_button_tag(:age, "child")
+```
+
+### Validation
+
+### Partials
+
+### MISC
+
+```rb
+# Asset Tag Helper
+javascript_include_tag "main"
+stylesheet_link_tag "main", "photos/columns"
+image_tag "icons/delete.gif", {height: 45}
+
+# helper?
+linked_to
+time_ago_in_words()
+```
+
+## Controller & Rails Router
 
 - Action is a method of the controller
 - A controller is inherited from `ApplicationController`
 - Actions must be `public`
 - Actions must be declared prior to `private` methods
 
-```ruby
+```rb
+class ArticlesController < ApplicationController
+  def create
+    # This new instance is available in views
+    @article = Article.new(params[:article]) # FAILS
+    @article = Article.new(params.require(:article).permit(:title, :text)) # ok
+
+    @article.save
+    redirect_to @article
+  end
+
+  def default_url_options
+    { locale: I18n.locale } # must return hash
+  end
+end
+
+# REST resources
+# Should define in this order
 index
 show
 new
 edit
-create
+create # new + save
 update
 destroy
+
+
 ```
 
-- `create` vs `new`
-  - `new` requires `save`
-  - `create` requires `new + save`
+### Params
 
-## Views
+- Both params can be accessed in the same way:
+  - Route params
+  - POST request body params
+- Params can be JSON
 
-```ruby
-# form_with: helper
-# scope: Why is it singular???
-# url: specify the <form action=""> path
-<%= form_with scope: :article, url: articles_path, local: true do |form| %>
-  <p>
-    <%= form.label :title %><br>
-    <%= form.text_field :title %>
-  </p>
+```rb
 
-  <p>
-    <%= form.label :text %><br>
-    <%= form.text_area :text %>
-  </p>
+# access to param
+params[:article]
+params[:article].inspect # to readable string
 
-  <p>
-    <%= form.submit %>
-  </p>
-<% end %>
+# strong parameters
+# This fails
+def create
+  Person.create(params[:person])
+end
+
+params.require(:article).permit(:title, :text) # strong parameters
+
+
+
+```
+
+### Routing with DSL
+
+- DSL
+  - Order of description matters; route of the 1st match will be applied.
+
+```rb
+#
+# config/routes.rb
+#
+# Ruby DSL
+Rails.applicaiton.routes.draw do
+  # route the access to "/welcome/index" to "Welcome" controller "index" action
+  get 'welcome/index'
+  get '/patients/:id', to: 'patients#show'
+  get '/patients/:id', to: 'patients#show', as: 'patient'
+
+  # route the access to "/" to "Welcome" controller "index" action
+  root 'welcome#index'
+
+  # route the access to: "/articles/<CRUD actions>
+  resources :articles
+
+  # namespace
+  # Requires this dir structure as well;
+  # articles/ & comments/ must be put under app/controllers/admin
+  namespace :admin do
+    resources :articles, :comments
+  end
+end
+```
+
+- Path and URL Helpers for corresponding views
+  - `article` is named after `resources:` in DSL
+  - Can be manually set by `as:` keyword
+
+```rb
+#
+# `views/articles/update.html.erb`
+#
+articles_path # plural
+article_path(:id) # singular
+new_article_path
+edit_article_path(:id)
+
+```
+
+### Session & Cookie
+
+- `memcached` is the default cache store
+
+```rb
+ActionDispatch::Session::CookieStore # Store on the client. Up to 4 KB
+ActionDispatch::Session::CacheStore #
+ActionDispatch::Session::ActiveRecordStore # Store in the server DB
+
+session[:current_user_id]
+
+cookies[:commenter_name]
+cookies.delete(:commenter_name)
+
+```
+
+## Models / Active Records
+
+### Active Records
+
+```rb
+
+# Access
+user1.save # Returns a bool to tell if saving was successful
+User.create()	# shorthand: User.new + user1.save
+User.all
+User.first
+User.order()
+user1.update() # shorthand: assignments +  user1.save
+User.update_all	 # shorthand
+user1.destroy
+User.destroy_by()	# shorthand: find_by + user1.destroy
+User.destroy_all	# shorthand
+
+# Value of the Boolean col can be accessed with "?"
+user1.activated?
+user1.admin?
+
+# Search
+User.find()	# find by id. Get a single record
+User.find_by()	# find by id / values but id. Get a single record
+User.where()	# find by arbitrary criteria. Get multiple records
+
+```
+
+### ActiveModel
+
+- ActiveRecord
+
+```rb
+ActiveModel::Serialization
+
+```
+
+### Authentication
+
+
+```rb
+class User < ActiveRecord::Base
+  has_secure_password validations: false
+end
+
+user1.authenticate()
+user1.has_secure_password
+user1.recovery_password
+user1.recovery_password_digest
+
+```
+
+### Migration
+
+```rb
+class CreateArticles < ActiveRecord::Migration[6.0]
+  # change methods runs on migration
+  def change
+    create_table :articles do |t| # what's this syntax???
+      # primary key "id" will be inserted implicitly
+      t.string :title # what's this syntax???
+      t.text :text
+
+      t.timestamps
+    end
+  end
+end
+
+create_table :articles # Create "articles" table
+create_table :products, options: "ENGINE=BLACKHOLE" do |t|
+t.string # type?
+t.timestamps # adds created_at & updated_at
+
+
+def change
+  # table
+  create_table :products do |t|
+
+  end
+  drop_table :products do |t|
+
+  end
+  # Seemingly, change_table is wrapper for methods below
+  change_table :products do |t|
+    t.remove :description, :name
+    t.string :part_number
+    t.index :part_number
+    t.column :name, :string, limit: 60
+    t.rename :upccode, :upc_code
+  end
+  rename_table :products
+
+
+  # col
+  # last value is "column modifier"
+  add_column :products, :part_number, :string
+  change_column :products, :part_number, :text
+  remove_column :products, :part_number, :string
+  change_column_null :products, :name, false
+  change_column_default :products, :approved, from: true, to: false
+
+  add_foreign_key :articles, :authors
+  remove_foreign_key
+  add_reference :products, :user, foreign_key: true
+  remove_reference
+  add_index :products, :part_number
+  remove_index
+
+  create_join_table :products, :categories
+  drop_join_table
+
+  # reverse
+  reversible do |dir|
+    change_table :products do |t|
+      dir.up   { t.change :price, :string }
+      dir.down { t.change :price, :integer }
+    end
+  end
+```
+
+### Association
+
+## API-only App
+
+```sh
+rails new my_api --api
 
 ```
 
 ## VS Code
 
-
-### Install Robocop
+- Install Robocop
 
 ```sh
 gem install rubocop
 ```
 
-### Ruby (by Peng Lv) Extension
+- Ruby (by Peng Lv) Extension
+- ruby-robocop Extension
+- settings.json
 
-### ruby-robocop Extension
 
-### settings.json
 
 ## Troubleshooting
 
 - `node-gyp` fails because it tries to find `python2` in the environment variables.
+
   - Downgrading node version from 15 to 10 worked.
   - `npm install -g node-gyp` is also necessary? not sure.
+
+- `Errno::EACCES: Permission denied @ rb_file_s_rename` on `rails new`
+  - Remove hyphenation in the project name (e.g. my-project). It's not allowed.
