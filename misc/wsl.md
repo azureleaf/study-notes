@@ -25,7 +25,21 @@ git config core.autocrlf true
 git config core.filemode false
 ```
 
-If the solution above is rejected by `operation not permitted` error, `vim .git/config` and change these values directly
+- If the solution above is rejected by `operation not permitted` error, `vim .git/config` and change these values directly
+
+### How this works
+
+- Newlines
+  - Windows: newline `CRLF`
+  - Linux + Mac OS 10 (and newer): `LF`
+  - Class Mac OS (to Mac OS 9, 2001): `CR`
+- Behavoir of Git for Windows:
+  - `core.autocrlf true`: Convert `LF` to `CRLF` on checkout, convert `CRLF` to `LF` on commit
+  - `core.autocrlf input`: Convert `CRLF` to `LF` on commit
+  - `core.autocrlf false` (default) do nothing
+- `git config core.filemode false` disables the detection on file permission alternation.
+  - Because file permission of the file edited in Linux can be different from that of Windows.
+
 
 ## Set up on VS Code + Python env
 
