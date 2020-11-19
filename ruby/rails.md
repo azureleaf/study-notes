@@ -21,6 +21,7 @@
     - [Partials](#partials)
     - [MISC](#misc)
   - [Controller & Rails Router](#controller--rails-router)
+    - [REST resources](#rest-resources)
     - [Params](#params)
     - [Routing with DSL](#routing-with-dsl)
     - [Session & Cookie](#session--cookie)
@@ -91,7 +92,7 @@ gem install rails
 
 ```sh
 # Choose the right version of Node.js
-# As of Nov. 2020, v15 wasn't compatible with the latest RoR 
+# As of Nov. 2020, v15 wasn't compatible with the latest RoR
 nvm use v10.23.0 # for example
 
 # For new project:
@@ -235,7 +236,7 @@ class ArticlesController < ApplicationController # CamelCase
 render "products/edit"
 redirect_to(@product)	# returns redirection
 head() # returns HTTP header only
-send_file	
+send_file
 send_data	streaming
 
 # default rendering type is .erb. However it can take various types: plain, html, js, json, etc.
@@ -350,15 +351,15 @@ end
 
 - Should define in this order
 
-|action|route|helper||
-|:---:|:---:|:---:|:---:|
-|index||||
-|show||||
-|new||||
-|edit||||
-|create||||
-|update||||
-|destroy||||
+| action  | route | method | helper | role |
+| :-----: | :---: | :----: | :----: | :--: |
+|  index  |       |        |        |      |
+|  show   |       |        |        |      |
+|   new   |       |        |        |      |
+|  edit   |       |        |        |      |
+| create  |       |        |        |      |
+| update  |       |        |        |      |
+| destroy |       |        |        |      |
 
 ### Params
 
@@ -487,7 +488,6 @@ ActiveModel::Serialization
 
 ### Authentication
 
-
 ```rb
 class User < ActiveRecord::Base
   has_secure_password validations: false
@@ -588,8 +588,6 @@ gem install rubocop
 - Ruby (by Peng Lv) Extension
 - ruby-robocop Extension
 - settings.json
-
-
 
 ## Troubleshooting
 
