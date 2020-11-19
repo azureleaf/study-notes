@@ -344,19 +344,21 @@ class ArticlesController < ApplicationController
     { locale: I18n.locale } # must return hash
   end
 end
-
-# REST resources
-# Should define in this order
-index
-show
-new
-edit
-create # new + save
-update
-destroy
-
-
 ```
+
+### REST resources
+
+- Should define in this order
+
+|action|route|helper||
+|:---:|:---:|:---:|:---:|
+|index||||
+|show||||
+|new||||
+|edit||||
+|create||||
+|update||||
+|destroy||||
 
 ### Params
 
