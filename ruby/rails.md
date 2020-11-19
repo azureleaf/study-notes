@@ -6,7 +6,7 @@
   - [ToC](#toc)
   - [Installation](#installation)
     - [Install Ruby with Rbenv](#install-ruby-with-rbenv)
-    - [Install Rails and its dependencies](#install-rails-and-its-dependencies)
+    - [Install dependencies for the Rails project](#install-dependencies-for-the-rails-project)
   - [Official Docs](#official-docs)
     - [Key files](#key-files)
     - [Functionalities](#functionalities)
@@ -65,11 +65,7 @@ rbenv install 2.7.2
 rbenv install -L # list the local ruby versions
 rbenv global 2.7.2 # use the ruby version globally
 rbenv local 2.7.2 # optional: when you want to use the ruby version inside the specific dir only
-```
 
-### Install Rails and its dependencies
-
-```sh
 sudo apt update
 
 # sqlite3
@@ -89,14 +85,22 @@ npm install -g yarn
 
 # rails
 gem install rails
+```
+
+### Install dependencies for the Rails project
+
+```sh
+# Choose the right version of Node.js
+# As of Nov. 2020, v15 wasn't compatible with the latest RoR 
+nvm use v10.23.0 # for example
 
 # For new project:
 rails new my_project # Hyphenation in the project name (e.g. my-project) caused "Errno::EACCES: Permission denied @ rb_file_s_rename"
 rails webpacker:install
 
 # For existing project:
-bundle # Gemfile
-yarn # package.json
+bundle install # on Gemfile
+yarn install # on package.json
 rails migrate # if the app uses DB
 ```
 
@@ -192,16 +196,16 @@ bin/rails generate controller Articles
 
 
 # migration
-# Create Migration & Model
-bin/rails generate model Article title:string text:string
-# Create migration (migration name matters!)
+bin/rails generate model Article title:string text:string # model + migration
 bin/rails generate migration CreateProducts name:string part_number:string
 bin/rails generate migration AddPartNumberToProducts part_number:string
 bin/rails generate migration AddPartNumberToProducts part_number:string:index
+bin/rails generate migration ChangeProductsPrice
 bin/rails generate migration RemovePartNumberFromProducts part_number:string
 bin/rails generate migration AddUserRefToProducts user:references
 bin/rails db:migrate
-
+bin/rails db:reset # drop DB, restore from db/schema.rb (Migration files not considered)
+bin/rails db:migrate:reset # drop DB, renew db/schema.rb (Migration files considered)
 ```
 
 ## Naming

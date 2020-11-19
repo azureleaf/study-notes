@@ -69,9 +69,11 @@
   - Git をインストールした直後に設定
 - `git config --global user.email johndoe@example.com`
   - Git をインストールした直後に設定
-- `git checkout MyFile.js`
+- `git checkout .`
+  - Revert changes to the index
+- `git checkout HEAD -- MyFile.js`
   - Reset the specified file(s) to `HEAD`
-- `git chekcout HEAD myfile.js`
+- `git checkcout HEAD myfile.js`
   - Restore delete file which is not committed yet
 
 ## Remote
