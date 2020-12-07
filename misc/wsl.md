@@ -7,6 +7,7 @@
 
 ## Installation History
 
+1. To install WSL-2, Activate the VM feature on your computer BIOS
 1. Open Control Panel > `Turn Windows features on and off`
 2. Tick `Windows Subsystem for Linux`
 3. Reboot
