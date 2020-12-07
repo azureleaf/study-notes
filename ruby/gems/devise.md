@@ -6,7 +6,8 @@
   - [ToC](#toc)
   - [Overview](#overview)
   - [Setup procedure](#setup-procedure)
-    - [Setup overviews](#setup-overviews)
+    - [Setup](#setup)
+    - [Setup (When all the members share the identical auth strategy)](#setup-when-all-the-members-share-the-identical-auth-strategy)
     - [Setup details](#setup-details)
   - [Config](#config)
     - [Choose functionality](#choose-functionality)
@@ -36,7 +37,7 @@ gem 'omniauth-twitter'
 
 ## Setup procedure
 
-### Setup overviews
+### Setup
 
 ```sh
 printf "gem 'devise'" >> Gemfile
@@ -46,19 +47,53 @@ rails g devise:install # generate initializer
 vim config/environments/development.rb # add mailer option (optional)
 vim config/routes.rb # set root URL if not set yet
 
-# create the model & migration with devise presets
-rails g devise User
-vim app/models/user.rb # declare the necessary modules
+# This command set the files with devise presets:
+#   Create model
+#   Create migration
+#   Set routes @config/routes.rb
+rails g devise user
+rails g devise admin
 
-# configure "blah-able"
+# Enable scoped view @ config/initializers/devise.rb
+config.scoped_views = true
+
+# Choose "blah-able" to use in the model.
+# this overrides some settings at config/initializers/devise.rb
+vim app/models/user.rb
+vim app/models/admin.rb
+
+# Generate controllers
+rails g devise:controllers users # app/controllers/users/*_controller.rb
+rails g devise:controllers admins # app/controllers/staffs/*_controller.rb
+
+# Configure the routes @config/routes.rb
+# Because CRUD routes for "admins" are totally overwrapped with those for "users",
+# you need to set the dinstinct routes manually
+devise_for :admins, path: 'admins', controllers: {
+  sessions:      'admins/sessions',
+  passwords:     'admins/passwords',
+  registrations: 'admins/registrations'
+}
+devise_for :users, path: 'users', controllers: {
+  sessions:      'users/sessions',
+  passwords:     'users/passwords',
+  registrations: 'users/registrations'
+}
+
+# Generate views
+rails g devise:views users
+rails g devise:views admins
+
+# add tags for flash message.
+vim app/views/layouts/application.html.erb 
+
+```
+
+### Setup (When all the members share the identical auth strategy)
+
+```sh
 vim config/initializers/devise.rb
-
-# Generate view files for devise inside app/views/devise
-rails g devise:views
-vim app/views/layouts/application.html.erb # add tags for flash message. (optional)
-
-
-
+rails g devise:views # this creates the app/views/devise
 ```
 
 ### Setup details

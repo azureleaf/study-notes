@@ -27,24 +27,21 @@
 
 ## Commands (from shell)
 
-
-- `psql -d mydb -U myuser`
-- `sudo -U postgres psql`
-  - Allegedly better than `sudo su - postgres`
-  - Can't be used when the `hba_file` value is converted from `peer` to `md5`
-- `sudo -i -u postgres`
-  - Available even after `md5`
-- `psql -U default -h postgres`
-  - h: Server host
-- `psql mydb`
+```sh
+psql -d mydb -U myuser
+sudo -U postgres psql # Allegedly better than `sudo su - postgres`. Can't be used when the `hba_file` value is converted from `peer` to `md5`
+sudo -i -u postgres # Available even after using md5
+psql -U default -h postgres # -h: Server host
+psql mydb
+```
 
 ## Commands (inside psql)
 
 ```
 \q # quit
 \l # list DB
-\d # my_table
-\c # my_db connect
+\d my_table
+\c my_db # connect
 \dt # display tables
 \du # display users
 ```
