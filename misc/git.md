@@ -94,13 +94,21 @@ git branch --set-upstream-to myfork/master # Set the default remote. Default rem
 ## Branch
 
 ```sh
+# create
 git branch
 git branch -r
-git branch -a # or --all
+git branch -a # --all
 git branch NEW_BRANCH_NAME
+
+# checkout
 git checkout BRANCH_NAME
-git push origin --delete MyBranch # Delete the branch on the remote. Not `branch` but `push`
-git branch -d <branch_name> # Delete the local branch
+
+# delete
+git push origin --delete MyBranch # Delete the remote branch. Note that it's "push"
+git branch -d MyBranch # Delete the merged local branch
+git branch -D MyBranch # Delete the unmerged local branch
+
+# rename
 git branch -m NEW_BRANCH_NAME # rename current branch
 git branch -m OLD_BRANCH_NAME NEW_BRANCH_NAME # rename the branch which you're not on
 ```
