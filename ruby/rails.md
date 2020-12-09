@@ -41,6 +41,7 @@
     - [Introduce PostgreSQL](#introduce-postgresql)
     - [Configure Rails for Postgres](#configure-rails-for-postgres)
   - [Bundler](#bundler)
+  - [Internationalization](#internationalization)
 
 ## Installation
 
@@ -753,3 +754,15 @@ bundle install # install from Gemfile
 bundle install --without production # install except "group :production do" block gems
 
 ```
+
+## Internationalization
+
+```sh
+printf "rails-i18n" >> Gemfile
+printf "enum-help" >> Gemfile
+bundle install
+
+# config/application.rb
+config.i18n.default_locale = :ja
+```
+

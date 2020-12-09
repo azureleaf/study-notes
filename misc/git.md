@@ -104,9 +104,13 @@ git branch NEW_BRANCH_NAME
 git checkout BRANCH_NAME
 
 # delete
-git push origin --delete MyBranch # Delete the remote branch. Note that it's "push"
+git push origin --delete my-branch # Delete the remote branch. Note that it's "push"
+git push origin :my-branch # adding ":" means push void
 git branch -d MyBranch # Delete the merged local branch
 git branch -D MyBranch # Delete the unmerged local branch
+
+# delete local remote-tracking branch
+git fetch origin --prune # when the remote branch no longer exists
 
 # rename
 git branch -m NEW_BRANCH_NAME # rename current branch
