@@ -32,7 +32,8 @@ heroku config:get S3_KEY
 # Heroku Deploy
 
 ```sh
-# Seemingly, branch name to push must be "master" or "main"
+# Seemingly, Heroku recognize the "master" or "main" only as the deployable path.
+# You can use arbitry branch name when you connect the Heroku to GitHub.
 git push heroku master
 
 ```
@@ -65,4 +66,15 @@ git push heroku master
 
 heroku config:set S3_KEY=8N029N81 S3_SECRET=9s83109d3+583493190 # set env var
 heroku run rails db:migrate
+```
+
+# Reduce slug size
+
+[ref website](https://thoughtbot.com/blog/how-to-reduce-a-large-heroku-compiled-slug-size)
+
+```sh
+heroku plugins:install heroku-repo 
+heroku repo:gc --app your-app-name
+heroku repo:purge_cache --app your-app-name 
+git push heroku
 ```
