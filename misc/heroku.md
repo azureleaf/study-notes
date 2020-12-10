@@ -16,6 +16,7 @@ heroku create john-my-rails-app # app name & URL will be set this name
 
 heroku open # open the app with browser
 
+# run bash in the Heroku
 heroku run bash -a myapp
 
 # logs
@@ -51,21 +52,33 @@ cd myapp # move to app root
 touch Procfile
 echo "web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}" >> Procfile
 
-# config/environments/production.rb
-# change the line below:
-# This dynamic compilation will slow the app
+# Change the line @config/environments/production.rb
+# This dynamic compilation will slow the app.
 config.assets.compile = true
+config.time_zone = 'Tokyo'
 
 # According to some sources, this is necessary for production env
 # This may be better for app performance
 rake assets:precompile RAILS_ENV=production
+config.public_file_server.enabled = true # to use static files (such as images)
 
 # This will automatically "bundle install" & "yarn install"
 # This process fails when the "sqlite3" gem is included (because heroku doesn't support it)
 git push heroku master 
 
+# Config
 heroku config:set S3_KEY=8N029N81 S3_SECRET=9s83109d3+583493190 # set env var
+heroku config:add TZ=Asia/Tokyo
+heroku config:set LANG=ja_JP.UTF-8
+
+
+# when the DB reset is necessary
+heroku pg:reset -a my_app
+
+# deploy
 heroku run rails db:migrate
+heroku run rails db:seed
+
 ```
 
 # Reduce slug size

@@ -103,12 +103,25 @@
 - `ls vue*`
 - `ls -a`
   - show hidden files as well
-- `ls -a | grep app`
-- `whereis python3`
-- `which python3`
-- `ln test/data100.dat d01`
-  - Create the "link" (alias?) of the file
-  - By creating the link, `cat d01` show the identical result with `cat test/data01.dat` 
+
+```sh
+ls -a | grep app
+whereis python3
+which python3
+
+# Create the "link" (alias?) of the file.
+# By creating the link, `cat d01` show the identical result with `cat test/data01.dat` 
+ln test/data100.dat d01
+
+stat Gemfile
+stat -c %s Gemfile # file size
+du -sh my_dir # directory size (du: Disk Usage)
+du -h -d1 my_dir # show only the top-level directory
+du -d1 | sort -n -r | head -n 6 # sort
+
+# word count
+wc hello.txt
+```
 
 ## Archive
 
