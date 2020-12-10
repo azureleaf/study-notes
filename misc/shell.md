@@ -140,6 +140,12 @@ wc hello.txt
 
 ## curl
 
+```sh
+curl http://blahblah --output myfile.txt
+curl -O -J http://blahblah # keep the original file name
+
+```
+
 ## wget
 
 ## grep
