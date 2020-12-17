@@ -54,8 +54,9 @@ vim config/routes.rb # set root URL if not set yet
 rails g devise user
 rails g devise admin
 
-# Enable scoped view @ config/initializers/devise.rb
-config.scoped_views = true
+# Enable scoped view
+vim config/initializers/devise.rb
+config.scoped_views = true # edit this line in the file above
 
 # Choose "blah-able" to use in the model.
 # this overrides some settings at config/initializers/devise.rb

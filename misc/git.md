@@ -59,7 +59,12 @@ git commit -m "debug: Solve DB access error"
 git status
 git mv # Git 管理されているファイルを移動したり、名前を変更したりするときには必ずこれらを使う # **エクスプローラ上などで勝手に変更してはいけない！**　そのファイルの変更履歴が反映されなくなってしまう。
 git rm # そのファイルを削除し、なおかつ git の index からも外す
+
 git log -n 3
+git log --oneline MyFile.js # show the concise commits for the single file
+git log --follow --oneline app/views/dogs/_form.html.haml # follow the past commits before renaming
+git log --oneline develop ^origin/develop # count how many commits ahead the branch from another 
+
 git revert HEAD~3
 git stash
 git stash list
@@ -68,6 +73,7 @@ git restore` (new)
 git checkout . # Revert changes to the index
 git checkout HEAD -- MyFile.js # Reset the specified file(s) to `HEAD
 git checkcout HEAD myfile.js # Restore delete file which is not committed yet
+git checkout -- MyFile.js # Restore the deleted file
 
 # Remove the untracked files.
 # Because git stash / revert / reset etc. won't remove the newly generated files,
@@ -115,6 +121,10 @@ git fetch origin --prune # when the remote branch no longer exists
 # rename
 git branch -m NEW_BRANCH_NAME # rename current branch
 git branch -m OLD_BRANCH_NAME NEW_BRANCH_NAME # rename the branch which you're not on
+
+# compare
+git diff master..develop
+
 ```
 
 ## Clarification

@@ -83,7 +83,10 @@ heroku run rails db:seed
 
 # Reduce slug size
 
-[ref website](https://thoughtbot.com/blog/how-to-reduce-a-large-heroku-compiled-slug-size)
+## A. Use heroku-repo plugin
+
+- This didn't work for me.
+- [ref website](https://thoughtbot.com/blog/how-to-reduce-a-large-heroku-compiled-slug-size)
 
 ```sh
 heroku plugins:install heroku-repo 
@@ -91,3 +94,12 @@ heroku repo:gc --app your-app-name
 heroku repo:purge_cache --app your-app-name 
 git push heroku
 ```
+
+## B. Use .slugignore
+
+- This didn't work for me.
+
+## C. Configure buildpack
+
+- Heroku buildpack is responsible for converting the uploaded files into slugs.
+- I needed to configure 

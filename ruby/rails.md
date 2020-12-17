@@ -11,6 +11,7 @@
     - [Key files](#key-files)
     - [Functionalities](#functionalities)
   - [Rails Command](#rails-command)
+  - [Default config for resourceful routes](#default-config-for-resourceful-routes)
   - [Naming](#naming)
   - [Views](#views)
     - [Render](#render)
@@ -21,7 +22,6 @@
     - [Partials](#partials)
     - [MISC](#misc)
   - [Controller & Rails Router](#controller--rails-router)
-    - [REST resources](#rest-resources)
     - [Params](#params)
     - [Routing with DSL](#routing-with-dsl)
     - [Session & Cookie](#session--cookie)
@@ -42,6 +42,7 @@
     - [Configure Rails for Postgres](#configure-rails-for-postgres)
   - [Bundler](#bundler)
   - [Internationalization](#internationalization)
+  - [Tips](#tips)
 
 ## Installation
 
@@ -195,27 +196,58 @@ bin/rails webpacker:install
 
 bin/rails server
 
+
 # show settings
 bin/rails routes
 bin/rails middleware
 
-# controller
-bin/rails generate controller Articles index
-bin/rails generate controller Articles
+# controller:
+# create app/controllers/patients_controller.rb
+# create app/views/patients
+# create test/controllers/patients_controller_test.rb
+# create app/helpers/patients_helper.rb
+# create app/assets/stylesheets/patients.scss
+bin/rails g controller Articles index
+bin/rails g controller Articles # Generate the views for all the action
 
 
-# migration
-bin/rails generate model Article title:string text:string # model + migration
-bin/rails generate migration CreateProducts name:string part_number:string
-bin/rails generate migration AddPartNumberToProducts part_number:string
-bin/rails generate migration AddPartNumberToProducts part_number:string:index
-bin/rails generate migration ChangeProductsPrice
-bin/rails generate migration RemovePartNumberFromProducts part_number:string
-bin/rails generate migration AddUserRefToProducts user:references
+# migration:
+# create db/migrate/20200101012345_create_patients.rb
+# create app/models/patient.rb
+# create test/models/patient_test.rb
+# create test/fixtures/patients.yml
+bin/rails g model Article title:string text:string # model + migration
+bin/rails g migration CreateProducts name:string part_number:string
+bin/rails g migration AddPartNumberToProducts part_number:string
+bin/rails g migration AddPartNumberToProducts part_number:string:index
+bin/rails g migration ChangeProductsPrice
+bin/rails g migration RemovePartNumberFromProducts part_number:string
+bin/rails g migration AddUserRefToProducts user:references
 bin/rails db:migrate
 bin/rails db:reset # drop DB, restore from db/schema.rb (Migration files not considered)
 bin/rails db:migrate:reset # drop DB, renew db/schema.rb (Migration files considered)
+
+# production
+bin/rails db:create RAILS_ENV=production
+bin/rails db:migrate RAILS_ENV=production
+rake assets:precompile RAILS_ENV=production assets:clean
+bundle exec rails s -e production
 ```
+
+## Default config for resourceful routes
+
+- In the controller file, better keep this order of actions!
+
+| helper            | verb   | uri                          | controller#action |
+| :---------------- | :----- | :--------------------------- | :---------------- |
+| patients_path     | GET    | /patients(.:format)          | patients#index    |
+|                   | POST   | /patients(.:format)          | patients#create   |
+| new_patient_path  | GET    | /patients/new(.:format)      | patients#new      |
+| edit_patient_path | GET    | /patients/:id/edit(.:format) | patients#edit     |
+| patient_path      | GET    | /patients/:id(.:format)      | patients#show     |
+|                   | PATCH  | /patients/:id(.:format)      | patients#update   |
+|                   | PUT    | /patients/:id(.:format)      | patients#update   |
+|                   | DELETE | /patients/:id(.:format)      | patients#destroy  |
 
 ## Naming
 
@@ -355,20 +387,6 @@ class ArticlesController < ApplicationController
 end
 ```
 
-### REST resources
-
-- Should define in this order
-
-| action  | route | method | helper | role |
-| :-----: | :---: | :----: | :----: | :--: |
-|  index  |       |        |        |      |
-|  show   |       |        |        |      |
-|   new   |       |        |        |      |
-|  edit   |       |        |        |      |
-| create  |       |        |        |      |
-| update  |       |        |        |      |
-| destroy |       |        |        |      |
-
 ### Params
 
 - Both params can be accessed in the same way:
@@ -382,13 +400,13 @@ end
 params[:article]
 params[:article].inspect # to readable string
 
-# strong parameters
-# This fails
+# This fails, because the param :person isn't permitted
 def create
   Person.create(params[:person])
 end
 
 params.require(:article).permit(:title, :text) # strong parameters
+params.require(:article).permit! # permit all
 
 
 
@@ -587,7 +605,7 @@ rails new my_api --api
 
 ## VS Code
 
-- Install Robocop
+- Install Rubocop
 
 ```sh
 gem install rubocop
@@ -607,12 +625,11 @@ gem install rubocop
 - `Errno::EACCES: Permission denied @ rb_file_s_rename` on `rails new`
   - Remove hyphenation in the project name (e.g. my-project). It's not allowed.
 
-
 ## Postgres + Rails + Heroku
 
 ### Create the Project
 
-- `rails new . -d postgresql` としておけば、楽だった。DBを指定しないとSQLiteになる
+- `rails new . -d postgresql` としておけば、楽だった。DB を指定しないと SQLite になる
 
 ```sh
 nvm use v10
@@ -636,6 +653,7 @@ bundle install
 ```sh
 yarn add bootstrap jquery popper.js
 ```
+
 ```js
 /**
  * Add to app/assets/stylesheets/application.scss
@@ -643,7 +661,7 @@ yarn add bootstrap jquery popper.js
 @import "bootstrap/scss/bootstrap"; // put in the end of the file
 
 /**
- * app/javascript/packs/application.js 
+ * app/javascript/packs/application.js
  */
 import 'bootstrap'
 require("@rails/ujs").start()	require("@rails/ujs").start() // existing line
@@ -666,24 +684,29 @@ module.exports = environment; // existing line
 
 ### Introduce PostgreSQL
 
-- `createdb myapp_test`などを行うチュートリアルもあるが、ＤＢはmigration時に自動で作成されるので不要。
+- `createdb myapp_test`などを行うチュートリアルもあるが、ＤＢは migration 時に自動で作成されるので不要。
 
 ```sh
+# Installation (for the 1st run only)
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo apt-get update
 sudo apt-get -y install postgresql
 
+# Create the role for this app
 sudo -i -u postgres # change the Ubuntu user to postgres
+createuser -d -P -e myapp # -d: CREATE DB privilege, -P: password, -e: echo details
+
+# Check if the user is successfully created
 psql
 \du # display users
 \l # list DBs
 \q
-createuser -d -P -e myapp # -d: CREATE DB privilege, -P: password, -e: echo details
+
 exit
 ```
 
-- 後に出てくる `createdb` 系コマンドが `WARNING:  could not flush dirty data: Function not implemented`エラーを出すのに対する対策
+- 後に出てくる `createdb` 系コマンドが `WARNING: could not flush dirty data: Function not implemented`エラーを出すのに対する対策
 - ただし、不要かもしれない
 
 ```sh
@@ -717,7 +740,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: myapp
   password: <%= ENV['myapp_DB_PASSWORD'] %>
-  host: localhost
+  host: localhost # lack of this line caused "peer authentication failed" error
   timeout: 5000
 
 development:
@@ -745,7 +768,6 @@ rails db:migrate:reset
 rails s
 ```
 
-
 ## Bundler
 
 ```sh
@@ -766,3 +788,20 @@ bundle install
 config.i18n.default_locale = :ja
 ```
 
+
+## Tips
+
+```rb
+#
+# refactor: Don't include the business logic in the views. Use helpers instead.
+#
+
+#
+# refactor: Common processes in the controller actions should be put in the "before_action" section.
+#
+
+#
+# refactor: For hash, use symbol notation (name: john) instead of hash-rocket notation (:name => john)
+# This is better for performance.
+#
+```
