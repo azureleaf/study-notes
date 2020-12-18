@@ -15,7 +15,7 @@
   - ということは、Rails 5時代に書かれた記事で調べものをするとき注意が必要。
 - 「バンドラ」といっても`bundler` gemとは別物
   - `bundle install` で、gemのバージョンとかを考慮して依存関係を考えながらgemをインストールしてくれる。
-  - `bundle exec rails` のようにすると、`Gemfile.lock`を考慮したgem versionを選択してくれる。複数バージョンのgemがインストールされてるときに問題になる？
+  - `bundle exec rails` のようにすると、`Gemfile.lock`を考慮したgem versionを選択してくれる。複数バージョンのgemがインストールされてるときに問題になるようだ。
 
 ## webpacker関係の
 
