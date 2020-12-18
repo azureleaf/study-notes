@@ -26,7 +26,13 @@
     - [Routing with DSL](#routing-with-dsl)
     - [Session & Cookie](#session--cookie)
   - [Models / Active Records](#models--active-records)
+    - [Keywords](#keywords)
+    - [Basics](#basics)
+    - [Conditions](#conditions)
+    - [Limit](#limit)
+    - [Calculation](#calculation)
     - [Active Records](#active-records)
+    - [Active Record Callbacks](#active-record-callbacks)
     - [ActiveModel](#activemodel)
     - [Authentication](#authentication)
     - [Migration](#migration)
@@ -200,6 +206,17 @@ bin/rails server
 # show settings
 bin/rails routes
 bin/rails middleware
+
+#
+# Rails generation
+#
+rails g controller Articles # controller, view, routing
+rails g model Article # model, migration
+rails g migration Article # migration
+rails g scaffold Article # controller, view, model, migration, routing 
+
+# delete
+rails d controller article # 
 
 # controller:
 # create app/controllers/patients_controller.rb
@@ -476,6 +493,115 @@ cookies.delete(:commenter_name)
 
 ## Models / Active Records
 
+### Keywords
+
+- Scope
+  - whereクエリに別名を与えるような使い方
+  - 実際に使うときに短くて済むので、可動性up。
+  - 引数をとることもできるので、柔軟性高い。
+  - スコープ同士を連結できる。
+  - default_scopeで全てのクエリに暗黙でscopeを付けることができる。
+  - 逆に、unscopedを使ってかかっているscopeを外すこともできる。
+- Enums
+  - 属性がその値になっている全てのレコードを抽出できる。
+  - あるレコードの値が、特定の値になっているのか「?」で抽出できる。
+  - 同じ値を持つenumを定義できない（するなら`prefix: true`が必要）なのは、このへんに理由がありそう。
+- Method Chaining
+- find_by_sql
+
+### Basics
+
+```rb
+
+#
+customer = Customer.find(10)
+customers = Customer.find([1, 10])
+customer = Customer.take
+customer = Customer.take(10)
+customer = Customer.take!(10)
+customer = Customer.first
+customers = Customer.first(3)
+customer = Customer.last
+customer = Customer.order(:first_name).first
+
+# equivalent two notations
+Customer.find_by first_name: 'Lifo'
+Customer.where(first_name: 'Lifo').take
+
+# equivalent
+Customer.find_by! first_name: 'does not exist'
+
+# BAD
+Customer.all.each do |customer|
+  NewsMailer.weekly(customer).deliver_now
+end
+
+# GOOD
+Customer.find_each do |customer|
+  NewsMailer.weekly(customer).deliver_now
+end
+
+
+# Scope
+# 
+scope :in_print, -> { where(out_of_print: false) } # controller
+
+
+```
+
+### Conditions
+
+```rb
+Customer.where.not(orders_count: [1,3,5])
+Customer.where(last_name: 'Smith').or(Customer.where(orders_count: [1,3,5]))
+
+
+```
+
+### Limit
+
+```rb
+Customer.order(:created_at)
+Customer.order(created_at: :desc)
+Customer.order(created_at: :asc)
+
+
+Book.select(:isbn, :out_of_print)
+Customer.select(:last_name).distinct
+
+
+Customer.limit(5)
+Customer.limit(5).offset(30)
+
+Book.where('id > 100').limit(20).order('id desc').unscope(:order)
+Book.where('id > 10').limit(20).order('id desc').only(:order, :where)
+
+
+# group
+Order.group(:status).count
+
+
+# exists
+Customer.exists?(1)
+Order.shipped.any?  
+Order.many?
+Order.any?
+
+```
+
+### Calculation
+
+
+```rb
+Customer.count
+Order.average("subtotal")
+Order.minimum("subtotal")
+Order.maximum("subtotal")
+Order.sum("subtotal")
+
+
+
+```
 ### Active Records
 
 ```rb
@@ -502,6 +628,9 @@ User.find_by()	# find by id / values but id. Get a single record
 User.where()	# find by arbitrary criteria. Get multiple records
 
 ```
+
+
+### Active Record Callbacks
 
 ### ActiveModel
 
