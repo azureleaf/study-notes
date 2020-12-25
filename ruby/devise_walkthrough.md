@@ -10,192 +10,261 @@
 2. Devise についての
 3. Devise に登場する、Ruby/Rails のシンタックスの確認
 
+## 疑問
+
+- CLIでのモデル名などはどう認識するのか？　大文字vs小文字、複数形vs単数形にかかわらず結果が同一のときも多いが
+- devise_forはどういう文法なのか？
+
+```rb
+class User < 
+
+```
+
 ## ToC
 
 - [Devise Walkthrough](#devise-walkthrough)
+  - [疑問](#疑問)
   - [ToC](#toc)
+  - [devise利用の基礎](#devise利用の基礎)
   - [Directory](#directory)
-  - [root](#root)
+  - [特に着目した方がよさそうなファイル](#特に着目した方がよさそうなファイル)
   - [lib/devise.rb](#libdeviserb)
+    - [メソッド](#メソッド)
+    - [一部抜粋](#一部抜粋)
   - [lib/devise/rails/routes.rb](#libdeviserailsroutesrb)
-  - [devise_mappingメソッドの流れを追ってみる](#devise_mappingメソッドの流れを追ってみる)
+    - [メソッド一覧](#メソッド一覧)
+    - [抜粋](#抜粋)
+    - [補足：エラー処理](#補足エラー処理)
+  - [横断：devise_forの流れを追ってみる](#横断devise_forの流れを追ってみる)
+  - [lib/devise/](#libdevise)
   - [lib/devise/models](#libdevisemodels)
-    - [authenticatable.rb](#authenticatablerb)
-    - [confirmable.rb](#confirmablerb)
-    - [database_authenticatable.rb](#database_authenticatablerb)
-    - [lockable.rb](#lockablerb)
-    - [omniauthable.rb](#omniauthablerb)
-    - [recoverable.rb](#recoverablerb)
-    - [registerable.rb](#registerablerb)
-    - [rememberable.rb](#rememberablerb)
-    - [timeoutable.rb](#timeoutablerb)
-    - [trackable.rb](#trackablerb)
-    - [validatable.rb](#validatablerb)
-  - [app/controllers](#appcontrollers)
-    - [devise_controllers.rb](#devise_controllersrb)
-    - [devise/confirmations_controller.rb](#deviseconfirmations_controllerrb)
-    - [devise/omniauth_callbacks_controller.rb](#deviseomniauth_callbacks_controllerrb)
-    - [devise/passwords_controller.rb](#devisepasswords_controllerrb)
-    - [devise/registrations_controller.rb](#deviseregistrations_controllerrb)
-    - [devise/sessions_controller.rb](#devisesessions_controllerrb)
-    - [devise/unlocks_controller.rb](#deviseunlocks_controllerrb)
   - [lib/devise/controllers/](#libdevisecontrollers)
-    - [helpers.rb](#helpersrb)
-    - [rememberable.rb](#rememberablerb-1)
-    - [scoped_views.rb](#scoped_viewsrb)
-    - [sign_in_out.rb](#sign_in_outrb)
-    - [store_location.rb](#store_locationrb)
-    - [url_helpers.rb](#url_helpersrb)
   - [app/views/devise](#appviewsdevise)
   - [lib/devise.rb](#libdeviserb-1)
   - [lib/devise/rails/routes.rb](#libdeviserailsroutesrb-1)
   - [lib/devise/generators](#libdevisegenerators)
-    - [files](#files)
+    - [Generatorってなんだったっけ？](#generatorってなんだったっけ)
+    - [Generator Usage](#generator-usage)
+    - [Methods](#methods)
     - [Syntax](#syntax)
   - [Syntax of Ruby / Rails](#syntax-of-ruby--rails)
     - [Module / Class](#module--class)
     - [Gemfile](#gemfile)
     - [Namespaces?](#namespaces)
+  - [Refs to external gems](#refs-to-external-gems)
+
+
+## devise利用の基礎
+
+```rb
+class Users
+  devise_for :database_authen
+end
+```
 
 ## Directory
 
-- gem それ自体が MVC の web アプリのようになっているように見えます。
-
 ```sh
-# tree -d > devise_structure.txt
+# tree devise -a -I .git
 
-.
-└── devise
-    ├── app
-    │   ├── controllers
-    │   │   └── devise
-    │   ├── helpers
-    │   ├── mailers
-    │   │   └── devise
-    │   └── views
-    │       └── devise
-    │           ├── confirmations
-    │           ├── mailer
-    │           ├── passwords
-    │           ├── registrations
-    │           ├── sessions
-    │           ├── shared
-    │           └── unlocks
-    ├── bin # テストを走らせるときの起点ファイルっぽい
-    ├── config
-    │   └── locales # 言語別に表示テキストを変える時の辞書を入れる。言語別のYAML
-    ├── gemfiles # package.json相当。
-    ├── guides
-    │   └── bug_report_templates
-    ├── lib
-    │   ├── devise # gemの本体。devise.rbが重要そう
-    │   │   ├── controllers
-    │   │   ├── hooks
-    │   │   ├── mailers
-    │   │   ├── models
-    │   │   ├── omniauth
-    │   │   ├── orm
-    │   │   ├── rails
-    │   │   ├── strategies
-    │   │   └── test
-    │   └── generators # Rails::Generators::Baseを継承したもの
-    │       ├── active_record
-    │       │   └── templates
-    │       ├── devise
-    │       ├── mongoid
-    │       └── templates
-    │           ├── controllers
-    │           ├── markerb
-    │           └── simple_form_for
-    │               ├── confirmations
-    │               ├── passwords
-    │               ├── registrations
-    │               ├── sessions
-    │               └── unlocks
-    └── test
-        ├── controllers
-        ├── generators
-        ├── helpers
-        ├── integration
-        ├── mailers
-        ├── models
-        ├── omniauth
-        ├── orm
-        ├── rails_app
-        │   ├── app
-        │   │   ├── active_record
-        │   │   ├── controllers
-        │   │   │   ├── admins
-        │   │   │   ├── custom
-        │   │   │   ├── publisher
-        │   │   │   └── users
-        │   │   ├── helpers
-        │   │   ├── mailers
-        │   │   │   └── users
-        │   │   ├── mongoid
-        │   │   └── views
-        │   │       ├── admins
-        │   │       │   └── sessions
-        │   │       ├── home
-        │   │       ├── layouts
-        │   │       └── users
-        │   │           ├── mailer
-        │   │           └── sessions
-        │   ├── bin
-        │   ├── config
-        │   │   ├── environments
-        │   │   └── initializers
-        │   ├── db
-        │   │   └── migrate
-        │   ├── lib
-        │   └── public
-        ├── support
-        │   ├── action_controller
-        │   ├── locale
-        │   └── webrat
-        │       └── integrations
-        └── test
+devise
+├── .gitignore
+├── .travis.yml
+├── .yardopts # YARDというrubyのdoc toolの設定ファイル。Ruby標準のRDocよりも書式がかっちり決まってて実戦向きだとか。
+├── CHANGELOG.md
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── Gemfile # package.jsonに相当
+├── Gemfile.lock # package_lock.jsonに相当
+├── ISSUE_TEMPLATE.md
+├── MIT-LICENSE
+├── README.md
+├── Rakefile
+├── app
+│   ├── controllers
+│   │   ├── devise
+│   │   │   ├── confirmations_controller.rb
+│   │   │   ├── omniauth_callbacks_controller.rb
+│   │   │   ├── passwords_controller.rb
+│   │   │   ├── registrations_controller.rb
+│   │   │   ├── sessions_controller.rb
+│   │   │   └── unlocks_controller.rb
+│   │   └── devise_controller.rb
+│   ├── helpers
+│   │   └── devise_helper.rb
+│   ├── mailers
+│   │   └── devise
+│   │       └── mailer.rb
+│   └── views
+│       └── devise
+│           ├── confirmations
+│           │   └── new.html.erb
+│           ├── mailer
+│           │   ├── confirmation_instructions.html.erb
+│           │   ├── email_changed.html.erb
+│           │   ├── password_change.html.erb
+│           │   ├── reset_password_instructions.html.erb
+│           │   └── unlock_instructions.html.erb
+│           ├── passwords
+│           │   ├── edit.html.erb
+│           │   └── new.html.erb
+│           ├── registrations
+│           │   ├── edit.html.erb
+│           │   └── new.html.erb
+│           ├── sessions
+│           │   └── new.html.erb
+│           ├── shared
+│           │   ├── _error_messages.html.erb
+│           │   └── _links.html.erb
+│           └── unlocks
+│               └── new.html.erb
+├── bin
+│   └── test
+├── config
+│   └── locales
+│       └── en.yml
+├── devise.gemspec # gemのメタ情報。依存gemのバージョン、gem名称、連絡先、著者、など
+├── devise.png
+├── gemfiles
+│   ├── Gemfile.rails-4.1-stable
+│   ├── Gemfile.rails-4.1-stable.lock
+│   ├── Gemfile.rails-4.2-stable
+│   ├── Gemfile.rails-4.2-stable.lock
+│   ├── Gemfile.rails-5.0-stable
+│   ├── Gemfile.rails-5.0-stable.lock
+│   ├── Gemfile.rails-5.1-stable
+│   ├── Gemfile.rails-5.1-stable.lock
+│   ├── Gemfile.rails-5.2-stable
+│   ├── Gemfile.rails-5.2-stable.lock
+│   ├── Gemfile.rails-6.0-stable
+│   └── Gemfile.rails-6.0-stable.lock
+├── guides
+│   └── bug_report_templates
+│       └── integration_test.rb
+├── lib
+│   ├── devise
+│   │   ├── controllers
+│   │   │   ├── helpers.rb # current_userやauthenticate_user!などのヘルパー生成
+│   │   │   ├── rememberable.rb
+│   │   │   ├── scoped_views.rb
+│   │   │   ├── sign_in_out.rb
+│   │   │   ├── store_location.rb
+│   │   │   └── url_helpers.rb
+│   │   ├── delegator.rb
+│   │   ├── encryptor.rb
+│   │   ├── failure_app.rb
+│   │   ├── hooks
+│   │   │   ├── activatable.rb
+│   │   │   ├── csrf_cleaner.rb
+│   │   │   ├── forgetable.rb
+│   │   │   ├── lockable.rb
+│   │   │   ├── proxy.rb
+│   │   │   ├── rememberable.rb
+│   │   │   ├── timeoutable.rb
+│   │   │   └── trackable.rb
+│   │   ├── mailers
+│   │   │   └── helpers.rb
+│   │   ├── mapping.rb # Devise::Mappingの定義。
+│   │   ├── models # modelで"devise :lockable"とかの引数になるシンボルと同名のモジュールを定義
+│   │   │   ├── authenticatable.rb
+│   │   │   ├── confirmable.rb
+│   │   │   ├── database_authenticatable.rb
+│   │   │   ├── lockable.rb
+│   │   │   ├── omniauthable.rb
+│   │   │   ├── recoverable.rb
+│   │   │   ├── registerable.rb
+│   │   │   ├── rememberable.rb
+│   │   │   ├── timeoutable.rb
+│   │   │   ├── trackable.rb
+│   │   │   └── validatable.rb
+│   │   ├── models.rb # devise付きmodelの冒頭にあるdevise()を定義
+│   │   ├── modules.rb
+│   │   ├── omniauth
+│   │   │   ├── config.rb
+│   │   │   └── url_helpers.rb
+│   │   ├── omniauth.rb
+│   │   ├── orm
+│   │   │   ├── active_record.rb
+│   │   │   └── mongoid.rb
+│   │   ├── parameter_filter.rb
+│   │   ├── parameter_sanitizer.rb # devise_parameter_sanitizer()の定義はここ
+│   │   ├── rails
+│   │   │   ├── deprecated_constant_accessor.rb
+│   │   │   ├── routes.rb # device_forの定義。
+│   │   │   └── warden_compat.rb
+│   │   ├── rails.rb
+│   │   ├── secret_key_finder.rb
+│   │   ├── strategies
+│   │   │   ├── authenticatable.rb
+│   │   │   ├── base.rb
+│   │   │   ├── database_authenticatable.rb
+│   │   │   └── rememberable.rb
+│   │   ├── test
+│   │   │   ├── controller_helpers.rb
+│   │   │   └── integration_helpers.rb
+│   │   ├── test_helpers.rb
+│   │   ├── time_inflector.rb
+│   │   ├── token_generator.rb
+│   │   └── version.rb
+│   ├── devise.rb # 最重要ファイル
+│   └── generators # rails g devise系のジェネレータの定義
+│       ├── active_record
+│       │   ├── devise_generator.rb
+│       │   └── templates
+│       │       ├── migration.rb
+│       │       └── migration_existing.rb
+│       ├── devise
+│       │   ├── controllers_generator.rb
+│       │   ├── devise_generator.rb
+│       │   ├── install_generator.rb
+│       │   ├── orm_helpers.rb
+│       │   └── views_generator.rb
+│       ├── mongoid
+│       │   └── devise_generator.rb
+│       └── templates
+│           ├── README
+│           ├── controllers
+│           │   ├── README
+│           │   ├── confirmations_controller.rb
+│           │   ├── omniauth_callbacks_controller.rb
+│           │   ├── passwords_controller.rb
+│           │   ├── registrations_controller.rb
+│           │   ├── sessions_controller.rb
+│           │   └── unlocks_controller.rb
+│           ├── devise.rb
+│           ├── markerb
+│           │   ├── confirmation_instructions.markerb
+│           │   ├── email_changed.markerb
+│           │   ├── password_change.markerb
+│           │   ├── reset_password_instructions.markerb
+│           │   └── unlock_instructions.markerb
+│           └── simple_form_for
+│               ├── confirmations
+│               │   └── new.html.erb
+│               ├── passwords
+│               │   ├── edit.html.erb
+│               │   └── new.html.erb
+│               ├── registrations
+│               │   ├── edit.html.erb
+│               │   └── new.html.erb
+│               ├── sessions
+│               │   └── new.html.erb
+│               └── unlocks
+│                   └── new.html.erb
+└── test # 省略
 
-90 directories
-
-
-
+89 directories, 278 files
 ```
 
-## root
+## 特に着目した方がよさそうなファイル
 
-```sh
-# package.jsonに相当する
-Gemfile
-
-# package-lock.jsonに相当
-Gemfile.lock
-
-#
-Rakefile
-
-#
-.travis.yml
-
-# このgemのメタ情報
-# 依存gemのバージョン、gem名称、連絡先、著者、など
-devise.gemspec
-
-# YARDというrubyのdoc toolの設定ファイル。
-# Rubyには標準で RDocというツールが入っているんだそうな。
-# YARDはそれよりも書式がかっちり決まってて実戦向きだそうだ。
-.yardopts
-
-# Rubyに限らずよく見る定番
-CHANGELOG.md
-CONTRIBUTING.md
-ISSUE_TEMPLATE.md
-CODE_OF_CONDUCT.md
-README.md
-MIT-LICENSE
-.gitignore
-```
-
+- `lib/devise/devise.rb`
+- `lib/devise/rails/routes.rb`
+- `app/controllers/devise_controller`
+- `lib/devise/mapping.rb`
+- `lib/devise/models.rb`
+- `lib/devise/models/database_authenticatable.rb`
+- `lib/devise/controllers/helpers.rb`
 
 ## lib/devise.rb
 
@@ -215,9 +284,45 @@ module Devise
     module Helpers
 ```
 
-- 一部抜粋
+### メソッド
 
 ```rb
+module Devise
+  module Controllers
+  module Hooks
+  module Mailers
+  module Strategies
+  module Test
+
+  def self.activerecord51? # :nodoc:
+  def self.setup
+  class Getter
+    def initialize(name)
+    def get
+  def self.ref(arg)
+  def self.available_router_name
+  def self.omniauth_providers
+  def self.mailer
+  def self.mailer=(class_name)
+  def self.add_mapping(resource, options)
+  def self.add_module(module_name, options = {})
+  def self.warden(&block)
+  def self.omniauth(provider, *args)
+  def self.include_helpers(scope)
+  def self.regenerate_helpers!
+  def self.configure_warden! #:nodoc:
+  def self.friendly_token(length = 20)
+  def self.secure_compare(a, b)
+```
+
+### 一部抜粋
+
+```rb
+# この行の意味？
+# frozen_string_literal: true
+
+
+
 # :nodocというのはRubyのドキュメンテーションツールrdocでこのメソッドを含めないという意味。このメソッドの重要度が低いから？
 # Gem::versionというのは、バージョン文字列を比較するrubyの組み込み関数（例えばv1.10はv1.9の次だっていう判別を正しく扱う）
 # def self.というのは
@@ -225,14 +330,6 @@ def self.activerecord51? # :nodoc:
   defined?(ActiveRecord) && ActiveRecord.gem_version >= Gem::Version.new("5.1.x")
 end
 
-# moduleとは
-# moduleはネストできる。
-module Devise
-  module Controllers
-    # autoloadとは???
-    autoload :Helpers, 'devise/controllers/helpers'
-  end
-end
 
 # mattr_accessor はクラスへのアクセサ `attr_accessor`のmodule版か？
 # @@valueはclass variableである。class instanceである@valueとの違い？
@@ -243,7 +340,8 @@ mattr_accessor :remember_for
 mattr_accessor :password_length
 @@password_length = 6..128 # Range
 
-# Rubyにおける << はいくつか意味がある：シフト演算、特異クラス、heredoc
+# Rubyにおける << はいくつか意味がある：シフト演算、特異クラス、heredocなど
+# これは特異クラスである
 mattr_reader :helpers
 @@helpers = Set.new
 @@helpers << Devise::Controllers::Helpers
@@ -257,15 +355,156 @@ end
 require 'warden'
 ```
 
+
 ## lib/devise/rails/routes.rb
 
 - **`devise_for`メソッドはここで定義されている。**
-- methods:
-  - 
 
-## devise_mappingメソッドの流れを追ってみる
+
+
+
+### メソッド一覧
 
 ```rb
+Devise::RouteSet.finalize! # finalize! そのものはRailsの機能っぽい。
+ActionDispatch::Routing
+  class RouteSet
+  class Mapper
+    def devise_for()
+    def authenticate()
+    def authenticated()
+    def unauthenticated()
+    def devise_scope()
+
+    protected
+
+    def devise_session()
+    def devise_password()
+    def devise_confirmation()
+    def devise_unlock(mapping, controllers) 
+    def devise_registration(mapping, controllers) 
+    def devise_omniauth_callback(mapping, controllers) 
+    def with_devise_exclusive_scope(new_path, new_as, options) 
+    def constraints_for(method_to_apply, scope = nil, block = nil)
+    def set_omniauth_path_prefix!(path_prefix) 
+    def raise_no_secret_key 
+    def raise_no_devise_method_error!(klass) 
+       
+```
+
+### 抜粋
+
+```rb
+# authenticate
+def authenticate(scope = nil, block = nil)
+  constraints_for(:authenticate!, scope, block) do
+    yield
+  end
+end
+
+
+
+```
+
+### 補足：エラー処理
+
+```rb
+begin # try
+  raise 
+rescue # catch
+  retry 
+ensure # finally
+end
+```
+
+
+## 横断：devise_forの流れを追ってみる
+
+```rb
+# routes.rbで以下のように記述したとしよう。
+devise_for :users,
+    path: '',
+    path_names: {
+      sign_up: '',
+      sign_in: 'login',
+      sign_out: 'logout',
+      registration: "signup",
+    },
+    controllers: {
+      registrations: "users/registrations",
+      sessions: "users/sessions"
+    }
+
+# viewやcontrollerでの使用例
+devise_mapping.registerable?
+
+#
+# lib/devise/rails/routes.rb
+#
+# *resourcesは可変長配列(splat operator)
+# ちなみに main(a, *args, **kwargs) とするとdouble splat operatorはハッシュをとれる。（Pythonと似てる）
+def devise_for(*resources)
+  @devise_finalized = false
+  raise_no_secret_key unless Devise.secret_key
+  options = resources.extract_options! # [:users, path: '', path_names {}] のうちhash部分のみを抜き出す
+
+  # @scopeとは???
+  options[:as]          ||= @scope[:as]     if @scope[:as].present?
+  options[:module]      ||= @scope[:module] if @scope[:module].present?
+  options[:path_prefix] ||= @scope[:path]   if @scope[:path].present?
+  options[:path_names]    = (@scope[:path_names] || {}).merge(options[:path_names] || {})
+  options[:constraints]   = (@scope[:constraints] || {}).merge(options[:constraints] || {})
+  options[:defaults]      = (@scope[:defaults] || {}).merge(options[:defaults] || {})
+  options[:options]       = @scope[:options] || {}
+  options[:options][:format] = false if options[:format] == false
+
+  # &はprocに変えているが... to_symと組み合わせるとどうなる？
+  resources.map!(&:to_sym)
+
+  resources.each do |resource|
+    mapping = Devise.add_mapping(resource, options)
+
+    begin
+      raise_no_devise_method_error!(mapping.class_name) unless mapping.to.respond_to?(:devise)
+    rescue NameError => e
+      raise unless mapping.class_name == resource.to_s.classify
+      warn "[WARNING] You provided devise_for #{resource.inspect} but there is " \
+        "no model #{mapping.class_name} defined in your application"
+      next
+    rescue NoMethodError => e
+      raise unless e.message.include?("undefined method `devise'")
+      raise_no_devise_method_error!(mapping.class_name)
+    end
+
+    if options[:controllers] && options[:controllers][:omniauth_callbacks]
+      unless mapping.omniauthable?
+        raise ArgumentError, "Mapping omniauth_callbacks on a resource that is not omniauthable\n" \
+          "Please add `devise :omniauthable` to the `#{mapping.class_name}` model"
+      end
+    end
+
+    routes = mapping.used_routes
+
+    devise_scope mapping.name do
+      with_devise_exclusive_scope mapping.fullpath, mapping.name, options do
+        routes.each { |mod| send("devise_#{mod}", mapping, mapping.controllers) }
+      end
+    end
+  end
+end
+
+# lib/devise.rb
+module Devise
+  def self.add_mapping(resource, options)
+    mapping = Devise::Mapping.new(resource, options)
+    @@mappings[mapping.name] = mapping
+    @@default_scope ||= mapping.name
+    @@helpers.each { |h| h.define_helpers(mapping) }
+    mapping
+  end
+end
+
+
 # lib/devise/mapping.rb
 module Devise
   class Mapping
@@ -293,62 +532,68 @@ module Devise
   end
 end
 
-# lib/devise.rb
-module Devise
-  def self.add_mapping(resource, options)
-    mapping = Devise::Mapping.new(resource, options)
-    @@mappings[mapping.name] = mapping
-    @@default_scope ||= mapping.name
-    @@helpers.each { |h| h.define_helpers(mapping) }
-    mapping
-  end
-end
+```
 
+- 別系統のdevise_mapping?
+
+```rb
 # app/controllers/devise_controller.rb
 def devise_mapping
   # request.envとは
   # request.env["HTTP_USER_AGENT"]
   @devise_mapping ||= request.env["devise.mapping"]
 end
-
-
-# 使用例
-devise_mapping.registerable?
-
-
 ```
 
+## lib/devise/
 
+
+```rb
+# models.rb
+Devise::Models
+  class MissingAttribute < StandardError
+    def initialize(attributes)
+    def message
+  def self.config(mod, *accessors) #:nodoc:
+    class << mod; attr_accessor :available_configs; end
+  def self.check_fields!(klass)
+  def devise(*modules)
+  def devise_modules_hook!
+
+require 'devise/models/authenticatable'
+```
 
 ## lib/devise/models
 
 - devise 使用時にモデル内で `devise_for` で列挙するオプションは、このディレクトリ内で module として定義されている。
 
-### authenticatable.rb
+```rb
+# authenticatable.rb
 
-### confirmable.rb
+# confirmable.rb
 
-### database_authenticatable.rb
+# database_authenticatable.rb
 
-### lockable.rb
+# lockable.rb
 
-### omniauthable.rb
+# omniauthable.rb
 
-### recoverable.rb
+# recoverable.rb
 
-### registerable.rb
+# registerable.rb
 
-### rememberable.rb
+# rememberable.rb
 
-### timeoutable.rb
+# timeoutable.rb
 
-### trackable.rb
+# trackable.rb
 
-### validatable.rb
+# validatable.rb
 
 ## app/controllers
 
-### devise_controllers.rb
+# devise_controllers.rb
+```
 
 - 以下の`devise/`以下 6 つのコントローラに継承される基底クラス。
 
@@ -364,37 +609,56 @@ helper_method(*helpers)
 
 ```
 
-### devise/confirmations_controller.rb
-
 ```rb
+# devise/confirmations_controller.rb
+
 GET /resource/confirmation/new
 POST /resource/confirmation
 GET /resource/confirmation?confirmation_token=abcdef
+
+# devise/omniauth_callbacks_controller.rb
+
+# devise/passwords_controller.rb
+
+# devise/registrations_controller.rb
+
+# devise/sessions_controller.rb
+
+# devise/unlocks_controller.rb
 ```
-
-### devise/omniauth_callbacks_controller.rb
-
-### devise/passwords_controller.rb
-
-### devise/registrations_controller.rb
-
-### devise/sessions_controller.rb
-
-### devise/unlocks_controller.rb
 
 ## lib/devise/controllers/
 
-### helpers.rb
+- deviseが以下のヘルパーを生成する。
+  - before_action :authenticate_user!	
+  - user_signed_in?
+  - current_user
+  - user_session
 
-### rememberable.rb
+```rb
+# helpers.rb
 
-### scoped_views.rb
+# rememberable.rb
 
-### sign_in_out.rb
+# scoped_views.rb
 
-### store_location.rb
+# sign_in_out.rb
+Devise::Controllers::SignInOut
+  def signed_in?(scope = nil)
+  def sign_in(resource_or_scope, *args)
+  def bypass_sign_in(resource, scope: nil)
+  def sign_out(resource_or_scope = nil)
+  def sign_out_all_scopes(lock = true)
+  private
+  def expire_data_after_sign_in!
+  alias :expire_data_after_sign_out! :expire_data_after_sign_in!
 
-### url_helpers.rb
+# store_location.rb
+
+# url_helpers.rb
+
+```
+
 
 ## app/views/devise
 
@@ -442,18 +706,60 @@ unlock_token
 
 ## lib/devise/rails/routes.rb
 
+```rb
+
+
+```
+
 ## lib/devise/generators
 
-- generatorを使うと、テンプレートファイルの自動生成などによりアプリ開発を高速化できる。
-  - `rails new` も `bin/rails generate` もgeneratorを利用している。
-- `Rails::Generators::Base`を継承している。
+### Generatorってなんだったっけ？
 
-### files
+- [公式](https://railsguides.jp/generators.html)
+- generatorを使うと、テンプレートファイルの自動生成などによりアプリ開発を高速化できる。
+- `rails new` も `bin/rails generate` もgeneratorを利用している。
+- Generatorは`Rails::Generators::Base`を継承してつくる。
+
+### Generator Usage
+
+- deviseの基本的なジェネレータをまず列挙してみる。
 
 ```sh
+bundle exec bin/rails g devise:install
+bundle exec bin/rails g devise user # model, migration, routes
+bundle exec bin/rails g devise:views users
+bundle exec bin/rails g devise:controllers users # controllers,
 
-# Generator: 
-generators/active_record/devise_generator.rb
+```
+
+### Methods
+
+```rb
+
+# Generatorの元締め？
+# generators/active_record/devise_generator.rb
+module ActiveRecord
+  module Generators
+    class DeviseGenerator
+
+      def copy_devise_migration
+
+
+      def generate_model
+
+      def inject_devise_content
+      
+      # migrationカラム内容を文字列として返す
+      def migration_data 
+      
+      def ip_column
+      def inet?
+      def rails5_and_up? # Railsバージョンが5以上か？
+      def postgresql? # configのDBがpostgresになってるか？
+      def migration_version # 
+      def primary_key_type
+      def primary_key_string
+
 
 # migrationファイルのテンプレート
 # ERBのテンプレートを使って、テーブル名やDBカラムなどを差し込めるようになっているのが面白い
@@ -707,9 +1013,46 @@ end
 
 ### Namespaces?
 
+- Scope operator
+  - https://stackoverflow.com/questions/10482772/rubys-double-colon-operator-usage-differences
+
+```rb
+::Rails::Engine #is an absolute path to the constant.
+# like /Rails/Engine in FS.
+
+Rails::Engine #is a path relative to the current tree level.
+# like ./Rails/Engine in FS.
+```
+
 ```rb
 Thor::Error
 ::BCrypt::Password.create(password, cost: klass.stretches).to_s
 Devise.secure_compare(password, hashed_password)
+
+```
+
+## Refs to external gems
+
+```rb
+# Rails::Generators::BaseはThor gem（CLIの作成支援ツール）を継承している。
+# 
+Thor::Base::ClassMethods.argument(name, options = {})
+
+
+# Returns the source root for this generator using default_source_root as default.
+Rails::Generators::Base.source_root(path = nil) 
+
+# Make class option aware of Rails::Generators.options and Rails::Generators.aliases.
+Rails::Generators::Base.class_option(name, options = {}) 
+
+# 
+ActiveSupport::CoreExtensions::Array::ExtractOptions.extract_options!
+# 実装は以下
+# Rubyは[1, 2, 3, c:4, d:5]みたいに値,値,hash, hashみたいな配列を許すようだ
+# ただし、値のかたまり→hashのかたまりという順序を守らないとsyntax errorになる
+# [a, b, c:1, d:2]という配列に対して、{c:1, d:2}だけを返す
+def extract_options!
+  last.is_a?(::Hash) ? pop : {}
+end
 
 ```

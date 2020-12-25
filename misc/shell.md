@@ -85,24 +85,22 @@
 
 ## Files
 
-- cd
-- mv hello.txt ../src
-- mv old.txt new.txt
-- cp old.txt ../
-- rm
-- mkdir src
-- rmdir
-- `rm -rf node_modules`
-  - `-f` is very dangerous; you can break your OS easily
-- `rm -v !("hello.txt")`
-  - Remove all files but hello.txt
-- `rm -rf !(triangle|fractal)`
-  - Remove all but specified files/directories
-- ls
-- `ls *.txt`
-- `ls vue*`
-- `ls -a`
-  - show hidden files as well
+```sh
+cd
+mv hello.txt ../src
+mv old.txt new.txt
+cp old.txt ../
+rm
+mkdir src
+rmdir
+rm -rf node_modules # -f is very dangerous; you can break your OS easily
+rm -v !("hello.txt") # Remove all files but hello.txt
+rm -rf !(triangle|fractal) # Remove all but specified files/directories
+ls
+ls *.txt
+ls vue*
+ls -a # show hidden files as well
+```
 
 ```sh
 ls -a | grep app
@@ -121,6 +119,13 @@ du -d1 | sort -n -r | head -n 6 # sort
 
 # word count
 wc hello.txt
+
+# display the files tree
+tree my_dir -I .git 
+tree my_dir -d # directory only
+tree my_dir -L 2 # 2 levels only
+tree my_dir --charset unicode
+
 ```
 
 ## Archive

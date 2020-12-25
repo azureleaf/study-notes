@@ -908,6 +908,20 @@ bundle install --without production # install except "group :production do" bloc
 
 ## Internationalization
 
+- 言語、時間などの設定
+
+```yml
+
+
+
+time:
+  formats:
+    default: "%Y年%-m月%-d日"
+    number: "%Y%m%d"
+
+```
+
+
 ```sh
 printf "rails-i18n" >> Gemfile
 printf "enum-help" >> Gemfile
@@ -915,6 +929,9 @@ bundle install
 
 # config/application.rb
 config.i18n.default_locale = :ja
+config.time_zone = "Tokyo" 
+config.active_record.default_timezone = :local
+
 ```
 
 
@@ -932,5 +949,9 @@ config.i18n.default_locale = :ja
 #
 # refactor: For hash, use symbol notation (name: john) instead of hash-rocket notation (:name => john)
 # This is better for performance.
+#
+
+#
+# refactor: Put the methods in alphabetical order
 #
 ```
