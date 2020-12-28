@@ -48,6 +48,11 @@
     - [Configure Rails for Postgres](#configure-rails-for-postgres)
   - [Bundler](#bundler)
   - [Internationalization](#internationalization)
+  - [6.9 Initializer](#69-initializer)
+  - [7.3 Generator](#73-generator)
+    - [Methods：　ファイルの生成などの実作業を制御する。](#methodsファイルの生成などの実作業を制御する)
+    - [Config](#config)
+  - [](#)
   - [Tips](#tips)
 
 ## Installation
@@ -934,6 +939,75 @@ config.active_record.default_timezone = :local
 
 ```
 
+## 6.9 Initializer
+
+```rb
+railties/exe/rails
+railties/lib/rails/app_loader.rb
+bin/rails
+config/boot.rb
+rails/commands.rb
+rails/command.rb
+actionpack/lib/action_dispatch.rb
+rails/commands/server_command.rb
+Rack: lib/rack/server.rb
+config/application
+Rails::Server#start
+config/environment.rb
+config/application.rb
+railties/lib/rails/all.rb
+```
+
+## 7.3 Generator
+
+- ThorというCLI作成支援のgemを利用している。
+- `rails new` も `rails g` コマンドもジェネレータを利用している。
+- `$ bin/rails generate generator mygenerator`：ジェネレータを生成するジェネレータ
+- ジェネレータの基底クラス
+```rb
+# A
+class InitializerGenerator < Rails::Generators::Base 
+
+# B
+class InitializerGenerator < Rails::Generators::NamedBase
+```
+
+### Methods：　ファイルの生成などの実作業を制御する。
+
+```rb
+# helpのテキスト
+desc "このジェネレータはconfig/initializersにイニシャライザファイルを作成します" 
+
+# 生成ファイルを直書きする場合
+create_file "config/initializers/initializer.rb", "# イニシャライザの内容" 
+
+# 生成ファイルをコピーする場合（こっちのほうが実戦でよくみる）
+copy_file "initializer.rb", "config/initializers/#{file_name}.rb" 
+
+# 生成先のディレクトリ指定
+source_root File.expand_path('templates', __dir__)
+
+
+```
+
+### Config
+
+```rb
+# config/application.rb
+config.generators do |g|
+  g.orm             :active_record
+  g.template_engine :erb
+  g.test_framework  :shoulda, fixture: false
+  g.stylesheets     false
+  g.javascripts     false
+  g.scaffold_stylesheet false
+
+  g.fallbacks[:shoulda] = :test_unit
+end
+
+```
+
+## 
 
 ## Tips
 

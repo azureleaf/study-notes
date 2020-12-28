@@ -136,6 +136,10 @@ end
 
 ### `require` vs `require_relative`
 
+- 名前から想像できるが
+  - `$LOAD_PATH`からの絶対パスでアクセスするのが `require`
+  - 現在の参照元ファイルからの相対パスで表記するのが `require_relative`
+
 ### `autoload` vs `require`
 
 - https://www.xmisao.com/2013/11/22/ruby-autoload.html
@@ -148,11 +152,13 @@ end
 
 ### 補足： `include` vs `prepend`
 
-- 共通点：　どちらもクラスにモジュールをmix-inする
-- 違い：
+- 共通点
+  - どちらもクラスにモジュールをmix-inする
+- 違い
   - `include`は、まずクラスを呼び、その後モジュールを呼ぶ。
   - `prepend`は、まずモジュールを呼び、その後クラスを呼ぶ。
-- この違いが重要になるのは、モジュールとクラスに同名のメソッドがあるとき。
+- 使い分け
+  - この違いが重要になるのは、モジュールとクラスに同名のメソッドがあるとき。
   - `prepend`だと、クラスの既存のメソッドをoverrideできる。
 
 ```rb
@@ -161,6 +167,8 @@ class RouteSet
 end
 
 ```
+
+- `prepend_before_action`というのがある。
 
 ### 補足：インスタンス変数、クラス変数、クラスインスタンス変数
 

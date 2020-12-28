@@ -14,11 +14,9 @@
 
 - CLIでのモデル名などはどう認識するのか？　大文字vs小文字、複数形vs単数形にかかわらず結果が同一のときも多いが
 - devise_forはどういう文法なのか？
+- strong parameterとはそもそも何か？
+- helperの生成名と、その中身はどのように追えるか？
 
-```rb
-class User < 
-
-```
 
 ## ToC
 
@@ -34,8 +32,15 @@ class User <
   - [lib/devise/rails/routes.rb](#libdeviserailsroutesrb)
     - [メソッド一覧](#メソッド一覧)
     - [抜粋](#抜粋)
+  - [app/controllers/devise_controller.rb](#appcontrollersdevise_controllerrb)
     - [補足：エラー処理](#補足エラー処理)
   - [横断：devise_forの流れを追ってみる](#横断devise_forの流れを追ってみる)
+  - [横断：Modelでの"devise"の流れを追ってみる](#横断modelでのdeviseの流れを追ってみる)
+  - [横断：helper生成の流れを追ってみる](#横断helper生成の流れを追ってみる)
+  - [横断：rails generate devise:viewsの流れを追ってみる](#横断rails-generate-deviseviewsの流れを追ってみる)
+  - [横断：rails generate devise:installを追跡する](#横断rails-generate-deviseinstallを追跡する)
+  - [横断：基本認証の過程を追ってみる](#横断基本認証の過程を追ってみる)
+  - [横断：omniauth認証の過程を追ってみる](#横断omniauth認証の過程を追ってみる)
   - [lib/devise/](#libdevise)
   - [lib/devise/models](#libdevisemodels)
   - [lib/devise/controllers/](#libdevisecontrollers)
@@ -51,7 +56,8 @@ class User <
     - [Module / Class](#module--class)
     - [Gemfile](#gemfile)
     - [Namespaces?](#namespaces)
-  - [Refs to external gems](#refs-to-external-gems)
+  - [広く参照される変数・メソッド](#広く参照される変数メソッド)
+  - [外部gemへの参照の例](#外部gemへの参照の例)
 
 
 ## devise利用の基礎
@@ -260,7 +266,7 @@ devise
 
 - `lib/devise/devise.rb`
 - `lib/devise/rails/routes.rb`
-- `app/controllers/devise_controller`
+- `app/controllers/devise_controller.rb`
 - `lib/devise/mapping.rb`
 - `lib/devise/models.rb`
 - `lib/devise/models/database_authenticatable.rb`
@@ -376,6 +382,7 @@ ActionDispatch::Routing
     def unauthenticated()
     def devise_scope()
 
+    # protected methodsに多数出てくる"resource"メソッドはapp/controllers/devise_controller.rbで定義
     protected
 
     def devise_session()
@@ -405,6 +412,225 @@ end
 
 
 ```
+
+## app/controllers/devise_controller.rb
+
+- 個別のコントローラ（パスワード管理、セッション、新規ユーザ登録、etc.）の基底となるクラスを定義する。
+
+```rb
+class DeviseController < Devise.parent_controller.constantize
+  include Devise::Controllers::ScopedViews
+
+  if respond_to?(:helper)
+    helper DeviseHelper
+  end
+
+  if respond_to?(:helper_method)
+    helpers = %w(resource scope_name resource_name signed_in_resource
+                 resource_class resource_params devise_mapping)
+    helper_method(*helpers)
+  end
+
+  prepend_before_action :assert_is_devise_resource!
+  respond_to :html if mimes_for_respond_to.empty?
+
+  # Override prefixes to consider the scoped view.
+  # Notice we need to check for the request due to a bug in
+  # Action Controller tests that forces _prefixes to be
+  # loaded before even having a request object.
+  #
+  # This method should be public as it is in ActionPack
+  # itself. Changing its visibility may break other gems.
+  def _prefixes #:nodoc:
+    @_prefixes ||= if self.class.scoped_views? && request && devise_mapping
+      ["#{devise_mapping.scoped_path}/#{controller_name}"] + super
+    else
+      super
+    end
+  end
+
+  protected
+
+  # Gets the actual resource stored in the instance variable
+  def resource
+    instance_variable_get(:"@#{resource_name}")
+  end
+
+  # Proxy to devise map name
+  def resource_name
+    devise_mapping.name
+  end
+  alias :scope_name :resource_name
+
+  # Proxy to devise map class
+  def resource_class
+    devise_mapping.to
+  end
+
+  # Returns a signed in resource from session (if one exists)
+  def signed_in_resource
+    warden.authenticate(scope: resource_name)
+  end
+
+  # Attempt to find the mapped route for devise based on request path
+  def devise_mapping
+    @devise_mapping ||= request.env["devise.mapping"]
+  end
+
+  # Checks whether it's a devise mapped resource or not.
+  def assert_is_devise_resource! #:nodoc:
+    unknown_action! <<-MESSAGE unless devise_mapping
+Could not find devise mapping for path #{request.fullpath.inspect}.
+This may happen for two reasons:
+
+1) You forgot to wrap your route inside the scope block. For example:
+
+  devise_scope :user do
+    get "/some/route" => "some_devise_controller"
+  end
+
+2) You are testing a Devise controller bypassing the router.
+   If so, you can explicitly tell Devise which mapping to use:
+
+   @request.env["devise.mapping"] = Devise.mappings[:user]
+
+MESSAGE
+  end
+
+  # Returns real navigational formats which are supported by Rails
+  def navigational_formats
+    @navigational_formats ||= Devise.navigational_formats.select { |format| Mime::EXTENSION_LOOKUP[format.to_s] }
+  end
+
+  def unknown_action!(msg)
+    logger.debug "[Devise] #{msg}" if logger
+    raise AbstractController::ActionNotFound, msg
+  end
+
+  # Sets the resource creating an instance variable
+  def resource=(new_resource)
+    instance_variable_set(:"@#{resource_name}", new_resource)
+  end
+
+  # Helper for use in before_actions where no authentication is required.
+  #
+  # Example:
+  #   before_action :require_no_authentication, only: :new
+  def require_no_authentication
+    assert_is_devise_resource!
+    return unless is_navigational_format?
+    no_input = devise_mapping.no_input_strategies
+
+    authenticated = if no_input.present?
+      args = no_input.dup.push scope: resource_name
+      warden.authenticate?(*args)
+    else
+      warden.authenticated?(resource_name)
+    end
+
+    if authenticated && resource = warden.user(resource_name)
+      set_flash_message(:alert, 'already_authenticated', scope: 'devise.failure')
+      redirect_to after_sign_in_path_for(resource)
+    end
+  end
+
+  # Helper for use after calling send_*_instructions methods on a resource.
+  # If we are in paranoid mode, we always act as if the resource was valid
+  # and instructions were sent.
+  def successfully_sent?(resource)
+    notice = if Devise.paranoid
+      resource.errors.clear
+      :send_paranoid_instructions
+    elsif resource.errors.empty?
+      :send_instructions
+    end
+
+    if notice
+      set_flash_message! :notice, notice
+      true
+    end
+  end
+
+  # Sets the flash message with :key, using I18n. By default you are able
+  # to set up your messages using specific resource scope, and if no message is
+  # found we look to the default scope. Set the "now" options key to a true
+  # value to populate the flash.now hash in lieu of the default flash hash (so
+  # the flash message will be available to the current action instead of the
+  # next action).
+  # Example (i18n locale file):
+  #
+  #   en:
+  #     devise:
+  #       passwords:
+  #         #default_scope_messages - only if resource_scope is not found
+  #         user:
+  #           #resource_scope_messages
+  #
+  # Please refer to README or en.yml locale file to check what messages are
+  # available.
+  def set_flash_message(key, kind, options = {})
+    message = find_message(kind, options)
+    if options[:now]
+      flash.now[key] = message if message.present?
+    else
+      flash[key] = message if message.present?
+    end
+  end
+
+  # Sets flash message if is_flashing_format? equals true
+  def set_flash_message!(key, kind, options = {})
+    if is_flashing_format?
+      set_flash_message(key, kind, options)
+    end
+  end
+
+  # Sets minimum password length to show to user
+  def set_minimum_password_length
+    if devise_mapping.validatable?
+      @minimum_password_length = resource_class.password_length.min
+    end
+  end
+
+  def devise_i18n_options(options)
+    options
+  end
+
+  # Get message for given
+  def find_message(kind, options = {})
+    options[:scope] ||= translation_scope
+    options[:default] = Array(options[:default]).unshift(kind.to_sym)
+    options[:resource_name] = resource_name
+    options = devise_i18n_options(options)
+    I18n.t("#{options[:resource_name]}.#{kind}", **options)
+  end
+
+  # Controllers inheriting DeviseController are advised to override this
+  # method so that other controllers inheriting from them would use
+  # existing translations.
+  def translation_scope
+    "devise.#{controller_name}"
+  end
+
+  def clean_up_passwords(object)
+    object.clean_up_passwords if object.respond_to?(:clean_up_passwords)
+  end
+
+  def respond_with_navigational(*args, &block)
+    respond_with(*args) do |format|
+      format.any(*navigational_formats, &block)
+    end
+  end
+
+  def resource_params
+    params.fetch(resource_name, {})
+  end
+
+  ActiveSupport.run_load_hooks(:devise_controller, self)
+end
+
+```
+
+
 
 ### 補足：エラー処理
 
@@ -443,51 +669,53 @@ devise_mapping.registerable?
 #
 # *resourcesは可変長配列(splat operator)
 # ちなみに main(a, *args, **kwargs) とするとdouble splat operatorはハッシュをとれる。（Pythonと似てる）
-def devise_for(*resources)
-  @devise_finalized = false
-  raise_no_secret_key unless Devise.secret_key
-  options = resources.extract_options! # [:users, path: '', path_names {}] のうちhash部分のみを抜き出す
+class Mapper
+  def devise_for(*resources)
+    @devise_finalized = false
+    raise_no_secret_key unless Devise.secret_key
+    options = resources.extract_options! # [:users, path: '', path_names {}] のうちhash部分のみを抜き出す
 
-  # @scopeとは???
-  options[:as]          ||= @scope[:as]     if @scope[:as].present?
-  options[:module]      ||= @scope[:module] if @scope[:module].present?
-  options[:path_prefix] ||= @scope[:path]   if @scope[:path].present?
-  options[:path_names]    = (@scope[:path_names] || {}).merge(options[:path_names] || {})
-  options[:constraints]   = (@scope[:constraints] || {}).merge(options[:constraints] || {})
-  options[:defaults]      = (@scope[:defaults] || {}).merge(options[:defaults] || {})
-  options[:options]       = @scope[:options] || {}
-  options[:options][:format] = false if options[:format] == false
+    # @scopeとは???
+    options[:as]          ||= @scope[:as]     if @scope[:as].present?
+    options[:module]      ||= @scope[:module] if @scope[:module].present?
+    options[:path_prefix] ||= @scope[:path]   if @scope[:path].present?
+    options[:path_names]    = (@scope[:path_names] || {}).merge(options[:path_names] || {})
+    options[:constraints]   = (@scope[:constraints] || {}).merge(options[:constraints] || {})
+    options[:defaults]      = (@scope[:defaults] || {}).merge(options[:defaults] || {})
+    options[:options]       = @scope[:options] || {}
+    options[:options][:format] = false if options[:format] == false
 
-  # &はprocに変えているが... to_symと組み合わせるとどうなる？
-  resources.map!(&:to_sym)
+    # &はprocに変えているが... to_symと組み合わせるとどうなる？
+    resources.map!(&:to_sym)
 
-  resources.each do |resource|
-    mapping = Devise.add_mapping(resource, options)
+    resources.each do |resource|
+      mapping = Devise.add_mapping(resource, options)
 
-    begin
-      raise_no_devise_method_error!(mapping.class_name) unless mapping.to.respond_to?(:devise)
-    rescue NameError => e
-      raise unless mapping.class_name == resource.to_s.classify
-      warn "[WARNING] You provided devise_for #{resource.inspect} but there is " \
-        "no model #{mapping.class_name} defined in your application"
-      next
-    rescue NoMethodError => e
-      raise unless e.message.include?("undefined method `devise'")
-      raise_no_devise_method_error!(mapping.class_name)
-    end
-
-    if options[:controllers] && options[:controllers][:omniauth_callbacks]
-      unless mapping.omniauthable?
-        raise ArgumentError, "Mapping omniauth_callbacks on a resource that is not omniauthable\n" \
-          "Please add `devise :omniauthable` to the `#{mapping.class_name}` model"
+      begin
+        raise_no_devise_method_error!(mapping.class_name) unless mapping.to.respond_to?(:devise)
+      rescue NameError => e
+        raise unless mapping.class_name == resource.to_s.classify
+        warn "[WARNING] You provided devise_for #{resource.inspect} but there is " \
+          "no model #{mapping.class_name} defined in your application"
+        next
+      rescue NoMethodError => e
+        raise unless e.message.include?("undefined method `devise'")
+        raise_no_devise_method_error!(mapping.class_name)
       end
-    end
 
-    routes = mapping.used_routes
+      if options[:controllers] && options[:controllers][:omniauth_callbacks]
+        unless mapping.omniauthable?
+          raise ArgumentError, "Mapping omniauth_callbacks on a resource that is not omniauthable\n" \
+            "Please add `devise :omniauthable` to the `#{mapping.class_name}` model"
+        end
+      end
 
-    devise_scope mapping.name do
-      with_devise_exclusive_scope mapping.fullpath, mapping.name, options do
-        routes.each { |mod| send("devise_#{mod}", mapping, mapping.controllers) }
+      routes = mapping.used_routes
+
+      devise_scope mapping.name do
+        with_devise_exclusive_scope mapping.fullpath, mapping.name, options do
+          routes.each { |mod| send("devise_#{mod}", mapping, mapping.controllers) }
+        end
       end
     end
   end
@@ -544,6 +772,32 @@ def devise_mapping
   @devise_mapping ||= request.env["devise.mapping"]
 end
 ```
+
+## 横断：Modelでの"devise"の流れを追ってみる
+
+
+## 横断：helper生成の流れを追ってみる
+
+
+
+## 横断：rails generate devise:viewsの流れを追ってみる
+
+
+
+## 横断：rails generate devise:installを追跡する
+
+
+## 横断：基本認証の過程を追ってみる
+
+これでついに総仕上げになる。
+
+## 横断：omniauth認証の過程を追ってみる
+
+- ログイン必要ページかどうかの判断
+- ログイン画面の表示
+- ログイン処理
+- ログイン成功：　リダイレクト
+- ログイン失敗：　フラッシュメッセージの表示
 
 ## lib/devise/
 
@@ -1031,7 +1285,32 @@ Devise.secure_compare(password, hashed_password)
 
 ```
 
-## Refs to external gems
+## 広く参照される変数・メソッド
+
+```rb
+# ログイン中のユーザー情報や、サーバーの設定情報にアクセスするハッシュ
+request.env
+request.env['warden']
+request.env['warden'].user(scope)
+request.env['warden.options']
+request.env['warden'].authenticate?
+request.env['warden'].send(method_to_apply, scope: scope)
+request.env['devise.allow_params_authentication'] # boolean
+request.env['devise.skip_storage'] # boolean
+request.env['devise.skip_trackable'] # boolean
+request.env['devise.skip_timeout'] # boolean
+request.env['devise.mapping']
+request.env['action_controller.instance']
+request.env['omniauth.auth']
+request.env['omniauth.error']
+request.env['omniauth.error.strategy']
+request.env['PATH_INFO']
+request.env['action_controller.instance']
+warden.request.env
+
+```
+
+## 外部gemへの参照の例
 
 ```rb
 # Rails::Generators::BaseはThor gem（CLIの作成支援ツール）を継承している。
@@ -1047,10 +1326,11 @@ Rails::Generators::Base.class_option(name, options = {})
 
 # 
 ActiveSupport::CoreExtensions::Array::ExtractOptions.extract_options!
-# 実装は以下
-# Rubyは[1, 2, 3, c:4, d:5]みたいに値,値,hash, hashみたいな配列を許すようだ
-# ただし、値のかたまり→hashのかたまりという順序を守らないとsyntax errorになる
-# [a, b, c:1, d:2]という配列に対して、{c:1, d:2}だけを返す
+# 以下のように実装されている。
+# Rubyは[1, 2, 3, c:4, d:5] のように値,値,hash, hashみたいな配列が可能。
+# ただし、値...→hash...という順序以外だとsyntax errorになる。
+# 結局、このメソッドは[a, b, c:1, d:2]という引数に対して、
+# {c:1, d:2}をひとかたまりとして認識し抜き出す。
 def extract_options!
   last.is_a?(::Hash) ? pop : {}
 end
