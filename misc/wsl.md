@@ -78,9 +78,16 @@ wsl # Go into the WSL
 wsl.exe -d Ubuntu # Specify the distro to start
 
 wslconfig.exe /l # List the installed Linux distros
+
+wsl -l -v # check if it's WSL 1 or 2
 ```
 
 ## Mounting
 
 - `/mnt/c/Users/john/Documents`
   - Path to the Windows Doc folder (inside the WSL terminal)
+
+## WSL + Docker
+
+1. Ensure that WSL2 is activated in your Windows.
+2. Install Docker Desktop for Windows.

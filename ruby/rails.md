@@ -7,7 +7,6 @@
   - [Installation](#installation)
     - [Install Ruby with Rbenv](#install-ruby-with-rbenv)
     - [Install dependencies for the Rails project](#install-dependencies-for-the-rails-project)
-  - [Official Docs](#official-docs)
     - [Key files](#key-files)
     - [Functionalities](#functionalities)
   - [Rails Command](#rails-command)
@@ -125,49 +124,7 @@ yarn install # on package.json
 rails migrate # if the app uses DB
 ```
 
-## Official Docs
 
-[official Guides](https://guides.rubyonrails.org/)
-
-- Start Here
-  - [ ] Getting started
-    1. Generate the `Welcome` \_VC + routes
-    2. Generate the `Article` MVC + migration + routes
-    3. Generate the `Comment` MVC + migration + routes
-    4. Connect the `Article` model to `Comment` model
-    5. Add auth to `Article` controller
-- Models
-  - [ ] Active Record Basics
-  - [x] Active Record Migrations
-  - [ ] Active Record Validations
-  - [ ] Active Record Callbacks
-  - [ ] Active Record Associations
-  - [ ] Active Record Query Interface
-- Views
-  - [ ] Layouts and Rendering in Rails
-  - [ ] Action View Form Helpers
-- Controllers
-  - [ ] **Action Controller Overview**
-  - [ ] Rails Routing from the Outside In
-- Other Components
-  - [ ] Active Support Core Extensions
-  - [ ] Action Mailer Basics
-  - [ ] Active Job Basics
-  - [ ] Active Storage Overview
-  - [ ] Action Cable Overview
-- Digging Deeper
-  - [ ] Rails Internationalization (I18n) API
-  - [ ] Testing Rails Applications
-  - [ ] Securing Rails Applications
-  - [ ] Debugging Rails Applications
-  - [ ] Configuring Rails Applications
-  - [ ] The Rails Command Line
-  - [ ] The Asset Pipeline
-  - [ ] Working with JavaScript in Rails
-  - [ ] Autoloading and Reloading Constants (Zeitwerk Mode)
-  - [ ] Autoloading and Reloading Constants (Classic Mode)
-  - [ ] Caching with Rails: An Overview
-  - [ ] Using Rails for API-only Applications
 
 ### Key files
 
