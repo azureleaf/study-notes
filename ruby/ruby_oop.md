@@ -11,15 +11,15 @@
   - [mattr_accessor](#mattr_accessor)
   - [autoload](#autoload)
   - [include](#include)
-    - [補足: yiled, proc, block](#補足-yiled-proc-block)
-    - [補足：moduleとは](#補足moduleとは)
-    - [補足： `include` vs `extend`](#補足-include-vs-extend)
-    - [`require` vs `require_relative`](#require-vs-require_relative)
-    - [`autoload` vs `require`](#autoload-vs-require)
-    - [補足： `include` vs `prepend`](#補足-include-vs-prepend)
-    - [補足：インスタンス変数、クラス変数、クラスインスタンス変数](#補足インスタンス変数クラス変数クラスインスタンス変数)
-    - [補足：名前空間](#補足名前空間)
-    - [補足：特異クラス](#補足特異クラス)
+  - [補足: yiled, proc, block](#補足-yiled-proc-block)
+  - [moduleとは](#moduleとは)
+  - [`include` vs `extend`](#include-vs-extend)
+  - [`require` vs `require_relative`](#require-vs-require_relative)
+  - [`autoload` vs `require`](#autoload-vs-require)
+  - [`include` vs `prepend`](#include-vs-prepend)
+  - [インスタンス変数、クラス変数、クラスインスタンス変数](#インスタンス変数クラス変数クラスインスタンス変数)
+  - [名前空間](#名前空間)
+  - [特異クラス](#特異クラス)
 
 ## Basic
 
@@ -111,9 +111,9 @@ end
 ```
 
 
-### 補足: yiled, proc, block
+## 補足: yiled, proc, block
 
-### 補足：moduleとは
+## moduleとは
 
 - モジュールの役割
   - 
@@ -131,16 +131,16 @@ end
 
 ```
 
-### 補足： `include` vs `extend`
+##  `include` vs `extend`
 
 
-### `require` vs `require_relative`
+## `require` vs `require_relative`
 
 - 名前から想像できるが
   - `$LOAD_PATH`からの絶対パスでアクセスするのが `require`
   - 現在の参照元ファイルからの相対パスで表記するのが `require_relative`
 
-### `autoload` vs `require`
+## `autoload` vs `require`
 
 - https://www.xmisao.com/2013/11/22/ruby-autoload.html
 - 共通点
@@ -150,7 +150,7 @@ end
   - `autoload`はコード内で参照されたら読み込む。
 - `require`に時間がかかりすぎるとき、内部で`if`などにより必要になったりならなかったりする場合には`autoload`がいい。
 
-### 補足： `include` vs `prepend`
+## `include` vs `prepend`
 
 - 共通点
   - どちらもクラスにモジュールをmix-inする
@@ -170,7 +170,7 @@ end
 
 - `prepend_before_action`というのがある。
 
-### 補足：インスタンス変数、クラス変数、クラスインスタンス変数
+## インスタンス変数、クラス変数、クラスインスタンス変数
 
 - 参考：[Qiita:【まとめ】インスタンス変数、クラス変数、クラスインスタンス変数](https://qiita.com/mogulla3/items/cd4d6e188c34c6819709)
 
@@ -179,10 +179,11 @@ end
 
 ```
 
-### 補足：名前空間
+## 名前空間
 
+- `名前の`
 
-### 補足：特異クラス
+## 特異クラス
 
 - `<<`記号
 - 参考：[Qiita:【Ruby】特異メソッド・特異クラスを理解する](https://qiita.com/k-penguin-sato/items/d637dced7af32e4ec7c0)

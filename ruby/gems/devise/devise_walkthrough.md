@@ -23,14 +23,11 @@
 - [Devise Walkthrough](#devise-walkthrough)
   - [疑問](#疑問)
   - [ToC](#toc)
-  - [devise利用の基礎](#devise利用の基礎)
   - [Directory](#directory)
   - [特に着目した方がよさそうなファイル](#特に着目した方がよさそうなファイル)
   - [lib/devise.rb](#libdeviserb)
-    - [メソッド](#メソッド)
     - [一部抜粋](#一部抜粋)
   - [lib/devise/rails/routes.rb](#libdeviserailsroutesrb)
-    - [メソッド一覧](#メソッド一覧)
     - [抜粋](#抜粋)
   - [app/controllers/devise_controller.rb](#appcontrollersdevise_controllerrb)
     - [補足：エラー処理](#補足エラー処理)
@@ -52,21 +49,14 @@
     - [Generator Usage](#generator-usage)
     - [Methods](#methods)
     - [Syntax](#syntax)
-  - [Syntax of Ruby / Rails](#syntax-of-ruby--rails)
     - [Module / Class](#module--class)
     - [Gemfile](#gemfile)
     - [Namespaces?](#namespaces)
   - [広く参照される変数・メソッド](#広く参照される変数メソッド)
   - [外部gemへの参照の例](#外部gemへの参照の例)
+  - [興味深い表現](#興味深い表現)
 
 
-## devise利用の基礎
-
-```rb
-class Users
-  devise_for :database_authen
-end
-```
 
 ## Directory
 
@@ -274,11 +264,6 @@ devise
 
 ## lib/devise.rb
 
-- gem の本体であると思われる
-- `Devise.secure_compare()`のように書くとき、この`Devise`はこのファイル内の`Devise` moduleを指している。
-- このファイルは、`lib/devise/` ディレクトリ内部のファイルをインポートするラッパとなっている。
-- `require`のルートは、この`lib/devise/`を指しているのかも？
-- スコープ：　モジュールの内包構造と、実際のディレクトリ構造が相似（devise > mailers > helpers）になっている。そういうルール？
 
 ```rb
 # /app/mailers.devise/mailer.rb
@@ -290,36 +275,6 @@ module Devise
     module Helpers
 ```
 
-### メソッド
-
-```rb
-module Devise
-  module Controllers
-  module Hooks
-  module Mailers
-  module Strategies
-  module Test
-
-  def self.activerecord51? # :nodoc:
-  def self.setup
-  class Getter
-    def initialize(name)
-    def get
-  def self.ref(arg)
-  def self.available_router_name
-  def self.omniauth_providers
-  def self.mailer
-  def self.mailer=(class_name)
-  def self.add_mapping(resource, options)
-  def self.add_module(module_name, options = {})
-  def self.warden(&block)
-  def self.omniauth(provider, *args)
-  def self.include_helpers(scope)
-  def self.regenerate_helpers!
-  def self.configure_warden! #:nodoc:
-  def self.friendly_token(length = 20)
-  def self.secure_compare(a, b)
-```
 
 ### 一部抜粋
 
@@ -364,41 +319,6 @@ require 'warden'
 
 ## lib/devise/rails/routes.rb
 
-- **`devise_for`メソッドはここで定義されている。**
-
-
-
-
-### メソッド一覧
-
-```rb
-Devise::RouteSet.finalize! # finalize! そのものはRailsの機能っぽい。
-ActionDispatch::Routing
-  class RouteSet
-  class Mapper
-    def devise_for()
-    def authenticate()
-    def authenticated()
-    def unauthenticated()
-    def devise_scope()
-
-    # protected methodsに多数出てくる"resource"メソッドはapp/controllers/devise_controller.rbで定義
-    protected
-
-    def devise_session()
-    def devise_password()
-    def devise_confirmation()
-    def devise_unlock(mapping, controllers) 
-    def devise_registration(mapping, controllers) 
-    def devise_omniauth_callback(mapping, controllers) 
-    def with_devise_exclusive_scope(new_path, new_as, options) 
-    def constraints_for(method_to_apply, scope = nil, block = nil)
-    def set_omniauth_path_prefix!(path_prefix) 
-    def raise_no_secret_key 
-    def raise_no_devise_method_error!(klass) 
-       
-```
-
 ### 抜粋
 
 ```rb
@@ -415,7 +335,6 @@ end
 
 ## app/controllers/devise_controller.rb
 
-- 個別のコントローラ（パスワード管理、セッション、新規ユーザ登録、etc.）の基底となるクラスを定義する。
 
 ```rb
 class DeviseController < Devise.parent_controller.constantize
@@ -1043,145 +962,6 @@ invoke "active_record:model", [name], migration: false unless model_exists? && b
 
 ```
 
-## Syntax of Ruby / Rails
-
-- 目についた表現を調べてみました。
-
-```rb
-
-# 基礎中の基礎だが
-
-def value()
-def value=() # setter
-def value?() # boolean
-def value!() # 呼び出し元のオブジェクトを改変するメソッドだから注意してね！の意味
-
-# 違い？
-include
-require
-autoload
-
-
-# JSと同じくrequire
-# これらのルートは、それぞれ別のgemの名前（gemのlib以下）
-# orm_adapter gemなら、lib/orm_adapter/adapters/mongoid.rbというファイル構成になっているから以下の記述になる。
-require 'bundler/setup'
-require 'orm_adapter/adapters/mongoid'
-
-
-
-
-Rails::TestUnit::Runner.run(ARGV)
-
-ActiveRecord::Base.establish_connection( adapter: :sqlite3, database:  ':memory:')
-
-
-# JSのtry, catch相当
-begin
-  require 'bundler/inline'
-rescue LoadError => e
-  # $はグローバル変数。
-  $stderr.puts 'Bundler version 1.10 or later is required. Please update your Bundler'
-  raise e
-end
-
-
-# グローバル変数「$:」の定義は"Load path for scripts and binary modules by load or require."
-$:.push File.expand_path("../lib", __FILE__)
-
-
-# #{blah}は、JSのtemplate literal ${blah}に相当
-raise "Could not find a valid mapping for #{obj.inspect}"
-
-#
-$stderr.puts 'Bundler version 1.10 or later is required. Please update your Bundler'
-
-
-#
-exec 'rake'
-
-# これはrubyのshebang。.rbでない場合には明示的に書いていることが多い
-#!/usr/bin/env ruby
-
-#
-# frozen_string_literal: true
-
-# syntactic sugar
-options[:scope] ||= translation_scope
-
-# double pipe equal
-a = nil
-b = 4
-a ||= b # now a is
-a = 1
-b = 2
-a ||= b # now a is
-
-# single pipe equal
-a = a | 3333
-a |= 3333
-
-# booleanを返してきそうな見た目だが、返すのは
-if defined?(ActionMailer)
-    class # blahblah
-end
-
-class Mapping
-    alias :name :singular
-end
-
-# JSでいうところのshort-circuit evaluationですね。
-mod = options[:module] || "devise"
-
-# JSにはなさそうな表現。
-# 後半の三項演算子はまあいいとして、
-@modules ||= to.respond_to?(:devise_modules) ? to.devise_modules : []
-
-# JSだとconstructor()
-def initialize(name, options)
-
-
-# メソッド名にくっついた記号の意味
-def self.find_scope!(obj)
-def authenticatable?
-
-
-@@secret_key = nil
-
-desc <<-DESC.strip_heredoc
-    Create inherited Devise controllers in your app/controllers folder.
-
-    Use -c to specify which controller you want to overwrite.
-    If you do no specify a controller, all controllers will be created.
-    For example:
-
-        rails generate devise:controllers users -c=sessions
-
-    This will create a controller class at app/controllers/users/sessions_controller.rb like this:
-
-        class Users::SessionsController < Devise::SessionsController
-        content...
-        end
-DESC
-
-raise MissingORMError, <<-ERROR.strip_heredoc
-An ORM must be set to install Devise in your application.
-
-Be sure to have an ORM like Active Record or Mongoid loaded in your
-app or configure your own at `config/application.rb`.
-
-    config.generators do |g|
-        g.orm :your_orm_gem
-    end
-ERROR
-
-#
-<<RUBY
-  field :email,              type: String, default: ""
-  field :encrypted_password, type: String, default: ""
-RUBY
-
-```
 
 ### Module / Class
 
@@ -1328,11 +1108,20 @@ Rails::Generators::Base.class_option(name, options = {})
 ActiveSupport::CoreExtensions::Array::ExtractOptions.extract_options!
 # 以下のように実装されている。
 # Rubyは[1, 2, 3, c:4, d:5] のように値,値,hash, hashみたいな配列が可能。
-# ただし、値...→hash...という順序以外だとsyntax errorになる。
+# ただし、値...hash...という順序以外だとsyntax errorになる。
 # 結局、このメソッドは[a, b, c:1, d:2]という引数に対して、
 # {c:1, d:2}をひとかたまりとして認識し抜き出す。
 def extract_options!
   last.is_a?(::Hash) ? pop : {}
 end
+
+```
+
+## 興味深い表現
+
+```rb
+def self.activerecord51? # :nodoc:
+
+
 
 ```

@@ -41,7 +41,6 @@
   - [Troubleshooting](#troubleshooting)
   - [Postgres + Rails + Heroku](#postgres--rails--heroku)
     - [Create the Project](#create-the-project)
-    - [Introduce wicked_pdf](#introduce-wicked_pdf)
     - [Introduce Bootstrap](#introduce-bootstrap)
     - [Introduce PostgreSQL](#introduce-postgresql)
     - [Configure Rails for Postgres](#configure-rails-for-postgres)
@@ -51,8 +50,12 @@
   - [7.3 Generator](#73-generator)
     - [Methods：　ファイルの生成などの実作業を制御する。](#methodsファイルの生成などの実作業を制御する)
     - [Config](#config)
-  - [](#)
   - [Tips](#tips)
+    - [Bundle execとは](#bundle-execとは)
+    - [rake vs rails](#rake-vs-rails)
+  - [受けたコードレビューの要旨](#受けたコードレビューの要旨)
+  - [Basics: pikawaka](#basics-pikawaka)
+  - [form_with vs form_with + form_tag](#form_with-vs-form_with--form_tag)
 
 ## Installation
 
@@ -88,9 +91,6 @@ rbenv local 2.7.2 # optional: when you want to use the ruby version inside the s
 
 sudo apt update
 
-# sqlite3
-sudo apt install sqlite3
-
 # node.js
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 nvm ls-remote --lts
@@ -105,6 +105,9 @@ npm install -g yarn
 
 # rails
 gem install rails
+
+# sqlite3 (optional)
+sudo apt install sqlite3
 ```
 
 ### Install dependencies for the Rails project
@@ -175,10 +178,10 @@ bin/rails middleware
 rails g controller Articles # controller, view, routing
 rails g model Article # model, migration
 rails g migration Article # migration
-rails g scaffold Article # controller, view, model, migration, routing 
+rails g scaffold Article # controller, view, model, migration, routing
 
 # delete
-rails d controller article # 
+rails d controller article #
 
 # controller:
 # create app/controllers/patients_controller.rb
@@ -505,7 +508,7 @@ end
 
 
 # Scope
-# 
+#
 scope :in_print, -> { where(out_of_print: false) } # controller
 
 
@@ -545,7 +548,7 @@ Order.group(:status).count
 
 # exists
 Customer.exists?(1)
-Order.shipped.any?  
+Order.shipped.any?
 Order.many?
 Order.any?
 
@@ -729,15 +732,6 @@ rails new .
 rails webpacker:install
 ```
 
-### Introduce wicked_pdf
-
-```sh
-echo "gem 'wicked_pdf'" >> Gemfile
-bundle install
-rails generate wicked_pdf
-echo "gem 'wkhtmltopdf-binary'" >> Gemfile
-bundle install
-```
 
 ### Introduce Bootstrap
 
@@ -891,7 +885,7 @@ bundle install
 
 # config/application.rb
 config.i18n.default_locale = :ja
-config.time_zone = "Tokyo" 
+config.time_zone = "Tokyo"
 config.active_record.default_timezone = :local
 
 ```
@@ -923,7 +917,7 @@ railties/lib/rails/all.rb
 - ジェネレータの基底クラス
 ```rb
 # A
-class InitializerGenerator < Rails::Generators::Base 
+class InitializerGenerator < Rails::Generators::Base
 
 # B
 class InitializerGenerator < Rails::Generators::NamedBase
@@ -933,13 +927,13 @@ class InitializerGenerator < Rails::Generators::NamedBase
 
 ```rb
 # helpのテキスト
-desc "このジェネレータはconfig/initializersにイニシャライザファイルを作成します" 
+desc "このジェネレータはconfig/initializersにイニシャライザファイルを作成します"
 
 # 生成ファイルを直書きする場合
-create_file "config/initializers/initializer.rb", "# イニシャライザの内容" 
+create_file "config/initializers/initializer.rb", "# イニシャライザの内容"
 
 # 生成ファイルをコピーする場合（こっちのほうが実戦でよくみる）
-copy_file "initializer.rb", "config/initializers/#{file_name}.rb" 
+copy_file "initializer.rb", "config/initializers/#{file_name}.rb"
 
 # 生成先のディレクトリ指定
 source_root File.expand_path('templates', __dir__)
@@ -964,9 +958,17 @@ end
 
 ```
 
-## 
-
 ## Tips
+
+### Bundle execとは
+
+### rake vs rails
+
+`rake`を使う場面で `rails`を使えるようになった。
+
+
+
+## 受けたコードレビューの要旨
 
 ```rb
 #
@@ -985,4 +987,99 @@ end
 #
 # refactor: Put the methods in alphabetical order
 #
+
+#
+# refactor: Don't use permit! for params!!! List all the params manually, or it can be a severe security hole
+#
 ```
+
+## Basics: pikawaka
+
+- 部分テンプレートの使い方を徹底解説！
+- form_withの使い方を徹底解説！
+- MVCフレームワークを1から丁寧に解説！
+- whereメソッドを使って欲しいデータの取得をしよう！
+- マイグレーションファイルを徹底解説！
+- アソシエーションを図解形式で徹底的に理解しよう！
+- Railsのバリデーションの使い方をマスターしよう！
+- dotenv-railsの導入方法と使い方を理解して環境変数を管理しよう！
+- form_forの使い方をマスターしよう！
+- link_toの使い方をマスターして簡単にリンクを作成しよう！
+- renderメソッドの使い方を徹底解説！
+- paramsって一体何？使い方を徹底解説！
+- N+1問題をincludesメソッドで解決しよう！
+- groupメソッドの使い方を図解形式で仕組みを徹底解説！
+- exists?メソッドの基礎から応用の使い方〜present?メソッドとの違いが良くわかる！
+- CarrierWaveチュートリアル
+- left_joinsメソッドで定義する左外部結合とは？
+- before_actionの使い方を徹底解説！
+- 結局bundlerって何？bundlerの仕組みを図解形式で徹底解説
+- ストロングパラメータの仕組みを理解しよう！
+- deviseの使い方をマスターしてログイン認証機能を実装しよう！
+- モデルのスコープ機能(scope)の使い方を１から理解する
+- hamlの書き方をマスターしよう！
+- enumチュートリアル
+- button_toの使い方をどこよりもわかりやすく解説！
+- resourcesメソッドを使ってルーティングを定義しよう！
+- joinsメソッドのテーブル結合からネストまでの解説書
+- permitメソッドを使ってストロングパラメーターにしよう
+- orderメソッドを使って取得したデータを並び替えよう！
+- updateメソッドの使い方を徹底解説！
+- image_tagを使って簡単に画像を表示させよう！
+- present?メソッドの使い方やリファクタリングの方法を具体的なコードを使って丁寧に解説
+- I18n入門書
+- Pryについて徹底解説！
+- 豊富なサンプルコードでselectメソッドを理解する！
+- rake routesコマンドの使い方をマスターしよう！
+- JSON形式のデータを返却する方法とは？
+- redirect_toの使い方を徹底解説！
+- Active Storageを使って画像をアップしよう！
+- jbuilderの使い方辞典〜メソッドの文法と使い方がすぐわかる
+- distinctメソッドでユニークなデータを取得する方法
+- rails newの書き方について徹底解説！
+- 世界で一番詳しいfind_byメソッドのいろいろな使い方
+- layoutメソッドの使い方をマスターしよう！
+- 世界で一番分りやすく詳しいcountメソッドの使い方
+- envメソッドで環境確認する方法と各コマンドの環境指定方法とは？
+- form_tagの使い方を徹底解説！
+- rails5の環境構築方法を画像を使いながら丁寧に解説！
+- destoryメソッドの使い方を徹底解説！
+- destroy_allメソッドの使い方を徹底解説！
+- 便利なpluckメソッドをマスターしよう！
+- N+1問題って何？原因と対処法を徹底解説！
+- 完全保存版！flashの使い方についてを徹底解説！
+- slimの書き方をマスターしよう！
+- font-awesome-sassの使い方を徹底解説！
+- blank?メソッドの使い方
+- rails g model コマンドでモデルを作成しよう！
+- findメソッドを使って指定したレコードを取得しよう！
+- find_by_idメソッドの使い方と他のfind系メソッドとの違い
+- kaminariの使い方をマスターしよう！
+- strftimeの使い方ついて徹底解説！
+- Ruby on Railsとは？Rubyとの違いを徹底解説！
+- font-awesome-railsの使い方を徹底解説！
+- presenceメソッドを使ってpresent?メソッドのコードをリファクタリングしよう！
+- allメソッドを徹底解説！
+- tryメソッドとtry!メソッドと&.演算子の違いを分りやすく説明します。
+- active_hashを使って疑似モデルを作ろう
+- remote: trueでフォーム送信をAjax実装する方法とは？
+- Ajaxチュートリアル(Rails + jQuery)~処理の流れを理解しよう！
+- respond_toメソッドの使い方をマスターしてリクエストのフォーマットで処理を分けよう！
+- reCAPTCHAを使ったユーザー登録機能を作ろう
+- createメソッドの使い方と似ているメソッドとの違いとは？
+- rails console(rails c)コマンドの使い方まとめ
+- find_eachメソッドでメモリを節約して大量データを扱う方法
+- rails serverコマンド(rails s)の使い方まとめ
+- ransackを使って検索機能がついたアプリを作ろう！
+- ancestryを使って多階層のデータを扱おう
+
+
+## form_with vs form_with + form_tag
+
+[Qiita: ](https://qiita.com/hmmrjn/items/24f3b8eade206ace17e2)
+
+- 基本的にはRails 5.1で採用された新しい `form_with`を覚えれば良い。
+- しかし、gemのgeneratorによっては旧式の書式の場合があり、また参考コード等も古い場合がある。
+- このため、`form_for`についても最低限の知識は必要だ。
+
+###

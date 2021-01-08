@@ -7,10 +7,10 @@
   - [Config](#config)
   - [Local](#local)
   - [Remote](#remote)
-  - [Branch](#branch)
-  - [Clarification](#clarification)
+  - [区別](#区別)
     - [`git fetch` vs `git pull`](#git-fetch-vs-git-pull)
     - [`git merge` vs `git rebase`](#git-merge-vs-git-rebase)
+    - [`git revert` vs `git reset`](#git-revert-vs-git-reset)
     - [CLONE vs FORK](#clone-vs-fork)
     - [MERGE REQUEST vs PULL REQUEST](#merge-request-vs-pull-request)
   - [Git レポジトリの付替え](#git-レポジトリの付替え)
@@ -20,6 +20,7 @@
   - [Good Tutorials](#good-tutorials)
   - [Git 管理すると何がいいの？](#git-管理すると何がいいの)
   - [Keywords](#keywords)
+    - [MISC](#misc)
     - [Pull Request / Merge Request](#pull-request--merge-request)
     - [Subversion (svn)](#subversion-svn)
     - [GitHub / GitLab / BitBucket](#github--gitlab--bitbucket)
@@ -27,6 +28,7 @@
     - [CI/CD: Continuous Integration + Continuous Deployment （もしくは Continuous Delivery）](#cicd-continuous-integration--continuous-deployment-もしくは-continuous-delivery)
   - [Naming Branch](#naming-branch)
   - [Commit Message Format](#commit-message-format)
+
 
 ## Config
 
@@ -49,13 +51,16 @@ git config core.filemode false
 git add -A
 git add -u # Stages only Modified Files
 git add . # Stages everything, without Deleted Files
+
 git reset -- hello.txt # Unstage hello.txt
 git reset HEAD # Unstage all the files
 git reset --hard 1234abcdblahblahblah
 git reset --soft HEAD^ # 最後のコミットを取り消すが、ファイル内容はそのまま
 git reset --hard HEAD^ # 最後のコミットを取り消し、なおかつローカルのファイル内容も戻す
+
 git init
 git commit -m "debug: Solve DB access error"
+git commit --amend # 最後のコミットを修正。git add したあとにやれば、addし忘れを修復できる
 git status
 git mv # Git 管理されているファイルを移動したり、名前を変更したりするときには必ずこれらを使う # **エクスプローラ上などで勝手に変更してはいけない！**　そのファイルの変更履歴が反映されなくなってしまう。
 git rm # そのファイルを削除し、なおかつ git の index からも外す
@@ -68,41 +73,24 @@ git log --oneline develop ^origin/develop # count how many commits ahead the bra
 git revert HEAD~3
 git stash
 git stash list
-git switch` (new)
-git restore` (new)
+
+# git checkoutがあまりに多機能なので、区別化のためgit switch/git restoreというコマンドが新規追加された。
+# ただし、git checkoutは従来通り使用可能
+git switch master # ブランチ変更
+git restore hello.c # 
 git checkout . # Revert changes to the index
 git checkout HEAD -- MyFile.js # Reset the specified file(s) to `HEAD
-git checkcout HEAD myfile.js # Restore delete file which is not committed yet
+git checkout HEAD myfile.js # Restore delete file which is not committed yet
 git checkout -- MyFile.js # Restore the deleted file
 
 # Remove the untracked files.
-# Because git stash / revert / reset etc. won't remove the newly generated files,
-# you need this command
+# Because git stash / revert / reset etc. won't remove the newly generated files.
 git clean -f  # for untracked files
 git clean -fd # for untracked directories
-```
 
-## Remote
-
-```sh
-git push origin master
-git push <remote> <branch>という構造
-git pull origin master
-git pull --all
-git clone http://blahblah.git
-git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git
-git remote rename origin gitlab
-git remote add origin https://username@your.bitbucket.domain:7999/yourproject/repo.git # 新しい remote を追加（例：GitHub に上げてたリポジトリを、GitLab にも上げられるようにするとか）
-git config --get remote.origin.url # Show the remote branch URL
-git branch --set-upstream-to myfork/master # Set the default remote. Default remote is used for git status comparison
-```
-
-## Branch
-
-```sh
 # create
 git branch
-git branch -r
+git branch -r # List remote branches
 git branch -a # --all
 git branch NEW_BRANCH_NAME
 
@@ -125,9 +113,31 @@ git branch -m OLD_BRANCH_NAME NEW_BRANCH_NAME # rename the branch which you're n
 # compare
 git diff master..develop
 
+
 ```
 
-## Clarification
+## Remote
+
+```sh
+git push origin master
+git push <remote> <branch>という構造
+git pull origin master
+git pull --all # ローカルに存在しないブランチはpullされない。
+
+# localに存在しないブランチ(ここではexperimental)をremoteから持ってくる
+git checkout origin/experimental # A. detached HEADの状態でremoteから持ってくる。中身をちょっと見たいだけのときなどに使用。
+git checkout experimental # B. ローカルに新ブランチを持ってくる
+
+git clone http://blahblah.git
+git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git
+
+git remote rename origin gitlab
+git remote add origin https://username@your.bitbucket.domain:7999/yourproject/repo.git # 新しい remote を追加（例：GitHub に上げてたリポジトリを、GitLab にも上げられるようにするとか）
+git config --get remote.origin.url # Show the remote branch URL
+git branch --set-upstream-to myfork/master # Set the default remote. Default remote is used for git status comparison
+```
+
+## 区別
 
 ### `git fetch` vs `git pull`
 
@@ -145,13 +155,20 @@ git diff master..develop
 - `git merge`
   - merge すると不具合が出る可能性があるので、いきなり master に merge してはいけない
   - master 側をブランチ側にまず merge し、不具合がないことを確かめてから
-
 - `git rebase -i origin master`
   - Similar to `git merge`
   - `git rebase` keep the commits on the branch while `git merge` doesn't
   - Therefore, in most cases, you better use `git rebase`
 - `git checkout features/visualization` then `git rebase master`
   - Merging "features/visualization" branch to "master"
+
+### `git revert` vs `git reset`
+
+revert・reset双方の共通点は、特定のコミットがなかったのと同じ状態になること。
+
+revertは、既存のコミットを打ち消すようなコミットを追加する。そのコミットがなかったのと同じ状態にはなるが、コミットそのものは履歴に残すことができる。
+
+resetは
 
 ### CLONE vs FORK
 
@@ -221,6 +238,16 @@ Upstream Branch を変更するため、以下のコマンドが必要になる�
 - クラウドサービスや遠隔などへコードを送信できる
 
 ## Keywords
+
+### MISC
+
+- index
+- working tree
+- fast forward
+- `HEAD`
+- `FETCH_HEAD`
+- "detached HEAD state"
+- git blame
 
 ### Pull Request / Merge Request
 

@@ -12,11 +12,10 @@
   - [curl](#curl)
   - [wget](#wget)
   - [grep](#grep)
-  - [Permission](#permission)
-  - [User & User Group of Linux](#user--user-group-of-linux)
-    - [How to see `ls -l mydir` results](#how-to-see-ls--l-mydir-results)
-    - [`chmod`](#chmod)
-    - [`chown`](#chown)
+  - [File Permission](#file-permission)
+    - [`ls -l mydir`の見方](#ls--l-mydirの見方)
+    - [chmod: "Change mode"](#chmod-change-mode)
+    - [chown: "Change Owner"](#chown-change-owner)
   - [Shell types](#shell-types)
   - [bash とは](#bash-とは)
   - [Config](#config)
@@ -34,7 +33,7 @@
   - [Mutual Exclusion](#mutual-exclusion)
   - [Automaton](#automaton)
   - [`service` command](#service-command)
-  - [File permission](#file-permission)
+  - [File permission](#file-permission-1)
   - [User Group](#user-group)
     - [Primary Group vs Secondary Group](#primary-group-vs-secondary-group)
     - [bash](#bash)
@@ -49,7 +48,7 @@
   - [chmod: Use with find command](#chmod-use-with-find-command)
     - [Syntax](#syntax)
     - [Samples](#samples)
-  - [chown](#chown-1)
+  - [chown](#chown)
   - [`xargs`](#xargs)
 
 ## Repository
@@ -155,17 +154,9 @@ curl -O -J http://blahblah # keep the original file name
 
 ## grep
 
-## Permission
+## File Permission
 
-- `chmod` stands for "Change Mode"
-- `chown` stands for "Change Owner"
-
-
-
-
-
-## User & User Group of Linux
-
+- user vs user group
 - An user can belong to multiple groups
 - UPG: User private group (for Ubuntu, CentOS)
 - Primary group
@@ -173,51 +164,54 @@ curl -O -J http://blahblah # keep the original file name
 - `/etc/passwd`
 - `/etc/group`
 
-### How to see `ls -l mydir` results
+### `ls -l mydir`の見方
 
-- This command lists files with permission info
-- `-rw-r--r-- 1 root root 209 Mar 30 17:41 printcap`
-  - `-`
-    - `-` for a file
-    - `d` for a directory
-  - `rw-`
-    - Read, Write, Execute for the owner
-  - `r--`
-    - Read, Write, Execute for the group
-  - `r--`
-    - Read, Write, Execute for everybody else
-  - `1`
-    - number of links inside the dir
-  - `root`
-    - owner of the file / directory
-  - `root`
-    - group of the file / directory
-  - `209`
-    - size: bytes
-  - `Mar 30 17:41`
-    - last modification
-  - `printcap`
-    - file name
+`-rw-r--r-- 1 root root 209 Mar 30 17:41 printcap`という出力結果だったとする。
 
-### `chmod`
+- `-`
+  - `-` for a file
+  - `d` for a directory
+  - `l` for symbolic link
+- `rw-`
+  - Read, Write, Execute for the **owner**
+- `r--`
+  - Read, Write, Execute for the **group**
+- `r--`
+  - Read, Write, Execute for **everybody**
+- `1`
+  - number of links inside the dir
+- `root`
+  - owner of the file / directory
+- `root`
+  - group of the file / directory
+- `209`
+  - size: bytes
+- `Mar 30 17:41`
+  - last modification
+- `printcap`
+  - file name
 
-- permission の指定方法は２つ
-  - by numbers
-  - by letters
-- By Letters
-  - `r`: Read
-  - `w`: Write
-  - `x`: Execute
-  - `u`: User
-  - `g`: Group
-  - `o`: Others
-  - `a`: All
-- By Numbers
+### chmod: "Change mode"
+
+permission の指定方法は「文字による指定」「数字による指定」の２種類ある。
+
+By Letters (操作の指定)
+- `r`: Read
+- `w`: Write
+- `x`: Execute
+By Letters（主体の指定）
+- `u`: User
+- `g`: Group
+- `o`: Others
+- `a`: All
+
+By Numbers
+- user, group, others の順で3つ書く
+- 権限ごとの点数
   - 4 points: read
   - 2 points: write
   - 1 points: execute
-  - この和によって権限を実現する。おもしろい。
-  - user, group, others の順
+- 上記の和で表現する。
   - 7: rwx
   - 6: rw
   - 5: rx
@@ -225,22 +219,35 @@ curl -O -J http://blahblah # keep the original file name
   - 3: wx
   - 2: w
   - 1: x
-- `chmod +x script.sh`
-- `chmod -x script.sh`
-- `chmod u+x script.sh`
-- `chmod ugo-x script.sh`
-  - これは`a`と同じだと思われる
-- `chmod a-x script.sh`
-- `chmod o-x script.sh`
-- `chmod 750 script.sh`
-- `chmod a=xwr,g-x,o-xw script.sh`
-  - `=`は set の意味
-  - `+`や`-`が現状からの権限の差分しか指定できないのに対して、`=`はフルに設定するんだと思う
-- `chmod -R 644 important-files/`
-  - ディレクトリに対してやる場合
-  - `-R`: recursive
 
-### `chown`
+```sh
+chmod +x script.sh
+chmod -x script.sh
+chmod u+x script.sh
+
+chmod ugo-x script.sh # たぶん a-xと同じ
+
+chmod a-x script.sh
+chmod o-x script.sh
+chmod 750 script.sh
+
+# =は set の意味
+# +や-は現状からの権限の差分のみ指定
+chmod a=xwr,g-x,o-xw script.sh
+
+# ディレクトリに対してやる場合
+# -R: recursive
+chmod -R 644 important-files/
+```
+
+### chown: "Change Owner"
+
+```sh
+whoami # 自分の情報表示
+
+sudo chown -R john . # johnを現在のディレクトリ以下の所有者に
+sudo chown john json-2.1.0/
+```
 
 ## Shell types
 
