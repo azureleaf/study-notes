@@ -154,11 +154,26 @@ RUBY
 
 ```
 
-`<<` の意味
+## Ruby実装
+
+いくつかある。
+
+- CRuby: C
+- JRuby: Java
+- MacRuby
+- Rubinius: RubyでRubyを実装
+- mruby: 軽量で組み込み向け
+
+## `<<` の意味
 
 - 文字列連結
 - 特異クラス
 
+## `$LOAD_PATH`
+
+- プロジェクトで必要な依存先ファイルの絶対パスを配列で保持する。
+- Rubyで`$`ではじまるのはグローバル変数。
+-
 
 
 ## たのしいruby (+α)
@@ -251,3 +266,4 @@ CSV
 ### Task vs Thread
 
 - thread safe
+

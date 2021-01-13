@@ -13,9 +13,10 @@ Webpacker, Heroku Asset Pipeline, Sprocketあたりについて
   - [Sprocketsの挙動](#sprocketsの挙動)
   - [Webpacker vs Sprockets](#webpacker-vs-sprockets)
   - [アセット処理関係のview helperは何をしているのか？](#アセット処理関係のview-helperは何をしているのか)
-    - [Sprockets向け](#sprockets向け)
-    - [Webpacker向け](#webpacker向け)
+    - [Sprockets向けのヘルパー](#sprockets向けのヘルパー)
+    - [Webpacker向けのヘルパー](#webpacker向けのヘルパー)
     - [Wicked PDF関係](#wicked-pdf関係)
+  - [Webpacker + Heroku](#webpacker--heroku)
   - [webpackerとHeroku asset pipeline](#webpackerとheroku-asset-pipeline)
     - [Rails + Heroku + Amazon CloudFront](#rails--heroku--amazon-cloudfront)
   - [参考](#参考)
@@ -35,7 +36,7 @@ Webpacker, Heroku Asset Pipeline, Sprocketあたりについて
 - JSはデフォルトで扱えるが、他のアセットをモジュール化するためには「loader」というツールが必要になる。
 - loaderは`npm install`する必要がある。代表的なローダーとしては以下がある。
   - `babel-loader @babel/core @babel/preset-env`: JSをトランスパイルする。
-  - `css-loader` 
+  - `css-loader`
   - `sass-loader node-sass`
   - `style-loader`： CSSをDOMに注入する。
   - `stylus-loader stylus`
@@ -48,8 +49,9 @@ Webpacker, Heroku Asset Pipeline, Sprocketあたりについて
 - `development`や`production`などのmodeがある。
   - `development`はソースマップ（元のソースファイルとバンドル後のファイルの関係付け）が有効になるため、デバッグがしやすくなる。
   - `production`ではファイルを圧縮するが、その処理の分時間がかかる。
+
 ### 各種のプラグインが提供されており、ビルドの内容を変更できる。
-  
+
 主要プラグインの紹介は、[Qiita: webpack初級者から中級者にステップアップするために理解しておきたいプラグインまとめ](https://qiita.com/R-Yoshi/items/30282dee7b6d5ddd6622)に詳しい。
 
 - `SplitChunksPlugin`:　
@@ -93,17 +95,23 @@ bundle exec rails webpacker:install
 - [Railsガイド：アセットパイプライン](https://railsguides.jp/asset_pipeline.html)
 - アセットパイプラインとは、JS・画像・CSSなどのアセットを入力にとり、それを変更して出力する一連の処理のこと。
   - なのでWebpackもSprocketsもどちらもアセットパイプライン
-- 
+-
 
 ## Webpacker vs Sprockets
 
-ここで、一つ疑問が生じる。WebpackerとSprocketsがほぼ同じことをしている点だ。
+ここで、一つ疑問が生じる。WebpackerとSprocketsがほぼ同じことをしている点だ。この疑問を持っているのは僕だけではないようで、Webで記事が見つかる。
+
+[Qiita: Ruby on Rails で sprockets から Webpacker へ移行し、移行できないものは共存させる方法](https://qiita.com/tatsurou313/items/645cbf0a3af4c673b5df)
+
+
+[Webpacker+Yarn+Sprocketsを十分理解してJavaScriptを書く：前編（翻訳）](https://techracho.bpsinc.jp/hachi8833/2020_01_16/85940) /
+[Webpacker+Yarn+Sprocketsを十分理解してJavaScriptを書く：後編（翻訳）](https://techracho.bpsinc.jp/hachi8833/2020_01_17/85943)
 
 
 
 ## アセット処理関係のview helperは何をしているのか？
 
-### Sprockets向け
+### Sprockets向けのヘルパー
 
 ```erb
 # application.erb
@@ -113,7 +121,7 @@ bundle exec rails webpacker:install
 
 - ちなみに上記のカスタムデータ属性（`data-`ではじまるHTML5の任意の属性）の`turbolink`というのはAjaxを利用してページ遷移を高速化するためのgemで、Rails 4以降は標準装備されている。上記の記述は、ページ遷移時に参照するJSやCSSが変化したか確認し、変化する場合にははreloadする。
 
-### Webpacker向け
+### Webpacker向けのヘルパー
 
 ```erb
 # application.erb
@@ -138,12 +146,27 @@ bundle exec rails webpacker:install
 <%= wicked_pdf_image_tag 'mysite.jpg' %>
 ```
 
+## Webpacker + Heroku
+
+
+
+- [公式：Getting Started on Heroku with Rails 6.x](https://devcenter.heroku.com/articles/getting-started-with-rails6)
+- [公式：](https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server)
+- [公式：]()
+- [公式：]()
+- [公式：]()
+- [公式：]()
+- [公式：Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
+
+参考：[Rails 6+Webpacker開発環境をJS強者ががっつりセットアップしてみた（翻訳）](https://techracho.bpsinc.jp/hachi8833/2019_11_28/83678)
+
+
 
 
 ## webpackerとHeroku asset pipeline
 
 - Heroku上では、production.rbの設定が適用される。
-  - 
+  -
 - webpackerがGemfileに含まれていると、Herokuは自動で`yarn`をインストールする。[Heroku公式記事](https://devcenter.heroku.com/changelog-items/1114)
 
 
@@ -151,9 +174,9 @@ bundle exec rails webpacker:install
   - アセットコンパイルのタイミングは、デプロイ時・ランタイム時のどちらも選択できる。
 
 - https://devcenter.heroku.com/articles/rails-4-asset-pipeline
-- 
+-
 
-### Rails + Heroku + Amazon CloudFront 
+### Rails + Heroku + Amazon CloudFront
 
 - 参考：[Using Amazon CloudFront CDN](https://devcenter.heroku.com/articles/using-amazon-cloudfront-cdn#adding-cloudfront-to-rails)
 - Heroku上でウェブサイトのパフォーマンスを高く維持するためには、必要な静的アセットは外部からCDNとして取得し、Herokuには動的コンテンツのみに専念させるべきである。このような用途だとAmazon S3は静的ファイルをホストするために使われているが、S3はファイル保存サービスであるのでパフォーマンスはよくない（遅いってことか？）。CDNの用途に設計されたAmazon CloudFrontを使うべきである。
@@ -172,5 +195,4 @@ config.action_controller.asset_host = "<YOUR DISTRIBUTION SUBDOMAIN>.cloudfront.
 
 ## 参考
 
-- [Webpacker+Yarn+Sprocketsを十分理解してJavaScriptを書く](https://techracho.bpsinc.jp/hachi8833/2020_01_16/85940)
 - https://www.fundely.co.jp/blog/tech/2020/01/22/180037/

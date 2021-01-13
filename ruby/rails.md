@@ -17,6 +17,8 @@
     - [Section](#section)
     - [View Helpers](#view-helpers)
     - [Forms](#forms)
+    - [Syntax](#syntax)
+    - [form_with vs form_with / form_tag](#form_with-vs-form_with--form_tag)
     - [Validation](#validation)
     - [Partials](#partials)
     - [MISC](#misc)
@@ -39,11 +41,6 @@
   - [API-only App](#api-only-app)
   - [VS Code](#vs-code)
   - [Troubleshooting](#troubleshooting)
-  - [Postgres + Rails + Heroku](#postgres--rails--heroku)
-    - [Create the Project](#create-the-project)
-    - [Introduce Bootstrap](#introduce-bootstrap)
-    - [Introduce PostgreSQL](#introduce-postgresql)
-    - [Configure Rails for Postgres](#configure-rails-for-postgres)
   - [Bundler](#bundler)
   - [Internationalization](#internationalization)
   - [6.9 Initializer](#69-initializer)
@@ -53,9 +50,9 @@
   - [Tips](#tips)
     - [Bundle execとは](#bundle-execとは)
     - [rake vs rails](#rake-vs-rails)
+    - [Application server vs Web server](#application-server-vs-web-server)
   - [受けたコードレビューの要旨](#受けたコードレビューの要旨)
   - [Basics: pikawaka](#basics-pikawaka)
-  - [form_with vs form_with + form_tag](#form_with-vs-form_with--form_tag)
 
 ## Installation
 
@@ -326,6 +323,37 @@ submit_tag("Search")
 check_box_tag(:pet_dog)
 
 radio_button_tag(:age, "child")
+```
+
+
+### Syntax
+
+- `local: true`
+  - form_withは既定でAjaxを使うが、それを使わないようにするには `local: true`を記述する。
+  - HTMLの既定動作だとフォーム送信後にページ遷移する。
+  - Ajaxをフォームで使うと、勝手に遷移するのを防ぐことができるのでみんなAjaxを使ってるようだ。
+
+### form_with vs form_with / form_tag
+
+[Qiita: 【Rails 5】(新) form_with と (旧) form_tag, form_for の違い](https://qiita.com/hmmrjn/items/24f3b8eade206ace17e2)
+
+- 基本的にはRails 5.1で採用された新しい `form_with`を覚えれば良い。
+- しかし、gemのgeneratorが生成するフォームが旧式だったり、ネット上の参考コードが古い場合があるため、旧版についても最低限の知識は必要。
+
+```sh
+
+# 関連モデルがないとき
+# 旧form_tag。build helperの |form|を使わない。
+<%= form_tag users_path do %>
+# 新form_with： |form|を使う
+<%= form_with url: users_path do |form| %>
+
+
+# 関連モデルがあるとき
+# 旧form_for。build helperの |form|を使う。
+<%= form_for @user do |form| %>
+# 新form_with： |form|を使う。
+<%= form_with model: @user do |form| %>
 ```
 
 ### Validation
@@ -719,139 +747,6 @@ gem install rubocop
 - `Errno::EACCES: Permission denied @ rb_file_s_rename` on `rails new`
   - Remove hyphenation in the project name (e.g. my-project). It's not allowed.
 
-## Postgres + Rails + Heroku
-
-### Create the Project
-
-- `rails new . -d postgresql` としておけば、楽だった。DB を指定しないと SQLite になる
-
-```sh
-nvm use v10
-node -v
-rails new .
-rails webpacker:install
-```
-
-
-### Introduce Bootstrap
-
-```sh
-yarn add bootstrap jquery popper.js
-```
-
-```js
-/**
- * Add to app/assets/stylesheets/application.scss
- */
-@import "bootstrap/scss/bootstrap"; // put in the end of the file
-
-/**
- * app/javascript/packs/application.js
- */
-import 'bootstrap'
-require("@rails/ujs").start()	require("@rails/ujs").start() // existing line
-
-/**
- * config/webpack/environment.js
- */
-const { environment } = require("@rails/webpacker"); // existing line
-const webpack = require("webpack");
-environment.plugins.append(
-  "Provide",
-  new webpack.ProvidePlugin({
-    $: "jquery",
-    jQuery: "jquery",
-    Popper: ["popper.js", "default"],
-  })
-);
-module.exports = environment; // existing line
-```
-
-### Introduce PostgreSQL
-
-- `createdb myapp_test`などを行うチュートリアルもあるが、ＤＢは migration 時に自動で作成されるので不要。
-
-```sh
-# Installation (for the 1st run only)
-sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-sudo apt-get update
-sudo apt-get -y install postgresql
-
-# Create the role for this app
-sudo -i -u postgres # change the Ubuntu user to postgres
-createuser -d -P -e myapp # -d: CREATE DB privilege, -P: password, -e: echo details
-
-# Check if the user is successfully created
-psql
-\du # display users
-\l # list DBs
-\q
-
-exit
-```
-
-- 後に出てくる `createdb` 系コマンドが `WARNING: could not flush dirty data: Function not implemented`エラーを出すのに対する対策
-- ただし、不要かもしれない
-
-```sh
-# /etc/postgresql/13/main/postgresql.confの最後尾に追加
-fsync = off
-data_sync_retry = true
-
-# restart postgresql
-sudo service postgresql restart
-```
-
-- 以下はユーザ作成にあたり不要だったし、やらない方がいいっぽい（古いやりかた？）
-
-```sh
-sudo -u postgres psql
-CREATE ROLE myapp WITH CREATEDB LOGIN PASSWORD 'blah';
-\q
-
-sudo vim /etc/postgresql/13/main/pg_hba.conf
-# Change line: "local all postgres peer" to "local all postgres md5"
-sudo service postgresql restart
-```
-
-### Configure Rails for Postgres
-
-```yml
-# config/database.yml
-default: &default
-  adapter: postgresql
-  encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: myapp
-  password: <%= ENV['myapp_DB_PASSWORD'] %>
-  host: localhost # lack of this line caused "peer authentication failed" error
-  timeout: 5000
-
-development:
-  <<: *default
-  database: myapp_development
-
-test:
-  <<: *default
-  database: myapp_test
-
-production:
-  <<: *default
-  database: myapp_production
-```
-
-```sh
-sudo apt install libpq-dev # pg gem dependency
-echo "gem 'pg'" >> Gemfile
-bundle install
-
-# パスワードを直接database.ymlに保存しないため
-echo 'export myapp_DB_PASSWORD="blah"' >> ~/.bash_profile
-
-rails db:migrate:reset
-rails s
-```
 
 ## Bundler
 
@@ -966,6 +861,39 @@ end
 
 `rake`を使う場面で `rails`を使えるようになった。
 
+### Application server vs Web server
+
+未完
+
+- [Rails開発におけるwebサーバーとアプリケーションサーバーの違い（翻訳）](https://qiita.com/jnchito/items/3884f9a2ccc057f8f3a3)
+
+３層アーキテクチャ： ２種類の定義があるらしい。[Qiita](https://qiita.com/os1ma/items/7a229585ebdd8b7d86c2)
+- その１：サーバー内部の機能を３つのレイヤに分割した概念。
+  1. browser
+  1. => presentation layer (UI) : RailsだとViewとController
+  1. => application layer (Business Logic) : RailsだとModel
+  1. => data layer (DB Access)：Railsだと、ORMを使うのでこの層に書くものはほぼない
+- その２：Web server + Application Server + DB serverの３サーバーのこと。
+
+web server: e.g. Apache, Nginx
+
+- リクエストを受け取り、必要な処理をしたあとにRailsのアプリケーションサーバに渡す。
+- ただし、webサーバー自身が自分で処理して、全体を高速化することもある：
+  - 静的ファイル（画像, CSS, JS, etc.）の処理
+  - SSLリクエストの処理：ここでTLS Handshakeをざっと復習すると...
+    - SSL通信確立の目標：ブラウザとサーバの双方が共通鍵を安全に保持すること。
+    - まずブラウザがSSL通信をリクエストし、Webサーバがサーバー証明書と公開鍵を返す。
+    - 次にブラウザが公開鍵から共通鍵を生成し、それを暗号化してサーバに送付。
+    - 最後にWebサーバが暗号化された共通鍵を、自身が持つ秘密鍵で複合化して共通鍵を入手。
+  - 圧縮されたHTTPの処理：[HTTPの圧縮](https://developer.mozilla.org/ja/docs/Web/HTTP/Compression)
+
+application server: e.g. Puma, Unicorn
+- リクエストは Nginx -> Unicorn -> Rack -> Rails router -> Rails controller
+- rackは
+
+Passenger
+
+
 
 
 ## 受けたコードレビューの要旨
@@ -989,7 +917,7 @@ end
 #
 
 #
-# refactor: Don't use permit! for params!!! List all the params manually, or it can be a severe security hole
+# refactor: Don't use "permit!" for params!!! List all the params manually, or it can be a severe security hole
 #
 ```
 
@@ -1073,13 +1001,3 @@ end
 - ransackを使って検索機能がついたアプリを作ろう！
 - ancestryを使って多階層のデータを扱おう
 
-
-## form_with vs form_with + form_tag
-
-[Qiita: ](https://qiita.com/hmmrjn/items/24f3b8eade206ace17e2)
-
-- 基本的にはRails 5.1で採用された新しい `form_with`を覚えれば良い。
-- しかし、gemのgeneratorによっては旧式の書式の場合があり、また参考コード等も古い場合がある。
-- このため、`form_for`についても最低限の知識は必要だ。
-
-###
