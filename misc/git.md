@@ -20,14 +20,19 @@
   - [Good Tutorials](#good-tutorials)
   - [Git 管理すると何がいいの？](#git-管理すると何がいいの)
   - [Keywords](#keywords)
+    - [revision](#revision)
     - [MISC](#misc)
     - [Pull Request / Merge Request](#pull-request--merge-request)
     - [Subversion (svn)](#subversion-svn)
-    - [GitHub / GitLab / BitBucket](#github--gitlab--bitbucket)
     - [SourceTree](#sourcetree)
     - [CI/CD: Continuous Integration + Continuous Deployment （もしくは Continuous Delivery）](#cicd-continuous-integration--continuous-deployment-もしくは-continuous-delivery)
-  - [Naming Branch](#naming-branch)
   - [Commit Message Format](#commit-message-format)
+  - [Git Flow](#git-flow)
+  - [GitHub Flow](#github-flow)
+  - [Version Control Repository](#version-control-repository)
+    - [GitHub](#github)
+    - [GitLab](#gitlab)
+    - [BitBucket](#bitbucket)
 
 
 ## Config
@@ -57,6 +62,12 @@ git reset HEAD # Unstage all the files
 git reset --hard 1234abcdblahblahblah
 git reset --soft HEAD^ # 最後のコミットを取り消すが、ファイル内容はそのまま
 git reset --hard HEAD^ # 最後のコミットを取り消し、なおかつローカルのファイル内容も戻す
+git reset ---hard HEAD~n # n個前まで戻す
+
+# git resetの取り消し
+git reflog # これで、戻すべき場所の番号をみつける
+git reset --soft HEAD@{2} # 見つけた番号の場所に移動
+
 
 git init
 git commit -m "debug: Solve DB access error"
@@ -68,7 +79,7 @@ git rm # そのファイルを削除し、なおかつ git の index からも�
 git log -n 3
 git log --oneline MyFile.js # show the concise commits for the single file
 git log --follow --oneline app/views/dogs/_form.html.haml # follow the past commits before renaming
-git log --oneline develop ^origin/develop # count how many commits ahead the branch from another 
+git log --oneline develop ^origin/develop # count how many commits ahead the branch from another
 
 git revert HEAD~3
 git stash
@@ -77,7 +88,7 @@ git stash list
 # git checkoutがあまりに多機能なので、区別化のためgit switch/git restoreというコマンドが新規追加された。
 # ただし、git checkoutは従来通り使用可能
 git switch master # ブランチ変更
-git restore hello.c # 
+git restore hello.c #
 git checkout . # Revert changes to the index
 git checkout HEAD -- MyFile.js # Reset the specified file(s) to `HEAD
 git checkout HEAD myfile.js # Restore delete file which is not committed yet
@@ -164,11 +175,16 @@ git branch --set-upstream-to myfork/master # Set the default remote. Default rem
 
 ### `git revert` vs `git reset`
 
-revert・reset双方の共通点は、特定のコミットがなかったのと同じ状態になること。
+[Qiita: Git revertとresetについて](https://qiita.com/Sammy_U/items/e37c7242544fd1da81be)
 
-revertは、既存のコミットを打ち消すようなコミットを追加する。そのコミットがなかったのと同じ状態にはなるが、コミットそのものは履歴に残すことができる。
-
-resetは
+- 共通点：
+  - 特定のコミットがなかったのと同じ状態になること。
+- 相違点：
+  - revertは、既存の特定のコミットを打ち消すようなコミットを追加する。そのコミットがなかったのと同じ状態にはなるが、コミットそのものは履歴に残すことができる。
+  - resetは、コミットそのものがなかったことになる。
+- 使い分け
+  - reset: そのブランチで他の人が作業していないときで、コミット履歴を見やすくしたい場合。(他の人が使っていると、マージ時にコンフリクト発生)。したがって個人開発向け。
+  - revert: 履歴そのものが残せるので、復元も簡単で安全。チーム開発はこちらが向いている。
 
 ### CLONE vs FORK
 
@@ -239,13 +255,34 @@ Upstream Branch を変更するため、以下のコマンドが必要になる�
 
 ## Keywords
 
+### revision
+
+- https://qiita.com/chihiro/items/d551c14cb9764454e0b9
+- https://git-scm.com/book/en/v2/Git-Tools-Revision-Selection
+- [サル先生のGit入門　ブランチの切り替え](https://backlog.com/ja/git-tutorial/stepup/03/)
+-
+
+```sh
+git reflog
+
+HEAD~
+HEAD~~
+HEAD^
+HEAD^^
+HEAD@{0}
+HEAD@{1}
+HEAD@{2}
+```
+
 ### MISC
 
 - index
-- working tree
-- fast forward
 - `HEAD`
+- working tree
+- fast-forward merge
+  - マージされるブランチの HEAD をマージするブランチの先端にそのまま移動させるマージ
 - `FETCH_HEAD`
+- `ORIG_HEAD`
 - "detached HEAD state"
 - git blame
 
@@ -259,10 +296,7 @@ Upstream Branch を変更するため、以下のコマンドが必要になる�
 
 - git と同じような古いツール。だが、今は多くの企業で git に取って代わられた
 
-### GitHub / GitLab / BitBucket
 
-- クラウド上にコードを保存するサービス
-- 外部に公開するか、内部専用なのか選べる。
 
 ### SourceTree
 
@@ -278,6 +312,101 @@ Upstream Branch を変更するため、以下のコマンドが必要になる�
 - 有名なツールは「Circle CI」「Jenkins」「GitLab」など
 - Continuous Deployment では、テストで問題なければ本番環境へのデプロイも自動で行う
 
-## Naming Branch
 
 ## Commit Message Format
+
+- commitの内容をタグ付けし分類付けしたい。この代表例に[angularの推奨フォーマット]がある。
+- 以下のような接頭辞をコミットメッセージにつける。
+  - build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+  - ci: Changes to our CI configuration files and scripts (example scopes: Circle, BrowserStack, SauceLabs)
+  - docs: Documentation only changes
+  - feat: A new feature
+  - fix: A bug fix
+  - perf: A code change that improves performance
+  - refactor: A code change that neither fixes a bug nor adds a feature
+  - test: Adding missing tests or correcting existing tests
+
+## Git Flow
+
+- Vincent Driessenという人が提唱した、Gitの開発フローの代表例。[日本語訳](http://keijinsonyaban.blogspot.com/2010/10/a-successful-git-branching-model.html)
+
+５種類のブランチを作る。
+
+- feature
+  - featureへのマージ元：develop
+  - featureからのマージ先：develop
+  - 機能追加は、developからfeatureのブランチを切って行う。
+  - 機能ごとに複数のfeatureブランチが並行することになる
+- develop:
+  - developへのマージ元： feature / release (バグ修正時) / hotfix (深刻なバグ修正時) / master (プロジェクト新規作成時)
+  - developからのマージ先： feature /
+  - featureからdevelopにプルリクを投げて開発していく。
+  - ここに直接pushしてはいけない。常にfeatからマージする。
+- release:
+  - releaseへのマージ元: develop
+  - releaseからのマージ先: develop, master
+  - developブランチがひと段落したらから切る / マージする。
+  - releaseブランチに直接pushしていいのは、バグ修正のみ。バグ修正したらdevelopにマージする。
+  - 新しいリリースをするときは、releaseからmasterへマージする。
+- hotfix:
+  - hotfixへのマージ元: master
+  - hotfixからのマージ先: master, develop
+  - リリース後の重大なバグ修正のためのブランチ。修正したら、masterおよびdevelopにマージする。
+- master
+  - masterへのマージ元: release, hotfix
+  - masterからのマージ先: hotfix / develop (新規作成時)
+  - releaseブランチからマージする。
+  - masterへのマージは、常にリリースである。
+  - マージする際には、必ずタグを付ける。
+
+## GitHub Flow
+
+- Git Flowよりもシンプルで、二つのブランチからなる。
+- topic branch
+- master branch: masterブランチは常にリリースされる。
+
+
+## Version Control Repository
+
+### GitHub
+
+- Pull Request
+  - 作業用のブランチから、特定の他のブランチにマージしたいからコードに問題ないか確認してくれ！ってこと
+  - 誰がレビューするのかアサインできる。
+  - 行ごとにコメントできる。
+  - ファイル単位でコメントできる。
+  - request changeできる。
+  - requestごとに`#3`みたいに番号が振られる。（URLを張ると、勝手にこの形式に置換される？）
+  - コンフリクトなしでマージできるか、調べてくれる。
+  - プルリクの修正：作業ブランチにプッシュすれば、プルリクにも勝手に追加される。
+  - `+` / `-` で行のdiffが表示される。
+- 権限
+  - read access: view, clone, edit wiki
+  - write access: view, clone, edit wiki, push
+  - admin access: view, clone, edit wiki, push, manage members, manage repo
+- Issue
+  - 問題の指摘
+  - 解決したらcloseできる。
+  - プルリクにリンクできる。
+  - プルリクにリンクすると、どの問題に対するfixのプルリクなのか明確化できる。[公式](https://docs.github.com/ja/free-pro-team@latest/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue)
+  - プルリクにリンクすると、マージしたときに自動でissueがcloseされる。
+  - Label: Issueに`bug`などのラベルを付けて分類できる。
+  - Milestone: issueの対応期限を設定できる。
+  - Assignee: 誰が対処するのか設定できる。
+- Project
+- GitHub Action
+  - 参考：[さくらのナレッジ: GitHubの新機能「GitHub Actions」で試すCI/CD](https://knowledge.sakura.ad.jp/23478/)
+  - CI/CDツール。
+  - trigger: pushやプルリクなどのイベントや、定時実行などがある。
+  - workflow: トリガーをもとにどのように処理するのか定めたもの。
+  - action: 実際に実行されるアクション。自作もできるし、典型的なものが多数公開されてもいる。
+  - プランによって、実行可能時間や並行可能なワークフローの数に様々な制限が課せられる。
+- Wiki
+- Insights
+- Settings
+
+### GitLab
+
+
+### BitBucket
+
