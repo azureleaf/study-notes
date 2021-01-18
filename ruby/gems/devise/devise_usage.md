@@ -62,7 +62,7 @@
     - [I18n Messages for Scoped Resources](#i18n-messages-for-scoped-resources)
     - [Add sign_in, sign_out, and sign_up links to your layout template](#add-sign_in-sign_out-and-sign_up-links-to-your-layout-template)
   - [Devise Wiki Digest: Custom Authentication Methods](#devise-wiki-digest-custom-authentication-methods)
-    - [重要: Allow users to sign in with something other than their email address](#重要-allow-users-to-sign-in-with-something-other-than-their-email-address)
+    - [IMPORTANT: Allow users to sign in with something other than their email address](#important-allow-users-to-sign-in-with-something-other-than-their-email-address)
     - [Authenticate via LDAP](#authenticate-via-ldap)
     - [Create a guest user](#create-a-guest-user-1)
     - [Email-only sign-up](#email-only-sign-up)
@@ -280,8 +280,24 @@ $ rails new myapp -d postgresql
 $ printf "gem 'devise'" >> Gemfile
 $ bundle install
 
-$ bundle exec rails g devise:install # generate initializer
-$ vim config/environments/development.rb # add mailer option (optional)
+# Generate 2 files:
+#   config/initializers/devise.rb
+#   config/locales/devise.en.yml
+$ bundle exec rails g devise:install
+
+$ vim config/routes.rb
+root 'pages#main' # Set the root URL (for example)
+
+# add tags for flash message. for example:
+$ vim app/views/layouts/application.html.erb
+<body>
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
+  <%= yield %>
+</body>
+
+$ vim config/environments/development.rb # add mailer options when you use a mailer
+config.action_mailer.default_url_options = { host: 'localhost', port: 3000 } # for example
 
 $ vim config/initializers/devise.rb
 config.scoped_views = true # Enable scoped view
@@ -292,9 +308,6 @@ config.scoped_views = true # Enable scoped view
 #   Set routes @config/routes.rb
 $ bundle exec rails g devise user
 $ bundle exec rails g devise admin
-
-$ vim config/routes.rb
-root 'pages#main' # Set the root URL (for example)
 
 # Choose "blah-able" to use in the model.
 # this overrides some settings at config/initializers/devise.rb
@@ -324,13 +337,6 @@ devise_for :users, path: 'users', controllers: {
 $ bundle exec rails g devise:views users
 $ bundle exec rails g devise:views admins
 
-# add tags for flash message. for example:
-$ vim app/views/layouts/application.html.erb
-<body>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
-<%= yield %>
-</body>
 
 # Set up i18n
 $ vim config/application.rb
@@ -466,12 +472,25 @@ end
 
 ### Automatically generate password for users (simpler registration)
 
-- 実現したい流れ：ユーザはメールアドレスを入力 => 登録申請するとそのメールアドレスにパスワードが送られる => ユーザはパスワード変更できる。
-- `Devise.friendly_token.first(8)`で8桁のランダムな文字列を生成できる。
+実現したい流れ：
+1. ユーザはメールアドレスを入力
+2. 登録申請するとそのメールアドレスにパスワードが送られる
+3. ユーザはパスワード変更できる。
+
+- `Devise.friendly_token.first(8)` generates 8-digit random string.
 
 ### Change the default sign_in and sign_out routes
 
+- for example: Change login route /users/sing_in (default) into /login
+
+A. Add `path_names` args to `devise_for`
+B. Use `devise_scope`
+C. Use `as`
+
 ### Change Default Sign_up Registration Path with Custom Path
+
+
+- What's `Customer::Private` ???
 
 ### Customize routes to user registration pages
 
@@ -542,7 +561,7 @@ end
 
 ## Devise Wiki Digest: Custom Authentication Methods
 
-### 重要: Allow users to sign in with something other than their email address
+### IMPORTANT: Allow users to sign in with something other than their email address
 
 deviseではデフォルトで`email`をユーザー識別子として利用するが、これを変更できる。例： usernameやuuidなどで識別する。
 

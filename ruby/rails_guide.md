@@ -105,6 +105,26 @@ _"touch"???_
 
 ## 3 Views
 
+- default
+
+```html
+<!-- app/views/layouts/application.html.erb -->
+<head>
+  <!--  -->
+  <%= csrf_meta_tags %>
+
+  <!--  -->
+  <%= csp_meta_tag %>
+
+  <!-- これはsprocketsのCSSアセットへの参照。webpack使用時で、config/webpacker.ymlでextract_css: trueとしたときには、stylesheet_pack_tagを使う -->
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+  <!-- webpackのJSアセットへの参照 -->
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+```
+
+
 ### Action View Overview
 
 template：　 Ruby の記法と組み合わせること、冗長な表現を省略することにより、生で書くよりも分量が減らせるのがいずれも特長。

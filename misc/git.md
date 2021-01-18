@@ -138,6 +138,7 @@ git pull --all # ローカルに存在しないブランチはpullされない�
 # localに存在しないブランチ(ここではexperimental)をremoteから持ってくる
 git checkout origin/experimental # A. detached HEADの状態でremoteから持ってくる。中身をちょっと見たいだけのときなどに使用。
 git checkout experimental # B. ローカルに新ブランチを持ってくる
+git checkout --track origin/experimental # fetch, create, and checkout new remote branch
 
 git clone http://blahblah.git
 git clone --bare https://username@bitbucket.org/exampleuser/OLD_REPOSITORY.git
