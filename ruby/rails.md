@@ -51,6 +51,7 @@
     - [Bundle execとは](#bundle-execとは)
     - [rake vs rails](#rake-vs-rails)
     - [Application server vs Web server](#application-server-vs-web-server)
+  - [Consoles](#consoles)
   - [受けたコードレビューの要旨](#受けたコードレビューの要旨)
   - [Basics: pikawaka](#basics-pikawaka)
 
@@ -893,7 +894,11 @@ application server: e.g. Puma, Unicorn
 
 Passenger
 
+## Consoles
 
+- $ irb
+- $ rails console
+- pry
 
 
 ## 受けたコードレビューの要旨

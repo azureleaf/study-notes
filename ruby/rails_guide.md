@@ -1,8 +1,7 @@
 # Study Notes on Rails Docs
 
 - [official Guides](https://guides.rubyonrails.org/)
-- v6.1.0 (Dec., 2020)
-- 写経することはあまり意味がないので、キーワードと概念をまとめるように心がけたい。
+- v6.1.0 (Dec. 2020)
 
 ## ToC
 
@@ -26,7 +25,7 @@
   - [4 Controllers](#4-controllers)
     - [Action Controller Overview](#action-controller-overview)
     - [Rails Routing from the Outside In](#rails-routing-from-the-outside-in)
-  - [5 Other Components](#5-other-components)
+  - [5. Other Components](#5-other-components)
     - [Active Support Core Extensions](#active-support-core-extensions)
     - [Action Mailer Basics](#action-mailer-basics)
     - [Action Mailbox Basics](#action-mailbox-basics)
@@ -127,13 +126,12 @@ _"touch"???_
 
 ### Action View Overview
 
-template：　 Ruby の記法と組み合わせること、冗長な表現を省略することにより、生で書くよりも分量が減らせるのがいずれも特長。
+Template
+- ERB: converted to HTML
+- Builder: converted to XML
+- JBuilder: converted to JSON
 
-- ERB: HTML を生成する。
-- Builder: XML を生成する。
-- JBuilder: JSON を生成する。
-
-partial: 複数のテンプレートで共有される小さなパーツ
+partial: small view parts shared among layouts.
 
 - `render "shared/menu"` は `shared/_menu.html.erb`パーシャルを利用する。
 - render の引数のキーワード
@@ -165,6 +163,11 @@ helpers: HTML 化したときに DOM に置換されるものが多い。これ�
   Localized Views
 
 ### Layouts and Rendering in Rails
+
+3 Ways to return HTTP response:
+- `render`: returns full response
+- `redirect_to`: returns HTTP redirect code status
+- `head`
 
 ### Action View Helpers
 
@@ -205,23 +208,187 @@ resourceful routing のカスタマイズ
 - `rails routes`で一覧表示。かなり巨大な表になるので、表示フォーマットオプションあり。
 - `assert_*`系のメソッド： `routes.rb`でのパスの記述が、目論見通りの URL 文字列になっているかどうか、などを確認できる。
 
-## 5 Other Components
+## 5. Other Components
 
 ### Active Support Core Extensions
 
+- Active Supportはライブラリの集合体である。
+- Core extension以外にも、Active Supportには重要な機能が多数含まれる。
+
+Active Support Libs
+- Active Support Core Extensions
+  - Integer, ...
+  - Strings
+  - Date, Datetime, ...
+  - ...
+- Active Support Dependencies
+- Active Support Cache
+- Active Support Concurrency
+- Active Support Benchmark
+- Active Support Testing
+- Active Support Railtie
+- Active Support Number Helper
+- ...
+
+Core Extensionsの拡張の例
+
+- blank? present?
+- presence
+- duplicable
+- deep_dup
+- try
+- class_eval
+- acts_like?
+- to_param
+- to_query
+- with_options
+- to_json
+- instance_values / instance_variable_names
+- silence_warnings / enable_warnings / suppress
+- in?
+  - Ruby組み込みのincludeと似ているが、内包関係の記述順序が違う
+
+
+
 ### Action Mailer Basics
+
+- Sends / receives mail in the Rails app.
+
+Similarity to action controllers:
+- Related views are put in `app/views`
+- You can use generators for mailers / layouts / views / tests
+- You can use helpers because mailer class inherits `AbstractController`
+
+Message Headers: passed to `mail()` method
+- `from`
+- `to`
+- `subject`
+
+Message body
+- `app/views/user_mailer/welcome_email.html.erb` for HTML mail
+- `app/views/user_mailer/welcome_email.text.erb` for text-only mail
+
+Message Attachments
+
+Mailers `app/mailers`
+- receive method:
+
+Configuration
+- `config/application.rb`
+- `config/environments/$RAILS_ENV.rb`
+
+
+MISC
+- Mails can be previewed before sending.
+- Mailing can be tested.
+
 
 ### Action Mailbox Basics
 
 ### Action Text Overview
 
+Why do I need this?
+- Rich text document.
+
+MISC
+- Requires Active Storage setup to embed images in the rich text.
+- Trix editor: Built-in editor for rich text.
+
+How to use
+1. Add `has_rich_text` to your model.
+2. Add rich text area in your view.
+3. Add rich text manipulations to the controller action.
+
 ### Active Job Basics
+
+Run various jobs:
+- Send emails (This works with Active Mail)
+- Issue bills.
+- Clean the app up.
+
+Timing
+- `perform_later`: Add to job queues. Will run after prior jobs are done.
+- `set`: Run on the specified time.
+
+Run the jobs
+- Create: Generate templates in `app/jobs` with a generator
+- Register:
+  - for in-memory queue: use Rails built-in functions
+  - for permanent queue: use queue adapters such as Sidekiq, Ressque, Delayed Job
+
+About Sidekiq
+- Run multiple jobs asynchronically.
+- Requires Redis.
+- Provided as a gem.
+- Runs as a different process from Rails app.
+
+Configure adapter
+- A. config/application.rb
+- B. Configure in every Job file
+
+Job Class
+```rb
+class ProcessVideoJob < ApplicationJob
+
+  queue_as
+  around_perform
+  rescue_from
+
+  def perform
+  def around_cleanup
+
+  retry_on
+  discard_on
+end
+```
+
+MISC
+- Exception will be thrown when a job in the queue failed.
+- Failed jobs can be retried or discarded.
 
 ### Active Storage Overview
 
-- 利点： Active Record にファイルを添付できる。これにより、
+What can I do with this?
+- Upload files to cloud storage.
+- Attach cloud storage files to Active Records.
+
+Configuration
+- `config/storage.yml`
+
+MISC
+- MiniMagic gem or RMagick gem (These are wrappers for ImageMagick) is useful to manipulate images in the Active Storage processes.
 
 ### Action Cable Overview
+
+What can I do with this?
+- WebSocket + Rails
+- Example usages:
+  - User appearance: Check if the user is viewing the page.
+  - Push notification to the user browser.
+
+Terms
+- An Action Cable server has multiple connection instance.
+- A connection instance has a WebSocket connection.
+- Every browser tabs on the user has different WebSocket connection.
+- Consumer: WebSocket client side.
+
+- Connection:
+- Channel:
+  - Channel can be subscribed by consumers.
+
+- Pub/Sub
+- Subscription
+
+Client-server comm
+- Broadcasting
+- Stream:
+
+What's WebSocket?
+- Real-time duplex communication.
+- WebSocket connection is established after hand-shaking over HTTP.
+- Unlike HTTP, WebSocket can send multiple requests over single connection.
+- Unlike HTTP, servers can initiate the connection.
+- Unlike HTTP, header size is quite small.
 
 ## 6 Digging Deeper
 
