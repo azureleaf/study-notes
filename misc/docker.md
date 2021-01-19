@@ -1,8 +1,8 @@
-# Meet Docker
+# Docker
 
 ## ToC
 
-- [Meet Docker](#meet-docker)
+- [Docker](#docker)
   - [ToC](#toc)
 - [Commands](#commands)
   - [Process](#process)
@@ -12,16 +12,20 @@
   - [Network](#network)
   - [Docker Compose](#docker-compose)
 - [Terminology](#terminology)
-  - [Docker Compose](#docker-compose-1)
+- [Docker Compose](#docker-compose-1)
+  - [Docker Compose vs K8s](#docker-compose-vs-k8s)
+  - [Docker Swarm vs Docker Compose](#docker-swarm-vs-docker-compose)
   - [Tag](#tag)
   - [Docker Network](#docker-network)
   - [MISC](#misc)
-- [Docker におけるデータ共有](#docker-%e3%81%ab%e3%81%8a%e3%81%91%e3%82%8b%e3%83%87%e3%83%bc%e3%82%bf%e5%85%b1%e6%9c%89)
+- [Docker におけるデータ共有](#docker-におけるデータ共有)
     - [Volume](#volume)
     - [Bind Mount](#bind-mount)
     - [tmpfs](#tmpfs)
 - [Dockerfile](#dockerfile)
 - [Run MySQL container](#run-mysql-container)
+- [Kubernetes](#kubernetes)
+  - [Terminology](#terminology-1)
 
 # Commands
 
