@@ -165,13 +165,27 @@ helpers: HTML 化したときに DOM に置換されるものが多い。これ�
 ### Layouts and Rendering in Rails
 
 3 Ways to return HTTP response:
-- `render`: returns full response
-- `redirect_to`: returns HTTP redirect code status
-- `head`
+- `render`: full response
+- `redirect_to`: HTTP redirect code status
+- `head`:
+
 
 ### Action View Helpers
 
+Major tags inside `form_with`: url, method
+- form.label
+- form.text_field
+- form.password_field
+- form.submit
+- form.check_box
+- form.radio_button
+- form.text_area
+
+
+
 ### Action View Form Helpers
+
+
 
 ## 4 Controllers
 
