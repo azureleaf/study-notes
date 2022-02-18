@@ -2,11 +2,30 @@
 
 ## Library
 
-## Terminology
+
+## Methodology
 
 - BERT
+  - By Google
+
 - seq2seq
 - word2vec
+
+- GPT(Generative Pre-trained Transformer)
+  - Generate text
+  - Use Self-Attention
+  - Use Word2Vec
+  - Free, but not open-source
+  - By OpenAI
+- GPT(-1)
+- GPT-2
+- GPT-3 (2020)
+- GPT-J: OSS Alternative
+
+
+## Terminology
+
+
 
 - 単語分割
 - 文書分類

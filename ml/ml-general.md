@@ -1,9 +1,10 @@
 # Machine Learning (General)
 
-## Terminology
+## Concepts
 
 - Supervised Learning
 - Unsupervised Learning
+
 - Swarm Intelligence
 - ACO: Ant Colony Optimization
 - Genetic Algorithm
@@ -14,6 +15,28 @@
 
 - Black box vs White box
   - 深層学習などの AI 手法では内在する物理法則の解析的記述とは関係のない関数の組み合わせでシステムの入出力を表現する中身の構造自体が意味を持たないブラックボックスとなるが、物理法則の解析的記述と連動する状態変数による構造に意味を持たせた表現をホワイトボックスと呼ぶ
+
+- Gradient Descent
+- SGD (Stochastic Gradient Descent)
+
+- Clustering
+
+- Regression
+- Overfitting
+- Adversary
+- Attention
+- Convolution
+- Loss Function
+- Backpropagation
+- Normalization
+- Activation
+  - Softmax
+  - Sigmoid
+  - Rectifier
+- Regularization
+
+
+
 ## Autoencdoder
 
 - PCA: Primary Component Analysis
@@ -119,3 +142,6 @@
 ## reinforcement_learning
 
 - Reinforcement Learning
+- Q-learning
+- SARSA (State–action–reward–state–action )
+  - Markov Decision Process

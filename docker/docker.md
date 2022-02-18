@@ -1,211 +1,61 @@
 # Docker
 
-## ToC
+# ToC
 
 - [Docker](#docker)
-  - [ToC](#toc)
-- [Commands](#commands)
-  - [Process](#process)
-  - [Info](#info)
-  - [Container](#container)
-  - [Docker Hub](#docker-hub)
-  - [Network](#network)
-  - [Docker Compose](#docker-compose)
-- [Terminology](#terminology)
-- [Docker Compose](#docker-compose-1)
-  - [Docker Compose vs K8s](#docker-compose-vs-k8s)
-  - [Docker Swarm vs Docker Compose](#docker-swarm-vs-docker-compose)
-  - [Tag](#tag)
+- [ToC](#toc)
+- [Docker & Rails](#docker--rails)
+  - [1. Dockerfile](#1-dockerfile)
+    - [Example](#example)
+  - [2. docker-compose.yml](#2-docker-composeyml)
+  - [3. entrypoint.sh](#3-entrypointsh)
+  - [4. Gemfile](#4-gemfile)
+  - [5. Gemfile.lock](#5-gemfilelock)
+- [Docker Command](#docker-command)
+- [Docker Compose Commands](#docker-compose-commands)
+- [Topics](#topics)
   - [Docker Network](#docker-network)
-  - [MISC](#misc)
-- [Docker におけるデータ共有](#docker-におけるデータ共有)
-    - [Volume](#volume)
-    - [Bind Mount](#bind-mount)
-    - [tmpfs](#tmpfs)
-- [Dockerfile](#dockerfile)
-- [Run MySQL container](#run-mysql-container)
-- [Kubernetes](#kubernetes)
-  - [Terminology](#terminology-1)
+  - [Sharing Data between host & containers](#sharing-data-between-host--containers)
+  - [Kubernetes](#kubernetes)
+  - [Docker vs Docker Compose](#docker-vs-docker-compose)
+  - [Docker on the Cloud](#docker-on-the-cloud)
 
-# Commands
+# Docker & Rails
 
-## Process
+## 1. Dockerfile
 
-- `systemctl start docker`
-- `service start docker`
-  - Same as `systemctl`
-- `systemctl status docker`
-
-## Info
-
-- `docker –version`
-- `docker info`
-- `docker ps`
-  - show RUNNING containers
-- `docker ps -a`
-  - show RUNNING & EXITED containers
-- `docker inspect my-container`
-- `docker images`
-
-## Container
-
-- **`docker pull ubuntu:xenial`**
-- `docker create —name my-ubuntu-ontainer -it ubuntu /bin/bash`
-- **`docker run -itd ubuntu`**
-  - `docker pull ubuntu` + `docker create my-ubuntu-container` + `docker start my-ubuntu-container`
-  - `-i` interactive. Get the standard input of the container
-  - `-t` tty. Assign TTY (TeleTYpewriter)
-  - `-d`
-- `docker start fe6e270a1c9c`
-  - Start with container ID
-- `docker start my-ubuntu-container`
-  - Start with container name
-- `docker restart my-ubuntu-container`
-- `docker stop my-ubuntu-container`
-- `docker pause my-ubuntu-container`
-- `docker unpause my-ubuntu-container`
-- 2 ways to access to the running Container
-  - `docker attach my-ubuntu-container`
-  - `docker exec -it my-ubuntu-container bash`
-  - `exit` inside the container: getting out of the container without terminating it
-- `docker kill fe6e270a1c9c`
-- `docker commit my-ubuntu-container my-ubuntu-image:mytag`
-  - Create the image from the container
-  - NOT RECOMMENDED, because image contents can't be recorded
-  - You should create image from Dockerfile
-- `docker rm my-ubuntu-container`
-- `docker rm -f my-ubuntu-container`
-- `docker rmi`
-- `docker build -t docker-whale .`
-  - Build image based on the Dockerfile
-  - Do this at the directorey with Dockerfile
-  - `docker-whale`: Name of the image to be created
-  - `.`: Build Context
-- `docker build —no-cache -t docker-whale`
-  - May need this on re-building from the Dockerfile
-- `docker run --name some-nginx -d -p 8080:80 nginx`
-- `docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7`
-- `docker run --name some-wordpress -e WORDPRESS_DB_PASSWORD=my-secret-pw --link some-mysql:mysql -d -p 8080:80 wordpress`
-
-## Docker Hub
-
-- `docker login`
-- `docker push`
-- `docker tag`
-
-## Network
-
-- `docker network ls`
-- `docker network create apline-net`
-- `docker network inspect alpine-net`
-- `docker network connect alpine-net alpine4`
-- `docker network disconnect alpine-net alpine4`
-
-## Docker Compose
+- `docker build`
+-
 
 
-- docker-compose ps
-  - List Containers
-- docker-compose images
-  - List images
-- docker-compose build
-  - Build Service Image
-- docker-compose restart
-- docker-compose run
-  - （※-d オプションでバックグランドで起動）
-- docker-compose up
-- docker-compose exec
-- docker-compose logs
-- docker-compose stop
-- docker-compose rm
-  - docker-compose.yml にかかれているコンテナを削除
-- docker-compose down
-  - コンテナを停止＆削除
+```dockerfile
+FROM
+ENV
+LABEL
 
-# Terminology
+RUN
 
-- Docker の環境
-  - Container > Docker Engine > Host OS > Hardware
-- Kubernetes (k8s)
-- Dockerfile
-- Image
-  - Snapshot of the Docker VM at the specific time point
-  - You can't modify image
-- To get images
-  - Download from Docker Hub
-  - Build from Dockerfile
-  - Commit from the container: Not recommended, because `docker history` can't be used for such images
-- Container
-  - Instance of Image
-- Dockerhub
-  - Place to share images
-- Docker Engine
-- Docker Machine
+# $cd equivalent
+WORKDIR
 
-# Docker Compose 
+# ADD can use remote URL & .tar extraction, while COPY can't.
+# You should use COPY bacause ADD may increase imagesize.
+# You can use $curl/wget/tar command with COPY
+COPY
+ADD
 
-- 複数のコマンドを
-- 利点
-  - dockerのコンテナをどのようにネットワークに接続するのか長々と設定コマンドを打たずに済む
-- docker-compose.yml
+VOLUME
 
-## Docker Compose vs K8s
+ENTRYPOINT
 
-- どちらも複数のコンテナ間での通信を設定する
-- Docker Composeは単一ホスト上での複数コンテナ
-- K8sは複数ホスト上での複数コンテナ
+EXPOSE
 
-## Docker Swarm vs Docker Compose
+# CMD appears only once in a Dockerfile
+CMD
+ARG
+```
 
-## Tag
-
-- Tag is the version of a image
-- `latest` or `1.14-perl` in `nginx:1.14-perl` `nginx:latest` are tags
-- When you don't specify the tag, it will be set as `latest` by default
-
-## Docker Network
-
-- 複数のコンテナ間で通信するためのネットワーク
-- Bridge Network
-  - Default
-- Host Network
-- Overlay Network
-- Macvlan Network
-- None Network
-- User-defined Brdge Network
-- Third-party Network Plugin
-
-## MISC
-
-- Hyper-V
-- Virtual Machine
-- Hypervisor
-- VirtualBox
-  - VM を作る
-- Vagrant
-  - VirtualBox の設定を自動化してくれるツール
-- VMWare
-  - VirtualBox みたいなもん
-  - VirtualBox が主流なので、あまり見ない気がする
-
-# Docker におけるデータ共有
-
-- ホスト側とコンテナ内部とでデータを共有しないといけない場面は多々ある
-- 実現する方法は３つある
-
-### Volume
-
-- `docker volume create
-
-### Bind Mount
-
-### tmpfs
-
-# Dockerfile
-
-# Run MySQL container
-
-1. Create `docker-compose.yml`
+### Example
 
 ```yml
 version: "3"
@@ -224,16 +74,284 @@ services:
       MYSQL_PASSWORD: test
 ```
 
-1. `docker-compose up -d`
-   - Start the container
-1. `docker-compose ps`
-   - Check if the container is up
-1. `mysql -uroot -p -h 127.0.0.1 --port 13306`
-   - Connect to MySQL container
+## 2. docker-compose.yml
 
-# Kubernetes
+```yml
+version: '3'
+services:
+  db: # container name
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./tmp/db:/var/lib/mysql
 
-## Terminology
+  web: # container name
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+```
+
+## 3. entrypoint.sh
+
+
+```sh
+
+#!/bin/bash
+
+# Immediately exit if any command being run exits with a non-zero exit code
+set -e
+
+# Terminate the Rails process if existed
+rm -f /myapp/tmp/pids/server.pid
+
+# Run the CMD content in the Dockerfile
+exec "$@"
+```
+
+## 4. Gemfile
+
+
+## 5. Gemfile.lock
+
+
+# Docker Command
+
+```sh
+docker build -t myimage:1.0 . # -t: tag, .: current dir
+
+#
+# Image
+#
+docker image ls
+docker image rm alpine:3.4
+docker tag # Tag is the version of a image. Tag will be `latest` by default when omitted
+
+# Remote registry
+docker pull alpine
+docker pull myimage:1.0
+docker pull ubuntu:xenial
+docker tag myimage:1.0 myrepo/ myimage:2.0 # retag
+docker push myrepo/myimage:2.0
+
+docker container run --name web -p 5000:80 alpine:3.9
+
+# "run" looks for local image first, if not found, pull it.
+docker run hello-world
+docker run alpine
+docker run alpine ls -l # run "ls -l" after container creation
+docker run alpine /bin/sh
+docker run my_img # foreground (attached by default)
+docker run my_img -d # detached
+docker run -it alpine /bin/sh # -t: TTY
+docker run -itd ubuntu # -i: interactive. This pull, create, start the container
+docker run --name some-nginx -d -p 8080:80 nginx
+docker run --name some-nginx -d -p 8080:80 nginx
+docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
+docker run --name some-wordpress -e WORDPRESS_DB_PASSWORD=my-secret-pw --link some-mysql:mysql -d -p 8080:80 wordpress
+
+docker attach
+docker attach my-ubuntu-container
+docker exec -it my-ubuntu-container bash
+exit # inside the container: getting out of the container without terminating it
+
+docker stop web # SIGTERM
+docker kill web # SIGKILL
+docker kill fe6e270a1c9c
+docker pause
+docker unpause
+docker start fe6e270a1c9c # with container ID
+docker start my-ubuntu-container # with container name
+docker restart
+docker stop
+
+docker network ls
+docker network ls
+docker network create apline-net
+docker network inspect alpine-net
+docker network connect alpine-net alpine4
+docker network disconnect alpine-net alpine4
+
+
+docker container ls # running
+docker container ls --all # running && stopped
+
+docker container rm -f $(docker ps -aq) # running && stopped
+
+docker container logs --tail 100 web
+
+docker ps # running
+docker ps -a
+docker ps -aq
+
+docker app
+
+docker builder
+docker build
+docker build -t docker-whale . # Build image based on the Dockerfile. `docker-whale`: Name of the image to be created. `.`: Build Context
+docker build —no-cache -t docker-whale
+docker buildx
+docker create
+docker create —name my-ubuntu-ontainer -it ubuntu /bin/bash
+docker rm # Remove container
+docker rm -f my-ubuntu-container
+docker rmi # Remove images
+
+#
+# INFO
+#
+docker images
+docker diff
+docker info
+docker inspect
+docker logs
+docker stats
+docker ps
+docker ps -a # Running & Exited
+docker version
+
+#
+# REMOTE
+#
+docker pull
+docker push
+docker login
+docker logout
+
+docker import
+docker export
+
+
+docker container
+
+docker volume
+docker volume create
+⭐ docker volume ls
+
+
+#
+# MISC
+#
+docker checkpoint
+docker commit
+docker commit my-ubuntu-container my-ubuntu-image:mytag # Create the image from the container. NOT RECOMMENDED, create create image from Dockerfile instead.
+docker compose
+docker config
+docker context
+docker cp
+docker events
+docker history
+docker engine
+docker load
+docker rename
+docker save
+docker search
+
+docker tag
+docker top
+docker update
+docker wait # Get exit code of the container when it stops
+docker plugin
+docker port
+docker manifest
+docker network
+docker plugin
+docker secret
+docker service
+docker stack
+docker swarm
+docker system
+docker trust
+
+#
+# Bash
+#
+docker --version
+docker -v
+systemctl start docker
+service start docker
+systemctl status docker
+```
+
+# Docker Compose Commands
+
+- 複数のコマンドを
+- 利点
+  - dockerのコンテナをどのようにネットワークに接続するのか長々と設定コマンドを打たずに済む
+- docker-compose.yml
+
+Docker Compose vs K8s
+
+- どちらも複数のコンテナ間での通信を設定する
+- Docker Composeは単一ホスト上での複数コンテナ
+- K8sは複数ホスト上での複数コンテナ
+
+Docker Swarm vs Docker Compose
+
+
+```sh
+docker-compose pull
+docker-compose push
+
+docker-compose port
+
+
+docker-compose config
+
+docker-compose build
+docker-compose create
+docker-compose start
+docker-compose restart
+docker-compose stop
+docker-compose kill
+docker-compose pause
+docker-compose unpause
+⭐ docker-compose up
+docker-compose up
+docker-compose up -d # --detach
+docker-compose up --build
+docker-compose up --scale # formerly: docker-compose scale
+⭐ docker-compose down # Remove containers, networks
+docker-compose down --rmi all # Remove images as well
+docker-compose down --rmi local # Remove images as well
+docker-compose down --v # Remove volumes as well
+docker-compose rm # remove stopped containers
+
+#
+# STAT
+#
+docker-compose events
+docker-compose ps
+docker-compose top # running processes
+docker-compose help
+docker-compose images
+docker-compose logs
+docker-compose logs --follow
+
+docker-compose exec # Allocate a TTY
+docker-compose exec web bin/rails c
+docker-compose exec web sh
+
+docker-compose run
+docker-compose run web rails webpacker:install
+docker-compose run --rm web bin/rails db:setup
+docker-compose run --rm web bundle exec rspec
+docker-compose run --rm web bundle update
+docker-compose run web rails new . --force --no-deps --database=mysql
+
+
+
+```
+
+# Topics
 
 - Cluster
 - Node
@@ -246,3 +364,63 @@ services:
 - Annotation
 - kubectl
 - Deployment
+- Hyper-V
+- Virtual Machine
+- Hypervisor
+- VirtualBox
+- VMWare:
+- Vagrant: Automate configuration of VirtualBox
+- External Port
+- Internal Port
+- Docker Client
+- Docker daemon
+- Docker の環境
+  - Container > Docker Engine > Host OS > Hardware
+- Kubernetes (k8s)
+- Dockerfile
+- Image
+  - Snapshot of the Docker VM at the specific time point
+  - You can't modify image
+- To get images
+  - Download from Docker Hub
+  - Build from Dockerfile
+  - Commit from the container: Not recommended, because `docker history` can't be used for such images
+- Container
+  - Instance of Image
+- Dockerhub
+  - Place to share images
+- Docker Engine
+- Docker Machine
+
+## Docker Network
+
+- 複数のコンテナ間で通信するためのネットワーク
+- Bridge Network
+  - Default
+- Host Network
+- Overlay Network
+- Macvlan Network
+- None Network
+- User-defined Brdge Network
+- Third-party Network Plugin
+
+
+## Sharing Data between host & containers
+
+- ホスト側とコンテナ内部とでデータを共有しないといけない場面は多々ある
+- 実現する方法は３つある
+  - Bind Mount
+  - tmpfs
+
+## Kubernetes
+
+## Docker vs Docker Compose
+
+## Docker on the Cloud
+
+Kubernetes
+
+- AWS ECS/EKS
+- Azure AKS
+- GCP Kubernetes Engine
+- Alibaba Cloud: Container Service
