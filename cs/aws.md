@@ -1,40 +1,46 @@
 
 # AWS
 
----
-
 # ToC
 
 - [AWS](#aws)
 - [ToC](#toc)
-- [Products](#products)
-  - [Region & AZ](#region--az)
+- [AWS Concepts](#aws-concepts)
+  - [Certificates](#certificates)
+  - [Global Infrastructure: AZ, Region...](#global-infrastructure-az-region)
+  - [Misc](#misc)
   - [Create Instance](#create-instance)
-  - [Products 1: Compute](#products-1-compute)
-  - [AWS: EC2 vs Lightsail](#aws-ec2-vs-lightsail)
-  - [Compute: Why use Elastic Beanstalk?](#compute-why-use-elastic-beanstalk)
-  - [Compute: Notes on Elastic Beanstalk](#compute-notes-on-elastic-beanstalk)
-  - [Products 2: Containers](#products-2-containers)
-  - [AWS: Why use Fargate?](#aws-why-use-fargate)
-  - [Products 3: Storage](#products-3-storage)
-  - [S3 vs EFS vs EBS](#s3-vs-efs-vs-ebs)
-    - [EFS](#efs)
-    - [EBS](#ebs)
-    - [S3](#s3)
-  - [Products 4: Database](#products-4-database)
+- [Product Categories: Analytics](#product-categories-analytics)
+- [Product Categories: Application Integration](#product-categories-application-integration)
+- [Product Categories: Blockchain](#product-categories-blockchain)
+- [Product Categories: Cloud Financial Management](#product-categories-cloud-financial-management)
+- [Product Categories: Compute](#product-categories-compute)
+  - [EC2 vs Lightsail](#ec2-vs-lightsail)
+  - [Why Elastic Beanstalk?](#why-elastic-beanstalk)
+- [Product Categories: Containers](#product-categories-containers)
+- [Product Categories: Database](#product-categories-database)
+  - [Aurora vs RDS](#aurora-vs-rds)
   - [ElastiCache](#elasticache)
-    - [Engine](#engine)
-    - [Purpose](#purpose)
-  - [Products 5: Security, Identity & Compliance](#products-5-security-identity--compliance)
-  - [Products 6: Cryptography & PKI](#products-6-cryptography--pki)
-  - [Products 7: Machine Learning](#products-7-machine-learning)
-  - [Products 8: Management & Governance](#products-8-management--governance)
-  - [Why need ELB?](#why-need-elb)
-  - [Types of ELB](#types-of-elb)
-  - [Products 9: Developer Tools](#products-9-developer-tools)
-  - [Products 10: Migration & Transfer](#products-10-migration--transfer)
-  - [Products 11: Networking & Contents Delivery](#products-11-networking--contents-delivery)
-  - [Products 12: Media Services](#products-12-media-services)
+- [Product Categories: Developer Tools](#product-categories-developer-tools)
+- [Product Categories: End User Computing](#product-categories-end-user-computing)
+- [Product Categories: Front-End Web & Mobile](#product-categories-front-end-web--mobile)
+- [Product Categories: Internet of Things](#product-categories-internet-of-things)
+- [Product Categories: Machine Learning](#product-categories-machine-learning)
+- [Product Categories: Management & Governance](#product-categories-management--governance)
+- [Product Categories: Media Services](#product-categories-media-services)
+- [Product Categories: Migration & Transfer](#product-categories-migration--transfer)
+- [Product Categories: Networking & Content Delivery](#product-categories-networking--content-delivery)
+  - [ELB](#elb)
+- [Product Categories: Quantum Technologies](#product-categories-quantum-technologies)
+- [Product Categories: Robotics](#product-categories-robotics)
+- [Product Categories: Satellite](#product-categories-satellite)
+- [Product Categories: Security, Identity, & Compliance](#product-categories-security-identity--compliance)
+  - [IAM](#iam)
+  - [SSO](#sso)
+- [Product Categories: Storage](#product-categories-storage)
+  - [S3 vs EFS vs EBS](#s3-vs-efs-vs-ebs)
+- [Product Categories: VR & AR](#product-categories-vr--ar)
+- [Example Patterns](#example-patterns)
 - [VPC](#vpc)
   - [AWS VPC: Features](#aws-vpc-features)
   - [AWS VPC: Keywords](#aws-vpc-keywords)
@@ -64,7 +70,7 @@
   - [Procedure w/o Elastic Beanstalk](#procedure-wo-elastic-beanstalk)
   - [AWS + Laravel: References](#aws--laravel-references)
   - [AWS + Laravel: Overview](#aws--laravel-overview)
-  - [MISC](#misc)
+  - [MISC](#misc-1)
     - [What's phpMyAdmin?](#whats-phpmyadmin)
   - [Step 1/4 Set up the EC2 instance](#step-14-set-up-the-ec2-instance)
   - [Step 2/4 Set up the LAMP](#step-24-set-up-the-lamp)
@@ -92,33 +98,44 @@
   - [Naka: Security Group](#naka-security-group)
     - [w/o LB](#wo-lb)
     - [w/ LB](#w-lb)
-- [RDS](#rds)
-  - [RDS](#rds-1)
 - [Cloudfront](#cloudfront)
   - [w/o CloudFront](#wo-cloudfront)
   - [w/ CloudFront (then)](#w-cloudfront-then)
   - [w/ CloudFront (modern)](#w-cloudfront-modern)
   - [System Config Example](#system-config-example)
 
----
+# AWS Concepts
 
-# Products
+## Certificates
 
->>>
+SA (Solution Architect)
 
-## Region & AZ
+## Global Infrastructure: AZ, Region...
 
-- Region:
-  - __ap-northeast-1__ is for Tokyo
-- AZ: Availability Zone
-  - A region has multiple AZ, that is, data centers
-  - A service can ber deployed to multiple AZs for redundancy
-  - Comm between multiple regions: High latency
-  - COmm between AZs inside the same region: Low latency
-- For high availability:
-  - Multi-AZs with Active-Passive / Active-Active
+AZ (Availability Zone)
+- A region has multiple AZ, that is, data centers
+- A service can ber deployed to multiple AZs for redundancy
+- Comm between multiple regions: High latency
+- COmm between AZs inside the same region: Low latency
+- For high availability: Multi-AZs with Active-Passive / Active-Active
 
->>>
+
+Local Zone
+
+Wavelength Zone
+
+Direct Connect Location
+
+Region
+- "ap-northeast-1" is for Tokyo
+
+## Misc
+
+Pricing Calculator
+
+SLA (Service Level Agreements): Amazon refunds when the availability is less than 95%
+
+Subnet
 
 ## Create Instance
 
@@ -129,177 +146,253 @@
 5. Set up Security group
 6. Start
 
->>>
+# Product Categories: Analytics
 
-## Products 1: Compute
+- ⭐️Athena
+- Cloud Search
+- EMR: for Hadoop
+- FinSpace
+- Kinesis
+- MSK (Managed Streaming for Apache Kafka)
+- ⭐️OpenSearch Service (formerly Elastisearch)
+- ⭐️QuickSight
+- ⭐️RedShift: Dataware House
+- Data Exchange
+- Data Pipeline
+- Glue
+- Lake Formation
 
-- **EC2**: Elastic Compute Cloud
-- Lightsail
-  - Servers + Storage + DB + Networking. Cheap
-- **Lambda**
-  - Run the code triggered by the events
-- Elastic Beanstalk
-  - PaaS for PHP, Node, Python, Docker... etc.
-- CodeStar
-  - CD (Continuous Delivery) tool: quick build & deployment
+# Product Categories: Application Integration
 
->>>
+- AppFlow
+- EverntBridge
+- MWAA (Managed Workflows for APache Airflow)
+- MQ
+- SNS (Simple Notification Service)
+- SQS (Simple Queue Service)
+- Step Functions
 
-## AWS: EC2 vs Lightsail
+# Product Categories: Blockchain
 
-Lightsail is a good option for small websites, test / dev env, WordPress blog
+- Managed Blockchain
+- QLDB (Quantum Ledger Database)
 
-- Lightsail is cheaper
-  - Lightsail has monthly fixed cost, while EC2 cost is calc by usage
-- Lightsail is all-in-one while EC2 is computing only
-  - Storage, snapshot, LB, firewall, DNS, networking
-  - With server snapshot functionality, you can duplicate the server easily
-  - LAMP / MEAN/ Node.js env is pre-configured
-  - Easy to host the website (incl. WordPress)
-- EC2 is more customizable
-  - Lightsail is highly pre-configured, and it can't be changed
-  - Lightsail service can't be linked to other AWS services with ease
-  - Lightsail can't be scaled according to the requests
+# Product Categories: Cloud Financial Management
 
->>>
+1. Budegets
+2. ⭐️Cost and Usage Report
+3. ⭐️Cost Explorer
+4. Saving Plans
+5. Reserved Instance Report
 
-## Compute: Why use Elastic Beanstalk?
+# Product Categories: Compute
 
-- Automatically configure the programming language-specific env
-  - e.g. PHP, Laravel, etc.
-- Automatically configure the necessary AWS services:
-  - EC2 Instance
-  - Auto Scaling Group
-  - Load Balancer
-  - CloudWatch
+1. ⭐️⭐️⭐️EC2 (Elastic Compute Cloud)
+2. EC2 Auto Scaling
+3. ECS (duplicate)
+4. EKS (duplicate)
+5. Fargate (duplicate)
+6. ⭐️Lightsail: Servers + Storage + DB + Networking. Cheap
+7. App Runner
+8. ⭐️⭐️⭐️Auto Scaling
+9. Batch
+10. Compute Optimizer
+11. Elastic Beanstalk: PaaS for PHP, Node, Python, Docker... etc.
+12. ⭐️⭐️⭐️Lambda: Run the code triggered by the events
+13. Outposts
+14. AWS Serverless Application Repository
+15. Wavelength
+16. VMWare Cloud on AWS
 
->>>
+## EC2 vs Lightsail
 
-## Compute: Notes on Elastic Beanstalk
+|                 | EC2                            | Lightsail                                                                                                         |
+| --------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+|                 | Compute                        | Compute, Storage, LB, Snapshot, Firewall, DNS, Networking                                                         |
+| Cost            | Expensive, Calculated by usage | Cheap, Monthly Fixed Cost                                                                                         |
+| Customizability | High                           | Low: Pre-configured (especially for LAMP, MEAN, Node.js), <br> however difficult to connect to other AWS services |
+| Scalability     | High                           | Low                                                                                                               |
+| Good for        | General App                    | Small Website, test env, WordPress                                                                                |
+
+## Why Elastic Beanstalk?
+
+Automatically configure the programming language-specific env; e.g. PHP, Laravel
+
+Automatically configure the necessary AWS services:
+
+- EC2 Instance
+- Auto Scaling Group
+- Load Balancer
+- CloudWatch
 
 - EC2 instance which is related to EB can't be stopped, seemingly
 - EB service can't be halted; it must be terminated not to consume AWS resources.
 
->>>
+# Product Categories: Containers
 
-## Products 2: Containers
+1. ⭐️ECS (Elastic Container Service)
+2. ⭐️EKS (Elastic Kubernetes Service)
+3. ⭐️Fargate: Manage EC2 instances for ECS / EKS instead of you
+4. ECR (Elastic Container Registry) Docker images repository
+5. App2Container
+6. Copilot
+7. Red Hat OpenShift Service on AWS
 
-- ECS: Elastic Container Service
-- EKS: Elastic Kubernetes Service
-- Fargate
-  - Compute Engine for ECS / EKS
-- ECR: Elastic Container Registry
-  - Store of the Docker images
+# Product Categories: Database
 
->>>
+1. ⭐️⭐️⭐️Aurora: for MySQL & Postgres only
+2. DocumentDB: MongoDB-like No-SQL engine
+3. ⭐️⭐️⭐️RDS (Relational Database Service)
+4. RDS on VMware
+5. ⭐️DynamoDB: Key-value No-SQL database
+6. ElastiCache
+7. Keyspaces
+8. MemoryDB for Redis
+9. Neptune
+10. RedShift(duplicate)
+11. Timestream
 
-## AWS: Why use Fargate?
+## Aurora vs RDS
 
-1. Build the container image 
-2. Deploy EC2 instances (Fargate does this instead of you!)
-3. Define memory resources
-4. Isolate apps with VMs (Fargate does this instead of you!)
-5. Run app
-
->>>
-
-## Products 3: Storage
-
-- **S3**: Simple Store Service
-  - Cheap
-- **EBS**: Elastic Block Store
-  - Virtual hard disks
-- EFS: Elastic File System
-
-
->>>
-
-## S3 vs EFS vs EBS
-
-### EFS
-
-- EFS is NFS (Network File System)
-- OSからマウントできる。S3はHTTPS経由でアクセス
-- EC2にマウントできる（EBSと同じ）
-- **複数のAZにまたがる大量のEC2 Instance**から同時にアクセス可
-- **expensive**
-
-### EBS
-
-- EBS is Block Storage
-- Mountable to EC2 (Same as EFS)
-- **single AZ, single EC2 instance**
-  - A EC2 instance can mount multiple EBSs, tho
-
-### S3
-
-- Object Storage
-- Multi-AZ
-- **cheap**
-
->>>
-
-## Products 4: Database
-
-- **RDS**: Relational Database Service
-- DynamoDB
-- ElastiCache
-- RedShift
-- AWS Aurora: RDB compatible with MySQL / PostgreSQL
-
->>>
+|              | Aurora                   | RDS     |
+| ------------ | ------------------------ | ------- |
+| DB           | MySQL, Postgres          |         |
+| Speed        | 5x (MySQL), 3x(Postgres) | 1x      |
+| Cost         |                          | Cheaper |
+| Availability |                          |         |
+| Scalability  |                          |         |
+|              |                          |         |
 
 ## ElastiCache
 
-### Engine
+Engine
+
 - Redis
 - Memcached
 
-### Purpose
+Purpose
 
 - Data which will be accessed frequently
 - Data which won't be updated frequently
 - **session**, **DB cache**, etc.
 
->>>
+# Product Categories: Developer Tools
 
-## Products 5: Security, Identity & Compliance
+# Product Categories: End User Computing
 
-- IAM: Identy & Access Management
+# Product Categories: Front-End Web & Mobile
 
->>>
+- API Gateway (duplicate)
+- Location Service
+- Pinpoint
+- SES (Simple Email Service)
+- ⭐️Amplify
+- AppSync
+- Devise Farm
 
-## Products 6: Cryptography & PKI
+# Product Categories: Internet of Things
 
->>>
+# Product Categories: Machine Learning
 
-## Products 7: Machine Learning
+1. Augmented AI
+2. 1. CodeGuru
+3. Comprehend
+4. DevOps Guru
+5. Elastic Inference
+6. Forecast
+7. Fraud Detector
+8. HealthLake
+9. Kendra
+10. Lex
+11. Lookout for Equipment
+12. Lookout for Metrics
+13. Lookout for Vision
+14. Monitron
+15. Personalize
+16. Polly
+17. Rekognition
+18. ⭐️SageMaker
+19. SageMaker Ground Truth
+20. Textract
+21. Transcribe
+22. Translate
+23. Apache MXNet on AWS
+24. Deep Learning AMIs
+25. Deep Learning Containers
+26. DeepComposer
+27. DeepLens
+28. DeepRacer
+29. Inferentia
+30. Panorama
+31. PyTorch on AWS
+32. TensorFlow on AWS
 
-- SageMaker
+# Product Categories: Management & Governance
 
->>>
+1. ⭐️⭐️⭐️CloudWatch
+2. Managed Grafana
+3. Managed Service for Prometheus
+4. Chatbot
+5. ⭐️CloudFormation: Describe the AWS system config in JSON; sort of IaC?
+6. CloudTrail
+7. CLI
+8. Compute Optimizer
+9. Config
+10. Control Tower
+11. Distro for OpenTelemetry
+12. Launch Wizard
+13. License Manager
+14. Managed Services
+15. Management Console
+16. Management Console Mobile Application
+17. OpsWorks
+18. ⭐️Organizations
+19. Personal Health Dashboard
+20. Proton
+21. Resilence Hub
+22. Service Catalog
+23. Systems Manager
+24. ⭐️Trusted Advisor
+25. Well-Architected Tool
 
-## Products 8: Management & Governance
+# Product Categories: Media Services
 
-- **ELB**: Elastic Load Balancing
-  - Application LB
-  - Network LB
-  - Classic LB
-- **Auto Scaling**
-- **CloudFormation**
-  - Describe the AWS system config in JSON; sort of IaC?
-- Systems Manager
-  - incl. Parameters Store
-- **CloudWatch**
-- CloudTrail
-  - Monitor the AWS Account activity
-- (DataDog)
-  - DataDog is provided by DataDog corp, not by AWS
-  - Offer the console for the AWS monitoring services
+# Product Categories: Migration & Transfer
 
->>>
+1. Application Discovery Service
+2. DMS (Database Migration Service)
+3. DataSync
+4. Mainframe Modernization
+5. Migration Hub
+6. SMS (Server Migration Service)
+7. Transfer Family
+8. CloudEndure Migration
+9. Migration Evaluetor (formerly TSO Logic)
 
-## Why need ELB?
+# Product Categories: Networking & Content Delivery
+
+- ⭐️API Gatewary
+- ⭐️CloudFront: CDN service: Static / dynamic contents will be delivered from the nearest server to the user. high speed delivery with cache: streaming is possible
+- Amazon Route 53: DNS service
+- VPC
+- App Mesh
+- Cloud Map
+- Cloud WAN (preview)
+- Direct Connect
+- Global Accelerator
+- Private 5G
+- PrivateLink
+- Transit Gateway
+- VPN
+- ⭐️ELB (Elastic Load Balancing)
+
+## ELB
+
+- Application LB
+- Network LB
+- Classic LB
+
+Why need ELB?
 
 - ELB distributes the load to multiple servers
   - Smaller load to each server, higher usability
@@ -310,9 +403,7 @@ Lightsail is a good option for small websites, test / dev env, WordPress blog
   - You can get SSL certificate
 - ELB scales according to traffic amount
 
->>>
-
-## Types of ELB
+Types of ELB
 
 - Application Load Balancer
   - High-spec
@@ -324,35 +415,113 @@ Lightsail is a good option for small websites, test / dev env, WordPress blog
 - Classic Load Balancer
   - Layer 7 & Layer 4
 
+# Product Categories: Quantum Technologies
 
->>>
+# Product Categories: Robotics
 
-## Products 9: Developer Tools
+# Product Categories: Satellite
 
->>>
+# Product Categories: Security, Identity, & Compliance
 
-## Products 10: Migration & Transfer
+1. ⭐️Cognito
+2. Detective
+3. GuardDuty
+4. Inspector
+5. Macie
+6. Artifact
+7. Audit Manager
+8. Certificate Manager
+9. CloudHSM
+10. Directory Service
+11. Firewall Manager
+12. ⭐️⭐️⭐️IAM (Identity and Access Management)
+13. Key Management Service
+14. Network Firewall
+15. Resource Access Manager
+16. Secrets Manager
+17. Security Hub
+18. Shield
+19. ⭐️SSO: Single Sign-On
+20. WAF
 
->>>
+## IAM
 
-## Products 11: Networking & Contents Delivery
+```mermaid
+flowchart LR
+  id1(View) -- User action --> id2(Controller) -- Update -->  id1
+  id2(Controller) -- Update --> id3(Model) -- Notify --> id2
+```
 
-- CloudFront
-  - CDN service: Static / dynamic contents will be delivered from the nearest server to the user
-  - high speed delivery with cache: streaming is possible
-- App Mesh
-- Amazon Route 53
-  - DNS service
+Account types in AWS
+1. Root User: Don't use this account for daily tasks! Use the root user only to manage IAM user accounts. Mail Address + Password
+2. IAM User: Must be attached to Policies to have any priviledge
 
->>>
+User vs Role
+-
 
-## Products 12: Media Services
 
----
+Job Functions
+1. Administrator
+3. Billing
+4. Data Scientist
+5. ⭐️Developer Power User
+6. Network Administrator
+7. Read-only Acess
+8. Security Auditor
+9. Support User
+10. System Administrator
+11. View-only user
+
+
+
+## SSO
+
+ID Store User
+
+# Product Categories: Storage
+
+1. ⭐️⭐️⭐️EBS (Elastic Block Store) EC2 Block Storage Volumes
+2. ⭐️EFS (Elastic File Systems)
+3. FSx
+4. S3 Glacier
+5. ⭐️⭐️⭐️S3 (Simple Storage Service)
+6. Backup
+7. Snow Family
+8. Storage Gateway
+9. CloudEndure Disaster Recover
+
+## S3 vs EFS vs EBS
+
+EFS
+
+- EFS is NFS (Network File System)
+- OS からマウントできる。S3 は HTTPS 経由でアクセス
+- EC2 にマウントできる（EBS と同じ）
+- **複数の AZ にまたがる大量の EC2 Instance**から同時にアクセス可
+- **expensive**
+
+EBS
+
+- EBS is Block Storage
+- Mountable to EC2 (Same as EFS)
+- **single AZ, single EC2 instance**
+  - A EC2 instance can mount multiple EBSs, tho
+
+S3
+
+- Object Storage
+- Multi-AZ
+- **cheap**
+
+# Product Categories: VR & AR
+
+# Example Patterns
+
+
+
 
 # VPC
 
->>>
 
 ## AWS VPC: Features
 
@@ -366,7 +535,6 @@ Lightsail is a good option for small websites, test / dev env, WordPress blog
   - VPC (for network)
 - A VPC can have multiple AZs
 
->>>
 
 ## AWS VPC: Keywords
 
@@ -384,7 +552,6 @@ Lightsail is a good option for small websites, test / dev env, WordPress blog
 - Security Group
   - Firewall for each instance
 
->>>
 
 ## AWS VPC Gateways
 
@@ -400,7 +567,6 @@ Lightsail is a good option for small websites, test / dev env, WordPress blog
 - API Gateway
 - AWS Direct Connect
 
->>>
 
 ## VPC: Route table is associated with...
 
@@ -410,13 +576,11 @@ Routing table can be associated with various entities.
 1. Gateway Route Table
 2. Local Gateway Route Table
 
->>>
 
-## VPC: Route Table 
-
+## VPC: Route Table
 
 
->>>
+
 
 ## VPC: Route Table Configs
 
@@ -424,7 +588,6 @@ Routing table can be associated with various entities.
 - Target
 
 
->>>
 
 ## AWS Products: MISC
 
@@ -435,7 +598,6 @@ Routing table can be associated with various entities.
 - Amazon SQS: Simple Query Service
 - AWS Snowball
 
->>>
 
 ## AWS: Account
 
@@ -447,7 +609,6 @@ Routing table can be associated with various entities.
 
 # EC2
 
->>>
 
 ## Set up EC2: 1/2 Set up the key pair
 
@@ -465,7 +626,6 @@ Routing table can be associated with various entities.
 - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon-ec2.html#create-a-base-security-group
 - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html
 
->>>
 
 ## Set up EC2: 2/2 Create the instance
 
@@ -478,7 +638,6 @@ Routing table can be associated with various entities.
 6. Connect with SSH
    - `ssh -i /path/my-key-pair.pem ec2-user@my-instance-IPv6-address`
 
->>>
 
 ## EC2: Amazon Linux
 
@@ -491,7 +650,6 @@ Routing table can be associated with various entities.
 - Amazon Linux 2
   - available as AMI
 
->>>
 
 ## EC2: AMI
 
@@ -506,7 +664,6 @@ Routing table can be associated with various entities.
 2. Register AMI
 3. Launch AMI
 
->>>
 
 ## EC2 Instance Types: Category
 
@@ -516,7 +673,6 @@ Routing table can be associated with various entities.
 - Accelerated Computing: P, Inf, G, F
 - Storage Optimized: I, D, H
 
->>>
 
 ## EC2: Instance Types
 
@@ -524,7 +680,6 @@ Routing table can be associated with various entities.
 - Every instance can be Linux or Windows
 - nano < micro < small < medium < large < xlarge < 2xlarge
 
->>>
 
 ## EC2: Connect to instance
 
@@ -533,7 +688,6 @@ Routing table can be associated with various entities.
 - AWS Systems Manager Session Manager
 - PuTTY (Windows)
 
->>>
 
 ## AWS VPC: Config Example 1
 
@@ -541,7 +695,6 @@ Routing table can be associated with various entities.
   - IGW > Public Subnet > t2.micro Instance
   - IGW > Public Subnet > NGW > Private Subnet > DB
 
->>>
 
 ## AWS VPC: Config Example 2
 
@@ -553,7 +706,6 @@ Routing table can be associated with various entities.
 
 # Deploy Laravel to AWS
 
->>>
 
 ## Use Elastic Beanstalk?
 
@@ -563,7 +715,6 @@ Routing table can be associated with various entities.
   - Install LAMP, Composer manually with SSH
   - Host Infra -> OS -> Application Server -> HTTP Server -> My Code
 
->>>
 
 ## Procedure w/ Elastic Beanstalk
 
@@ -580,7 +731,6 @@ Routing table can be associated with various entities.
 - https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/php-laravel-tutorial.html
 - https://dev.classmethod.jp/articles/elastic-beanstalk-laravel-deploy/
 
->>>
 
 ## Procedure w/o Elastic Beanstalk
 
@@ -594,7 +744,6 @@ Routing table can be associated with various entities.
 7. Configure MySQL & `.env`
 8. Run file seeding
 
->>>
 
 ## AWS + Laravel: References
 
@@ -607,7 +756,6 @@ Routing table can be associated with various entities.
 - https://varunver.wordpress.com/2016/06/03/centos-7-install-php-and-postgres/
   - install PHP, Postgres
 
->>>
 
 ## AWS + Laravel: Overview
 
@@ -630,7 +778,6 @@ Routing table can be associated with various entities.
    2. Laravel: Key generation, set `.env`
    3. Laravel: Migration & Seeding
 
->>>
 
 ## MISC
 
@@ -640,20 +787,16 @@ Routing table can be associated with various entities.
 - Manipulation of the data with GUI
 - Importing the data from CSV
 
->>>
 
 ## Step 1/4 Set up the EC2 instance
 
->>>
 
 ## Step 2/4 Set up the LAMP
 
->>>
 
 ## Step 3/4 Set up the RDS
 
 
->>>
 
 ## Step 4/4 Ste up the Laravel App
 
@@ -663,7 +806,6 @@ Routing table can be associated with various entities.
 
 ```
 
->>>
 
 ## masataka: Laravel + AWS Setup Procedure Overview
 
@@ -689,7 +831,6 @@ Routing table can be associated with various entities.
 2. Let the `apache` group own the `var/www`
 2. Let the `apache` group write to the `var/www`
 
->>>
 
 ## atto: Laravel + AWS
 
@@ -709,9 +850,8 @@ Routing table can be associated with various entities.
 8. Configure `custom.conf`
    1. Change Apache root
    2. Activate `.htaccess`
-9. 
+9.
 
->>>
 
 ## nakm: Laravel + AWS
 
@@ -724,14 +864,12 @@ Routing table can be associated with various entities.
 5. Install Apache
 6. Configure `.env`
 
->>>
 
 ## Set up PHP
 
 - `sudo yum install php -y`
 
 
->>>
 
 ## Set up Apache
 
@@ -752,7 +890,7 @@ sudo usermod -a -G apache ec2-user
 #
 sudo chown -R ec2-user:apache /var/www
 
-# 
+#
 sudo chmod 2775 /var/www
 
 find /var/www -type d -exec sudo chmod 2775 {} \;
@@ -760,14 +898,12 @@ find /var/www -type d -exec sudo chmod 2775 {} \;
 find /var/www -type f -exec sudo chmod 0664 {} \;
 ```
 
->>>
 
 ## Set up Postgres
 
 - `sudo yum install postgresql-server postgresql-contrib`
 - `sudo yum install php-pgsql`: Connector of PHP & Postgres
 
->>>
 
 ## Naka: Set up example
 
@@ -790,30 +926,28 @@ find /var/www -type f -exec sudo chmod 0664 {} \;
    5. MySQL
    6. Laravel
 3. LB
-   1. Set up a redundant server 
+   1. Set up a redundant server
    2. ALB
 4. ElastiCache Redis
 5. Jump Server
 
->>>
 
 ## Naka: Overview
 
 - **IGW** (Entrance to VPC)
   - **ALB**
-    - us-east-2a AZ 
+    - us-east-2a AZ
       - Public Subnet (routing table A)
         - **Web Server Instance 1** (sec group: laravel-sg-web)
       - Private Subnet (routing table B)
         - **RDS MySQL Instance 1** (sec group: laravel-sg-rds)
         - **Redis ElastiCache**
-    - us-east-2b AZ 
+    - us-east-2b AZ
       - Public Subnet (routing table C)
         - **Web Server Instance 2** (sec group: laravel-sg-web)
       - Private Subnet (routing table D)
         - **RDS MySQL Instance 2** (sec group: laravel-sg-rds)
 
->>>
 
 ## Naka: Access Flow
 
@@ -824,30 +958,25 @@ find /var/www -type f -exec sudo chmod 0664 {} \;
 
 ### Re
 
->>>
 
 ## Naka: Subnets vs Subnet Group
 
 - https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/SubnetGroups.html
 
->>>
 
 ## Naka: この構成でRedisはなんの役割をしているか？
 
->>>
 
 ## Naka: この構成でSecurityはどのように機能しているか？
 
->>>
 
 ## Naka: この構成でもしWebサーバが落ちたらどうなるか？
 
->>>
 
 ## Naka: Security Group
 
 ### w/o LB
- 
+
 `laravel-sg-web` allows:
 
 - SSH access from **my IP**
@@ -862,37 +991,21 @@ This configuration works, however by-passing the access with LB is more secure
 - HTTP access from **ALB security group**
   - As you can see here, to specify the acceptable access source, you can use security group instead of IP
 
->>>
 
-
----
-
-# RDS
-
->>>
-
-## RDS
-
-- 
-
----
 
 # Cloudfront
 
->>>
 
 ## w/o CloudFront
 
 - Internet -> ELB -> EC2 -> RDS
 
->>>
 
 ## w/ CloudFront (then)
 
 - Route 1: Internet -> ELB -> EC2 -> RDS
 - Route 2: Internet -> CF -> S3
 
->>>
 
 ## w/ CloudFront (modern)
 
@@ -900,7 +1013,6 @@ This configuration works, however by-passing the access with LB is more secure
 - For static contents: CF returns the contents from the cache
 - For dynamic contents: CF do nothing, EC2 & RDS returns the contents
 
->>>
 
 ## System Config Example
 
