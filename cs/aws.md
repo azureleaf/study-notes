@@ -20,6 +20,7 @@
 - [Product Categories: Containers](#product-categories-containers)
 - [Product Categories: Database](#product-categories-database)
   - [Aurora vs RDS](#aurora-vs-rds)
+  - [RDS](#rds)
   - [ElastiCache](#elasticache)
 - [Product Categories: Developer Tools](#product-categories-developer-tools)
 - [Product Categories: End User Computing](#product-categories-end-user-computing)
@@ -31,6 +32,9 @@
 - [Product Categories: Migration & Transfer](#product-categories-migration--transfer)
 - [Product Categories: Networking & Content Delivery](#product-categories-networking--content-delivery)
   - [ELB](#elb)
+  - [VPC](#vpc)
+    - [CIDR: Classless Inter-Domain Routing](#cidr-classless-inter-domain-routing)
+    - [Subnet](#subnet)
 - [Product Categories: Quantum Technologies](#product-categories-quantum-technologies)
 - [Product Categories: Robotics](#product-categories-robotics)
 - [Product Categories: Satellite](#product-categories-satellite)
@@ -41,13 +45,6 @@
   - [S3 vs EFS vs EBS](#s3-vs-efs-vs-ebs)
 - [Product Categories: VR & AR](#product-categories-vr--ar)
 - [Example Patterns](#example-patterns)
-- [VPC](#vpc)
-  - [AWS VPC: Features](#aws-vpc-features)
-  - [AWS VPC: Keywords](#aws-vpc-keywords)
-  - [AWS VPC Gateways](#aws-vpc-gateways)
-  - [VPC: Route table is associated with...](#vpc-route-table-is-associated-with)
-  - [VPC: Route Table](#vpc-route-table)
-  - [VPC: Route Table Configs](#vpc-route-table-configs)
   - [AWS Products: MISC](#aws-products-misc)
   - [AWS: Account](#aws-account)
 - [EC2](#ec2)
@@ -118,6 +115,23 @@ AZ (Availability Zone)
 - Comm between multiple regions: High latency
 - COmm between AZs inside the same region: Low latency
 - For high availability: Multi-AZs with Active-Passive / Active-Active
+
+```
+Region: ap-northeast-1 (Tokyo)
+  AZ: ap-northeast-1a
+  AZ: ap-northeast-1b
+  AZ: ap-northeast-1c
+  AZ: ap-northeast-1d
+
+Region: ap-northeast-2 (Seoul)
+
+
+Region: ap-northeast-3 (Osaka)
+
+
+Region: us-east-1 (N. Virginia)
+...
+```
 
 
 Local Zone
@@ -263,6 +277,16 @@ Automatically configure the necessary AWS services:
 | Scalability  |                          |         |
 |              |                          |         |
 
+## RDS
+
+Connect from Heroku
+
+1. AWS Config: Accept SSL connection only
+2. AWS Config: Authorize Heroku Ruby app to use a RDS instance ()
+3. Download RDS CA Certificate, add it to project Git repo
+4. Heroku CLI: Set RDS URL on DATABASE_URL
+5. AWS: Restrict RDS connection; accepts SSL only
+
 ## ElastiCache
 
 Engine
@@ -371,22 +395,40 @@ Purpose
 
 # Product Categories: Networking & Content Delivery
 
-- ⭐️API Gatewary
-- ⭐️CloudFront: CDN service: Static / dynamic contents will be delivered from the nearest server to the user. high speed delivery with cache: streaming is possible
-- Amazon Route 53: DNS service
-- VPC
-- App Mesh
-- Cloud Map
-- Cloud WAN (preview)
-- Direct Connect
-- Global Accelerator
-- Private 5G
-- PrivateLink
-- Transit Gateway
-- VPN
-- ⭐️ELB (Elastic Load Balancing)
+1. ⭐️API Gatewary
+2. ⭐️CloudFront: CDN service: Static / dynamic contents will be delivered from the nearest server to the user. high speed delivery with cache: streaming is possible
+3. ⭐️Amazon Route 53: DNS service
+4. ⭐️VPC
+5. App Mesh
+6. Cloud Map
+7. Cloud WAN (preview)
+8. Direct Connect
+9. Global Accelerator
+10. Private 5G
+11. PrivateLink
+12. Transit Gateway
+13. VPN
+14. ⭐️ELB (Elastic Load Balancing)
 
 ## ELB
+
+```mermaid
+flowchart TD
+  Internet --> IGW --> ELB
+  ELB --> EC2-az1
+  ELB --> EC2-az2
+
+  subgraph AZ-1
+  EC2-az1 --> RDS-az1
+  end
+
+  subgraph AZ-2
+  EC2-az2 -. No Connection .-> RDS-az2
+  end
+
+  EC2-az2 --> RDS-az1
+  RDS-az1 -- Replication --> RDS-az2
+```
 
 - Application LB
 - Network LB
@@ -414,6 +456,159 @@ Types of ELB
   - Layer 4: distribute TCP / UDP / TLS traffics
 - Classic Load Balancer
   - Layer 7 & Layer 4
+
+## VPC
+
+What's this?
+
+- VPC: Virtual Private Cloud
+- selection of your own IP address range
+- creation of subnets
+- configuration of route tables and network gateways
+
+Major combination
+- EBS (for permanet storage)
+- EC2 (for server software)
+- VPC (for network)
+
+VPC > AZ > Subnet
+- A VPC can have multiple AZs
+- A AZ can have more than 1 Subnet
+- A Subnet cannot belong to multiple AZs
+
+
+Configuration
+- Name
+- CIDR
+- IPv6
+- Tenancy: Default vs Dedicated (Exclusively use computing hardware)
+
+Setup
+
+1. Create VPC
+2. Create Subnets, choose VPC
+3. Create IGW: choose VPC
+4. Create Routes Table
+
+### CIDR: Classless Inter-Domain Routing
+
+pronunciation: "cider"
+
+10.0.0.0/16
+- Network Address 2^16=65536
+- Host Address 2^16=65536
+
+10.0.0.0/28
+- Network Address 2^28=268435456
+- Host Address=2^4=16
+
+### Subnet
+
+```mermaid
+flowchart TD
+  Start --> Stop -->
+```
+
+```
+VPC
+  Route 53
+    AZ1
+      EC2 (1)
+      RDS (1)
+    AZ2
+      EC2 (2)
+      RDS (2)
+```
+
+Subnet Types
+
+- IPv4
+- Dual Stack
+- IPv6
+
+Subnet Types (By )
+
+- Public Subnet
+- Private Subnet
+- VPN Subnet
+
+Subnet Configuration
+
+- name tag
+- VPC
+- AZ
+- CIDR
+- DHCP
+- NACL (Network Access Control)
+- Public vs Private
+
+Route table
+- Define possible connections among internet / subnets
+
+Router
+
+VPC Peering
+
+Endpoints for S3
+
+Elastic IP
+- Reachable IPv4 address from the internet
+- Assign it to your EC2 instance
+- Free one EIP for a EC2 instance
+- Additional charge for 2nd EIP
+- Additional charnge when EIP isn't assigned
+- EIP is fixed address, while Public IP address of EC2 is variable address
+
+
+Security Group
+- Firewall for each instance
+
+
+VPC Gateways
+
+- Virtual Private Gateway
+  - GW between the private network (such as on-premise server) & VPC
+- IGW: Internet Gateway
+  - GW between the internet & VPC
+  - Without this, instances can't have the global IP
+- NGW: NAT gateway: Network Address Translation
+  - GW between the internet & private subnet
+  - Enable instances in the private subnet connect to internet / other AWS services
+  - Disable the internet establish the connection to the instances
+- API Gateway
+- AWS Direct Connect
+
+
+VPC Route table is associated with...
+
+
+Routing table can be associated with various entities.
+
+1. Subnet Route Table
+2. Gateway Route Table
+3. Local Gateway Route Table
+
+VPC
+
+
+VPC + RDS
+
+1. Create a VPC (if necessary)
+2. Add subnets to the VPC
+3. Create a DB subnet group
+4. Create a VPC security group
+5. Create a DB instance in the VPC
+
+VPC: Route Table
+
+
+
+
+VPC: Route Table Configs
+
+- Destination
+- Target
+
 
 # Product Categories: Quantum Technologies
 
@@ -516,76 +711,6 @@ S3
 # Product Categories: VR & AR
 
 # Example Patterns
-
-
-
-
-# VPC
-
-
-## AWS VPC: Features
-
-- VPC: Virtual Private Cloud
-  - selection of your own IP address range
-  - creation of subnets
-  - configuration of route tables and network gateways
-- Major combination
-  - EBS (for permanet storage)
-  - EC2 (for server software)
-  - VPC (for network)
-- A VPC can have multiple AZs
-
-
-## AWS VPC: Keywords
-
-- Subnet
-  - Public Subnet
-  - Private Subnet
-- Route table
-  - Define possible connections among internet / subnets
-- Router
-- VPC Peering
-- Endpoints for S3
-- Elastic IP
-  - Reachable IPv4 address from the internet
-  - After you get the Elastic IP, you must assign it to your EC2 instance
-- Security Group
-  - Firewall for each instance
-
-
-## AWS VPC Gateways
-
-- Virtual Private Gateway
-  - GW between the private network (such as on-premise server) & VPC
-- IGW: Internet Gateway
-  - GW between the internet & VPC
-  - Without this, instances can't have the global IP
-- NGW: NAT gateway: Network Address Translation
-  - GW between the internet & private subnet
-  - Enable instances in the private subnet connect to internet / other AWS services
-  - Disable the internet establish the connection to the instances
-- API Gateway
-- AWS Direct Connect
-
-
-## VPC: Route table is associated with...
-
-Routing table can be associated with various entities.
-
-1. Subnet Route Table
-1. Gateway Route Table
-2. Local Gateway Route Table
-
-
-## VPC: Route Table
-
-
-
-
-## VPC: Route Table Configs
-
-- Destination
-- Target
 
 
 

@@ -1,76 +1,72 @@
 # DB
 
->>>
-
-## ToC
+# ToC
 
 - [DB](#db)
-  - [ToC](#toc)
-- [General Knowledge](#general-knowledge)
-  - [DB MISC](#db-misc)
-  - [3層スキーマ](#3層スキーマ)
-  - [DB Model](#db-model)
-  - [ER Diagram](#er-diagram)
-  - [DB types](#db-types)
-  - [正規形](#正規形)
-  - [従属](#従属)
-  - [演算](#演算)
-    - [関係演算](#関係演算)
-    - [集合演算](#集合演算)
-  - [SQL: Lang Types](#sql-lang-types)
-  - [SQL: SELECT](#sql-select)
-  - [DBMS](#dbms)
-  - [SQL: GRANT](#sql-grant)
-  - [Mutex for DB](#mutex-for-db)
-  - [Mutex for DB: Lock](#mutex-for-db-lock)
-  - [障害回復](#障害回復)
-  - [DB Performance](#db-performance)
-  - [Strategy to increase the DB server performance](#strategy-to-increase-the-db-server-performance)
-  - [Distributed DB: MISC](#distributed-db-misc)
-  - [分散DBでの表の結合方法](#分散dbでの表の結合方法)
-  - [Distributed DB: Basics](#distributed-db-basics)
-  - [Distributed DB: Advantage](#distributed-db-advantage)
-  - [Distributed DB: Keywords](#distributed-db-keywords)
-  - [Transaction: ACID](#transaction-acid)
-  - [Transaction: Isolation Level](#transaction-isolation-level)
-  - [Transaction: Isolation MISC](#transaction-isolation-misc)
-  - [RDB](#rdb)
-  - [DB Partitioning: Overview](#db-partitioning-overview)
-  - [DB partitioning: Category](#db-partitioning-category)
-  - [DB partitioning:](#db-partitioning)
+- [ToC](#toc)
+- [DB MISC](#db-misc)
+- [3層スキーマ](#3層スキーマ)
+- [DB Model](#db-model)
+- [ER Diagram](#er-diagram)
+- [DB types](#db-types)
+- [正規形](#正規形)
+- [従属](#従属)
+- [演算](#演算)
+  - [関係演算](#関係演算)
+  - [集合演算](#集合演算)
+- [SQL: Lang Types](#sql-lang-types)
+- [SQL: SELECT](#sql-select)
+- [DBMS](#dbms)
+- [SQL: GRANT](#sql-grant)
+- [Mutex for DB](#mutex-for-db)
+- [Mutex for DB: Lock](#mutex-for-db-lock)
+- [障害回復](#障害回復)
+- [DB Performance](#db-performance)
+- [Strategy to increase the DB server performance](#strategy-to-increase-the-db-server-performance)
+- [Distributed DB: MISC](#distributed-db-misc)
+- [分散DBでの表の結合方法](#分散dbでの表の結合方法)
+- [Distributed DB: Basics](#distributed-db-basics)
+- [Distributed DB: Advantage](#distributed-db-advantage)
+- [Distributed DB: Keywords](#distributed-db-keywords)
+- [Transaction: ACID](#transaction-acid)
+- [Transaction: Isolation Level](#transaction-isolation-level)
+- [Transaction: Isolation MISC](#transaction-isolation-misc)
+- [RDB](#rdb)
+- [DB Partitioning: Overview](#db-partitioning-overview)
+- [DB partitioning: Category](#db-partitioning-category)
+- [DB partitioning:](#db-partitioning)
 - [MySQL](#mysql)
-  - [Manage Account](#manage-account)
-  - [Basic Command](#basic-command)
+- [Manage Account](#manage-account)
+- [Basic Command](#basic-command)
 - [Topics on Data Storage](#topics-on-data-storage)
-  - [Keywords: essential](#keywords-essential)
-  - [Keywords: advanced](#keywords-advanced)
-  - [Connection](#connection)
-  - [Migration](#migration)
-  - [RESTful API](#restful-api)
-  - [GraphQL API](#graphql-api)
-  - [Index](#index)
-  - [DB Parts](#db-parts)
-  - [DBs Categorization](#dbs-categorization)
-  - [Cloud DB](#cloud-db)
-  - [ORM/ODM](#ormodm)
-    - [抑えるべきっぽい三大 ORM](#抑えるべきっぽい三大-orm)
-    - [Node 使いには重要じゃなさそうな ORM](#node-使いには重要じゃなさそうな-orm)
+- [Keywords](#keywords)
+- [Keywords: advanced](#keywords-advanced)
+- [Connection](#connection)
+- [Migration](#migration)
+- [RESTful API](#restful-api)
+- [GraphQL API](#graphql-api)
+- [Index](#index)
+- [DB Parts](#db-parts)
+- [DBs](#dbs)
+  - [SQL DBs](#sql-dbs)
+  - [No-SQL DBs](#no-sql-dbs)
+- [Cloud DB](#cloud-db)
+- [ORM/ODM](#ormodm)
+  - [抑えるべきっぽい三大 ORM](#抑えるべきっぽい三大-orm)
+  - [Node 使いには重要じゃなさそうな ORM](#node-使いには重要じゃなさそうな-orm)
+- [Scaling](#scaling)
+- [DB Performance](#db-performance-1)
 
----
 
-# General Knowledge
-
----
-
-## DB MISC
+# DB MISC
 
 - KVS: Key Value Store
 - memcached
 - DWH (Dataware House) vs DB
 
->>>
 
-## 3層スキーマ
+
+# 3層スキーマ
 
 - Conceptual Schema
 - External Schema
@@ -78,50 +74,50 @@
 - Internal Schema
   - Hardware
 
->>>
 
-## DB Model
+
+# DB Model
 
 - Conceptual Model
   - ER diagram
 - Logical Model
 - Physical Model
 
->>>
 
-## ER Diagram
 
->>>
+# ER Diagram
 
-## DB types
+
+
+# DB types
 
 - 階層型
   - one root
 - ネットワーク型
 - RDB
 
->>>
 
-## 正規形
+
+# 正規形
 
 - 第一正規形
 - 第二正規形
 - 第三正規形
 
 
->>>
 
-## 従属
+
+# 従属
 
 - 関数従属
 - 完全関数従属
 - 推移関数従属
 
->>>
 
-## 演算
 
-### 関係演算
+# 演算
+
+## 関係演算
 
 - 選択
   - 行方向の取り出し
@@ -131,7 +127,7 @@
   - JOIN
 - 商
 
-### 集合演算
+## 集合演算
 
 - 和
   - ２表から単純に全ての行を取り出す
@@ -142,10 +138,10 @@
 - 直積
   - ２表から全てを組み合わせる
   - 列は２倍になり、行の数は`m * n`になる
-  - 
->>>
+  -
 
-## SQL: Lang Types
+
+# SQL: Lang Types
 
 - DML: Data Manipulation Language
 - DDL: Data Definition Language
@@ -153,9 +149,9 @@
 - DCL: Data Control Language
   - Define DB Authorization
 
->>>
 
-## SQL: SELECT
+
+# SQL: SELECT
 
 - WHERE: AND / OR / NOT / AS
 - DISTINCT：　重複したものは省く
@@ -165,14 +161,14 @@
 - EXISTS
 - 集合演算: UNION / EXCEPT / INTERSECT
 
->>> 
-
-## DBMS
 
 
->>>
+# DBMS
 
-## SQL: GRANT
+
+
+
+# SQL: GRANT
 
 - GRANT ALL PRIVILEGES
 - GRANT SELECT, UPDATE, INSERT, UPDATE, DELETE
@@ -180,9 +176,9 @@
   - 全てのユーザーに対して与える
 - REVOKE SELECT ON products FROM user
 
->>>
 
-## Mutex for DB
+
+# Mutex for DB
 
 - Lock
   - 占有ロック
@@ -190,16 +186,16 @@
 - Timestamp
 - 楽観的制御
 
->>>
 
-## Mutex for DB: Lock
+
+# Mutex for DB: Lock
 
 - ロックの粒度
 - ２相ロック
-  
->>>
 
-## 障害回復
+
+
+# 障害回復
 
 - Log (aka Journal)
   - WALでないと駄目
@@ -207,15 +203,15 @@
   - Roll back
 - CHeck point
 
-## DB Performance
+# DB Performance
 
 - Index
 - Hash
 - B-tree
 
->>>
 
-## Strategy to increase the DB server performance
+
+# Strategy to increase the DB server performance
 
 - Distribute the DB: Master & Slaves
 - Store the DB data in the memory rather than disk
@@ -224,26 +220,26 @@
 - MySQL Cluster
 - DB partitioning
 
->>>
 
-## Distributed DB: MISC
+
+# Distributed DB: MISC
 
 - 2相コミット
 - ３相コミット
 - セミジョイン
 
->>>
 
-## 分散DBでの表の結合方法
+
+# 分散DBでの表の結合方法
 
 - Nested Loop
 - Sort Merge
 - Hash Join
 
->>>
 
 
-## Distributed DB: Basics
+
+# Distributed DB: Basics
 
 - Master Server
   - Mostly single; to populate the master, you need complicated clustering
@@ -255,9 +251,9 @@
   - Referred for R of CRUD
     - Therefore Master-Slave architecture is powerful when reference is more frequent than updating
 
->>>
 
-## Distributed DB: Advantage
+
+# Distributed DB: Advantage
 
 - Higher performance on DB references
 - Higher availability
@@ -267,46 +263,42 @@
 - Easier to get the backup
   - Creating the backup data from the slave won't affect the performance of the master
 
->>>
 
-## Distributed DB: Keywords
+
+# Distributed DB: Keywords
 
 - Database Polling (ポーリング)
 - Synchrnous Replication / Asynchronous Replication
 
->>>
 
-## Transaction: ACID
+# Transaction: ACID
 
 - Atomicity
 - Consistency
 - Isolation
 - Durability
-  
->>>
 
-## Transaction: Isolation Level
+
+# Transaction: Isolation Level
 
 - READ UNCOMMITTED
 - READ COMMITTED
 - REPEATABLE READ
 - SERIALIZABLE
 
->>>
 
-## Transaction: Isolation MISC
+# Transaction: Isolation MISC
 
 - Dirty Read
 - Non-repeatable Read
 - Phantom
 
->>>
 
-## RDB
+# RDB
 
->>>
 
-## DB Partitioning: Overview
+
+# DB Partitioning: Overview
 
 - Dividing a large database with many tables into small databases
 - Advantage
@@ -314,32 +306,32 @@
 - MySQL supports partitioning by default
 
 
->>>
 
 
-## DB partitioning: Category
+
+# DB partitioning: Category
 
 - Vertical Partitioning
 - Horizontal Partitioning
 
->>>
 
-## DB partitioning: 
 
-- 
+# DB partitioning:
+
+-
 
 ---
 
 # MySQL
 
->>>
-
-## Manage Account
 
 
->>>
+# Manage Account
 
-## Basic Command
+
+
+
+# Basic Command
 
 ```sql
 USE dorm_db;
@@ -349,7 +341,7 @@ exit;
 
 # Topics on Data Storage
 
-## Keywords: essential
+# Keywords
 
 - DBMS: Database Management System
 - In-memory DB
@@ -383,12 +375,12 @@ exit;
   - Keywords like `JOIN` are available to define the view
 - Index
 
-## Keywords: advanced
+# Keywords: advanced
 
 - BaaS: Backend as a Service
 - JDBC: Java DB Connectivity
 
-## Connection
+# Connection
 
 - You can't access to the DB without Open & Available connection
 - To create a connection, you have to addressing info:
@@ -402,7 +394,7 @@ exit;
   - DBMS requires considerable time to connect to DB, so using the cache
   -
 
-## Migration
+# Migration
 
 - Advantage
   - データベーススキーマの変更時に、SQL 文を書かずにすむ
@@ -419,7 +411,7 @@ exit;
   - `up()`
   - `down()`
 
-## RESTful API
+# RESTful API
 
 - REST: REpresentational State Transfer
   - 分散型システムにおける複数のソフトウェアを連携させるための設計原則のこと
@@ -438,7 +430,7 @@ exit;
   - Session に依存する API
   - WebSocket などを利用する API
 
-## GraphQL API
+# GraphQL API
 
 - References
   - https://employment.en-japan.com/engineerhub/entry/2018/12/26/103000
@@ -470,7 +462,7 @@ exit;
   - Relay Server Specification
   -
 
-## Index
+# Index
 
 - カラム単位で作成する
 - カラムの内容を検索するため、B-TREE という構造にしてデータ本体とは別に保存
@@ -482,7 +474,7 @@ exit;
   - Additional storage consumption
   - Slow UPDATE / DELETE because Index will be also altered as well as records
 
-## DB Parts
+# DB Parts
 
 | RDBS     | MongoDB    |
 | -------- | ---------- |
@@ -491,31 +483,49 @@ exit;
 | Record   | Document   |
 | Field    | Field      |
 
-## DBs Categorization
+# DBs
 
-- SQL DBs
-  - MySQL
-  - PostgreSQL
-- No-SQL DBs
-  - Document Databases: JSON のような形式保存
-    - MongoDB
-  - Key-value Database
-    - Redis: in-memory
-    - memcached: in-memory
-  - Graph Database
-    - Node で保存
-    - SQL ではなく Cypher という言語でクエリする
-    - Neo4j が代表的
-  - Wide Column Stores
-    - Cassandra
+## SQL DBs
 
-## Cloud DB
+- MySQL
+- PostgreSQL
+- MariaDB
+- MSSQL
+- Oracle
+
+## No-SQL DBs
+
+Document Databases: JSON のような形式保存
+
+- MongoDB
+
+Key-value Database
+- Redis: in-memory
+- memcached: in-memory
+
+Graph Database: Node で保存.SQL ではなく Cypher という言語でクエリする
+
+- Neo4j
+
+Column DB
+
+- Cassandra
+
+Time Series
+
+- InfluxDB
+- TimescaleDB
+
+
+
+# Cloud DB
 
 - Server-less Service
   - Google Firebase
   - Amazon DynamoDB
   - mLab
     - for MongoDB
+  - RethinkDB
 - Cloud Storage Service
   - AWS S3
   - Alicloud
@@ -524,12 +534,12 @@ exit;
   - Microsoft OneDrive
   - DropBox
 
-## ORM/ODM
+# ORM/ODM
 
 - ORM: Object Relation Model
 - ODM: Object Data Model
 
-### 抑えるべきっぽい三大 ORM
+## 抑えるべきっぽい三大 ORM
 
 - TypeORM
   - MYSQL, Postgres, SQLite3, MongoDB, MariaDB, MSSQL, Oracle
@@ -541,7 +551,7 @@ exit;
 - Mongoose
   - MongoDB
 
-### Node 使いには重要じゃなさそうな ORM
+## Node 使いには重要じゃなさそうな ORM
 
 - Waterline
   - MySQL, Postgres, MongoDB, LDAP, Redis
@@ -557,3 +567,14 @@ exit;
 - Active Record
   - Ruby on Rails 用
   - Active Record そのものが ORM というか、Active Record の中で ORM も使っているという感じか？
+
+# Scaling
+
+- Vertical Scaling
+- Horizontal Scaling
+
+# DB Performance
+
+- N+1 Problem
+- Indexes
+-

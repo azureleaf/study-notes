@@ -52,6 +52,7 @@
     - [Module / Class](#module--class)
     - [Gemfile](#gemfile)
     - [Namespaces?](#namespaces)
+  - [Warden](#warden)
   - [広く参照される変数・メソッド](#広く参照される変数メソッド)
   - [外部gemへの参照の例](#外部gemへの参照の例)
   - [興味深い表現](#興味深い表現)
@@ -149,7 +150,7 @@ devise
 │   │   ├── delegator.rb
 │   │   ├── encryptor.rb
 │   │   ├── failure_app.rb
-│   │   ├── hooks
+│   │   ├── hooks # Warden::Manager.after_set_userによってcallbackを定義。
 │   │   │   ├── activatable.rb
 │   │   │   ├── csrf_cleaner.rb
 │   │   │   ├── forgetable.rb
@@ -262,6 +263,90 @@ devise
 - `lib/devise/models/database_authenticatable.rb`
 - `lib/devise/controllers/helpers.rb`
 
+以上のファイルの依存関係
+
+```sh
+lib/devise/devise.rb (Devise module)
+  require 'rails'
+  require 'active_support/core_ext/numeric/time'
+  require 'active_support/dependencies'
+  require 'orm_adapter'
+  require 'set'
+  require 'securerandom'
+  require 'responders'
+
+  require 'warden'
+
+  # lib/devise/mapping.rb
+  require 'devise/mapping'
+
+  # lib/devise/models.rb
+  require 'devise/models'
+    require 'devise/models/authenticatable'
+      require 'devise/hooks/activatable'
+      require 'devise/hooks/csrf_cleaner'
+      require 'devise/rails/deprecated_constant_accessor'
+
+
+  # lib/devise/modules.rb
+  require 'devise/modules'
+
+  # lib/devise/rails.rb
+  require 'devise/rails'
+
+  # module Controllers
+  autoload :Helpers,        'devise/controllers/helpers'
+  autoload :Rememberable,   'devise/controllers/rememberable'
+  autoload :ScopedViews,    'devise/controllers/scoped_views'
+  autoload :SignInOut,      'devise/controllers/sign_in_out'
+  autoload :StoreLocation,  'devise/controllers/store_location'
+  autoload :UrlHelpers,     'devise/controllers/url_helpers'
+
+  # module Hooks
+  autoload :Proxy, 'devise/hooks/proxy'
+
+  # module Mailers
+  autoload :Helpers, 'devise/mailers/helpers'
+
+  # module Strategies
+  autoload :Base,            'devise/strategies/base'
+  autoload :Authenticatable, 'devise/strategies/authenticatable'
+
+  # module Test
+  autoload :IntegrationHelpers, 'devise/test/integration_helpers'
+
+
+
+# このファイルはどのようにインポートされてる???
+lib/devise/rails/routes.rb (module Devise + module ActionDispatch::Routing)
+
+# 以下のファイルはgeneratorで生成される???
+(inherit) app/controllers/devise/confirmations_controller.rb
+(inherit) app/controllers/devise/omniauth_callbacks_controller.rb
+(inherit) app/controllers/devise/passwords_controller.rb
+(inherit) app/controllers/devise/registrations_controller.rb
+(inherit) app/controllers/devise/sessions_controller.rb
+(inherit) app/controllers/devise/unlocks_controller.rb
+  app/controllers/devise_controller.rb
+    (include) lib/devise/controllers/scoped_views.rb
+
+#
+# lib/devise/models系統の依存関係
+## このファイルはどのようにインポートされてる???
+
+
+lib/devise/models/database_authenticatable.rb
+  require 'devise/strategies/authenticatable'
+    require 'devise/strategies/base'
+
+lib/devise/models/rememberable.rb
+  require 'devise/strategies/rememberable'
+  require 'devise/hooks/rememberable'
+  require 'devise/hooks/forgetable'
+
+
+```
+
 ## lib/devise.rb
 
 
@@ -296,7 +381,7 @@ end
 # @@valueはclass variableである。class instanceである@valueとの違い？
 # 2.weeksなどはRailsで拡張されたnumeric。days, bytesなど様々なものがある
 mattr_accessor :remember_for
-@@remember_for = 2.weeks 
+@@remember_for = 2.weeks
 
 mattr_accessor :password_length
 @@password_length = 6..128 # Range
@@ -555,9 +640,9 @@ end
 
 ```rb
 begin # try
-  raise 
+  raise
 rescue # catch
-  retry 
+  retry
 ensure # finally
 end
 ```
@@ -803,7 +888,7 @@ GET /resource/confirmation?confirmation_token=abcdef
 ## lib/devise/controllers/
 
 - deviseが以下のヘルパーを生成する。
-  - before_action :authenticate_user!	
+  - before_action :authenticate_user!
   - user_signed_in?
   - current_user
   - user_session
@@ -921,15 +1006,15 @@ module ActiveRecord
       def generate_model
 
       def inject_devise_content
-      
+
       # migrationカラム内容を文字列として返す
-      def migration_data 
-      
+      def migration_data
+
       def ip_column
       def inet?
       def rails5_and_up? # Railsバージョンが5以上か？
       def postgresql? # configのDBがpostgresになってるか？
-      def migration_version # 
+      def migration_version #
       def primary_key_type
       def primary_key_string
 
@@ -939,7 +1024,7 @@ module ActiveRecord
 generators/active_record/templates/migration_existing.rb # up / down 系のロールバック処理付き。class AddDeviseTo
 generators/active_record/templates/migration.rb # 新規テーブル向け。class DeviseCreate
 
-# 
+#
 generators/active_record/devise
 generators/devise/
 generators/mongoid/
@@ -1065,6 +1150,48 @@ Devise.secure_compare(password, hashed_password)
 
 ```
 
+## Warden
+
+- https://github.com/wardencommunity/warden/wiki
+
+Warden is a gem for authentication.
+
+Devise is dependent on Warden.
+
+Warden is a rack-based middleware.
+
+Warden injects an object into Rack env which can be available as `request.env['warden']` in Rails app.
+
+```rb
+request.env['warden'].authenticate(:password)
+request.env['warden'].user # the user object is set only after the successful authentication.
+
+throw(:warden)  # Bail out for an authentication failure
+```
+
+Callbacks: Insert the behavior you want in the specified timing in the authentication cycle.
+
+```rb
+# Called when the user is authenticated, or request.env['warden'].user is called.
+Warden::Manager.after_set_user do |user, auth, opts|
+  unless user.active?
+    auth.logout
+    throw(:warden, :message => "User not active")
+  end
+end
+
+Warden::Manager.after_authentication do |user,auth,opts|
+  user.last_login = Time.now
+end
+```
+
+Strategies:
+
+Scopes: Warden allows for multiple users to be logged in simultaneously.
+
+
+
+
 ## 広く参照される変数・メソッド
 
 ```rb
@@ -1094,17 +1221,17 @@ warden.request.env
 
 ```rb
 # Rails::Generators::BaseはThor gem（CLIの作成支援ツール）を継承している。
-# 
+#
 Thor::Base::ClassMethods.argument(name, options = {})
 
 
 # Returns the source root for this generator using default_source_root as default.
-Rails::Generators::Base.source_root(path = nil) 
+Rails::Generators::Base.source_root(path = nil)
 
 # Make class option aware of Rails::Generators.options and Rails::Generators.aliases.
-Rails::Generators::Base.class_option(name, options = {}) 
+Rails::Generators::Base.class_option(name, options = {})
 
-# 
+#
 ActiveSupport::CoreExtensions::Array::ExtractOptions.extract_options!
 # 以下のように実装されている。
 # Rubyは[1, 2, 3, c:4, d:5] のように値,値,hash, hashみたいな配列が可能。

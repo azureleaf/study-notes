@@ -4,9 +4,9 @@
 
 - [Docker](#docker)
 - [ToC](#toc)
-- [Docker & Rails](#docker--rails)
+- [Docker Basics (with Rails)](#docker-basics-with-rails)
   - [1. Dockerfile](#1-dockerfile)
-    - [Example](#example)
+    - [Parser directives](#parser-directives)
   - [2. docker-compose.yml](#2-docker-composeyml)
   - [3. entrypoint.sh](#3-entrypointsh)
   - [4. Gemfile](#4-gemfile)
@@ -20,17 +20,58 @@
   - [Docker vs Docker Compose](#docker-vs-docker-compose)
   - [Docker on the Cloud](#docker-on-the-cloud)
 
-# Docker & Rails
+# Docker Basics (with Rails)
 
 ## 1. Dockerfile
 
-- `docker build`
--
+Sample 1
 
+```dockerfile
+# syntax=docker/dockerfile:1
+FROM ruby:2.5
+RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+WORKDIR /myapp
+COPY Gemfile /myapp/Gemfile
+COPY Gemfile.lock /myapp/Gemfile.lock
+RUN bundle install
+
+# Add a script to be executed every time the container starts.
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
+EXPOSE 3000
+
+# Configure the main process to run when running the image
+CMD ["rails", "server", "-b", "0.0.0.0"]
+```
+
+Sample 2
+
+```dockerfile
+FROM ruby:2.7.5
+RUN apt-get update -qq &&\
+    apt-get install -y build-essential nodejs\
+    postgresql-client curl
+    apt-transport-https wget
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && apt-get install -y yarn
+RUN mkdir /app
+WORKDIR /app
+COPY Gemfile /app/Gemfile
+COPY Gemfile.lock /app/Gemfile.lock
+RUN bundle install
+COPY . /app
+```
+
+
+Instruction Keywords:
 
 ```dockerfile
 FROM
+
 ENV
+
 LABEL
 
 RUN
@@ -38,6 +79,18 @@ RUN
 # $cd equivalent
 WORKDIR
 
+# Can be a sequence of relative dir changes: /users/john/documents
+WORKDIR /users
+RUN touch .config
+WORKDIR john
+WORKDIR documents
+RUN touch changelog.txt
+
+# Can resolve ENV vars
+ENV DIRPATH=/path
+WORKDIR $DIRPATH/$DIRNAME
+
+# COPY VS ADD:
 # ADD can use remote URL & .tar extraction, while COPY can't.
 # You should use COPY bacause ADD may increase imagesize.
 # You can use $curl/wget/tar command with COPY
@@ -53,9 +106,40 @@ EXPOSE
 # CMD appears only once in a Dockerfile
 CMD
 ARG
+
+# DEPRECATED
+MAINTAINER
+
+USER
+ONBUILD
+STOPSIGNAL
+HEALTHCHECK
+SHELL
 ```
 
-### Example
+### Parser directives
+
+Comment-like directives change behavior of the Dockerfile.
+
+There're 2 directives: "syntax" and "escape".
+
+A parser directive can appear only once for the type.
+
+```dockerfile
+# syntax=docker/dockerfile:1
+# syntax=docker.io/docker/dockerfile:1
+```
+
+"escape" define which character is used as escape characters in the Dockerfile
+
+```dockerfile
+# escape=\
+# escape=`
+```
+
+## 2. docker-compose.yml
+
+Example 1:
 
 ```yml
 version: "3"
@@ -74,7 +158,7 @@ services:
       MYSQL_PASSWORD: test
 ```
 
-## 2. docker-compose.yml
+Example 2:
 
 ```yml
 version: '3'
@@ -195,7 +279,8 @@ docker ps -aq
 docker app
 
 docker builder
-docker build
+docker build .
+docker build -f /path/to/a/Dockerfile .
 docker build -t docker-whale . # Build image based on the Dockerfile. `docker-whale`: Name of the image to be created. `.`: Build Context
 docker build —no-cache -t docker-whale
 docker buildx

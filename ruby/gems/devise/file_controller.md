@@ -6,13 +6,41 @@
 
 - [Devise Controller](#devise-controller)
   - [ToC](#toc)
-  - [全体構造](#全体構造)
+  - [依存関係](#依存関係)
+  - [このファイル内部の構造](#このファイル内部の構造)
+  - [devise_mappingとはなんなのか](#devise_mappingとはなんなのか)
   - [詳細](#詳細)
 
-## 全体構造
+## 依存関係
+
+このクラスから依存
+- Devise::Controllers::ScopedViews
+- Devise.parent_controller.constantize (基底クラス)
+
+このクラスに依存
+- このクラスは、すべてのDevise Controllerの基底クラスになる。
+
+## このファイル内部の構造
 
 
+## devise_mappingとはなんなのか
 
+`request.env["devise.mapping"]`の中身のことらしい
+
+```
+devise_mapping.to
+devise_mapping.name
+devise_mapping.scoped_path
+devise_mapping.no_input_strategies
+devise_mapping.validateable?
+devise_mapping.confirmable?
+devise_mapping.registerable?
+devise_mapping.recoverable?
+devise_mapping.locable?
+devise_mapping.omniauthable?
+devise_mapping.rememberable?
+
+```
 
 ## 詳細
 
@@ -22,19 +50,36 @@
 
 # All Devise controllers are inherited from here.
 class DeviseController < Devise.parent_controller.constantize
+
+  # scoped_viewsというクラス変数を定義するだけの小さいモジュール
   include Devise::Controllers::ScopedViews
 
+  # :helperというメソッドがあるか調べ、あれば???
+  # helperメソッド：Rails組み込み（actionpack/lib/abstract_controller/helpers.rb）。モジュールを複数引数にとり、テンプレートのクラスに追加する役割がある。
+  # respond_to?メソッド： Ruby組み込み. 特定のメソッドがObjectに定義されているか(privateは除く)どうかをbooleanで返す。moduleではmethod_defined?という似たようなメソッドがある。一方で、よく似ているが"respond_to"はRails組み込みである。
+  # DeviseHelper module: app/helpers/devise_helper.rbで定義される。後方互換性のため装備。
   if respond_to?(:helper)
     helper DeviseHelper
   end
 
+  # :helper_methodというメソッドがあるか調べ、あれば???
   if respond_to?(:helper_method)
+    # %wは、文字列の配列を簡潔に記述する記法。
+    # ここで出てくる文字列は、すべてこのコントローラのアクションであることに注意する。
     helpers = %w(resource scope_name resource_name signed_in_resource
                  resource_class resource_params devise_mapping)
+
+    # helper_methodメソッド：Rails組み込みの関数。、引数にコントローラのアクションをとる。
+    # これらのアクションはviewでヘルパーとして利用できるようになる。
+    # つまり、このコントローラのアクション（devise_mappingなど）をヘルパー化している。
     helper_method(*helpers)
   end
 
+  # このコントローラのassert_is_devise_resourceアクションを常に事前に実行する???
+  # prepend_before_action: before_actionよりもさらに前に処理する。
   prepend_before_action :assert_is_devise_resource!
+
+  # actionpack/lib/action_controller/metal/mime_responds.rb
   respond_to :html if mimes_for_respond_to.empty?
 
   # Override prefixes to consider the scoped view.
@@ -54,6 +99,7 @@ class DeviseController < Devise.parent_controller.constantize
 
   protected
 
+  # instance_variable_get(): オブジェクトのインスタンス変数を取得する。
   # Gets the actual resource stored in the instance variable
   def resource
     instance_variable_get(:"@#{resource_name}")
@@ -63,6 +109,9 @@ class DeviseController < Devise.parent_controller.constantize
   def resource_name
     devise_mapping.name
   end
+
+  # scope_nameと書いても、resource_nameの意味になるようにする。これによりスコープの名前であることが明示できる???
+  # "alias 新しい別名 既存の名前"
   alias :scope_name :resource_name
 
   # Proxy to devise map class

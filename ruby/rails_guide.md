@@ -607,6 +607,31 @@ Action Pack層
 
 ### Rails on Rack
 
+- [Qiita: Rack入門 Rack Application編](https://qiita.com/nishio-dens/items/e293f15856d849d3862b)
+
+HTTP requests are passed in this order, and responses are passed in the opposite direction.
+
+1. Web Server: e.g. Apache, Nginx
+2. App Server: e.g. Puma, Unicorn
+3. Middleware: e.g. Rack, WSGI
+4. App Framework: e.g. Rails
+
+- Requirements for Rack middleware:
+  - Rack middleware is a class.
+  - Rack middleware has a `.call()` method.
+  - Rack middleware takes `app` as the initializer arg.
+- Rack middleware alters the content of request / response.
+  - HTTP Status
+  - HTTP Headers
+  - HTTP Body
+
+Default middlewares
+- Rack itself is packed with basic middlewares.
+- Rails has many Rack middlewares by default:
+
+Rails Action Dispatcher middleware stack
+
+
 ### Creating and Customizing Rails Generators & Templates
 
 ### Getting Started with Engines

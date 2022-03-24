@@ -14,14 +14,9 @@ devise gemの`lib/devise/devise.rb`を読解する。
 
 - [devise.rb](#deviserb)
   - [ToC](#toc)
-  - [依存先](#依存先)
   - [構造](#構造)
   - [詳細](#詳細)
 
-## 依存先
-
-- `warden`
-  - これは重要なgemである。
 
 ## 構造
 

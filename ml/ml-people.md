@@ -1,5 +1,6 @@
 # ML People
 - [ML People](#ml-people)
+- [Books](#books)
 - [People](#people)
   - [⭐⭐⭐](#)
   - [⭐⭐](#-1)
@@ -11,7 +12,34 @@
   - [⭐⭐⭐](#-5)
   - [⭐⭐](#-6)
 - [Institutions](#institutions)
+- [Contest](#contest)
 
+# Books
+
+PRML: pattern recognition and machine learning, bishop
+
+DLTK
+		詳解ディープラーニング、巣籠悠輔、Gunosy創業者
+			w/ RNN
+			w/o CNN
+
+ゼロから作るDeepLearning
+			w/ CNN、重みの最適化、計算グラフ
+			w/o RNN
+
+ITエンジニアのための機械学習理論入門
+			w/ k平均法、ROC曲線、EMアルゴリズム
+			w/o DL
+
+Raschka	Python機械学習プログラミング
+	w/
+		SVM、アンサンブル学習、クラスタ分析、
+				次元削減（PCA、LDA）
+				線形回帰（ML以外の一般論）
+  w/o
+    CNN, RNN
+
+プログラミングための確率統計
 
 # People
 
@@ -115,3 +143,10 @@ China
 - SenseTime
 - iFlytek
 - MSRA (Microsoft Research Asia)
+
+# Contest
+
+- Amazon Robotics Challenge
+- DARPA Robotics Challenge
+- ILSVRC (ImageNet blah blah)
+- SQuAD: Stanford Question Answering Dataset

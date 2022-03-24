@@ -1,12 +1,45 @@
 # Statistics
 
-## ToC
+- [Statistics](#statistics)
+- [Reference](#reference)
+- [Important Subfields](#important-subfields)
+- [Application fields of Statistics](#application-fields-of-statistics)
+- [Noise](#noise)
+- [Terminology](#terminology)
+- [TSA: Time Series Analysis](#tsa-time-series-analysis)
+- [Experimental Design 実験計画法](#experimental-design-実験計画法)
+- [Hayashi's quantification methods 数量化理論](#hayashis-quantification-methods-数量化理論)
+- [因子分析](#因子分析)
+- [Survery Methodology (Social Science)](#survery-methodology-social-science)
+- [Products](#products)
+- [Descriptive Statistics](#descriptive-statistics)
+- [Statistical Chart](#statistical-chart)
+- [Probability Distribution 確率分布](#probability-distribution-確率分布)
+- [実世界での分布](#実世界での分布)
+- [正規分布の解析の代表的ケース](#正規分布の解析の代表的ケース)
+- [Estimation 推定](#estimation-推定)
+- [Sampling 標本抽出](#sampling-標本抽出)
+- [検定](#検定)
+- [多重共線性　 multicollinearity](#多重共線性-multicollinearity)
+- [確率](#確率)
+- [ベイズ統計](#ベイズ統計)
+- [統計量](#統計量)
+- [Model](#model)
+  - [HMM: Hidden Markov Model](#hmm-hidden-markov-model)
+- [Regression 回帰](#regression-回帰)
+- [相関](#相関)
+- [原理のまとめ](#原理のまとめ)
+- [推定](#推定)
+- [擬似乱数](#擬似乱数)
+- [Stochastic Process 確率過程　 {X(t); t ∈ T}](#stochastic-process-確率過程-xt-t--t)
+- [Distance](#distance)
+- [Spline](#spline)
 
-## Reference
+# Reference
 
 - 統計学入門, 東京大学出版会
 
-## Important Subfields
+# Important Subfields
 
 分類方法は一通りではないため、重複は多い
 
@@ -55,7 +88,7 @@
   - Binary Classification
   - Multiclass Classification
 
-## Application fields of Statistics
+# Application fields of Statistics
 
 - Biostatistics
   - Bioinformatics
@@ -71,7 +104,11 @@
 - Social Statistics
 - Spatial Statistics
 
-## Terminology
+# Noise
+
+- White Noise
+
+# Terminology
 
 - 推定
 - 点推定
@@ -108,7 +145,7 @@
 - SVM
 - EM Algorithm
 
-## TSA: Time Series Analysis
+# TSA: Time Series Analysis
 
 - AR Model: Autoregression
 - ARMA Model: Autoregressive Moving Average
@@ -120,9 +157,9 @@
 - Ratio-to-moving-average Method
 - Trend Stationary
 
-## Experimental Design 実験計画法
+# Experimental Design 実験計画法
 
-## Hayashi's quantification methods 数量化理論
+# Hayashi's quantification methods 数量化理論
 
 - Known only in Japan
 - 数量化 I 類
@@ -130,7 +167,7 @@
 - 数量化 III 類
 - 数量化 IV 類
 
-## 因子分析
+# 因子分析
 
 - Often used for marketing
 - Group the factors which have correlation to each other
@@ -138,21 +175,21 @@
 - Varimax Rotation
 - Promax Rotation
 
-## Survery Methodology (Social Science)
+# Survery Methodology (Social Science)
 
 - RDD: Random Digit Dialing
   - Random sampling for telephone survey
 - CATI: Computer Assisted Telephone Interviewing
 - Omnibus test /
 
-## Products
+# Products
 
 - Kaggle
 - 基幹統計
 - 一般統計
   - 基幹統計以外
 
-## Descriptive Statistics
+# Descriptive Statistics
 
 - Descriptive Statistics 記述統計学
 - Average
@@ -166,7 +203,7 @@
 - Correlation 相関
 - Outlier 外れ値
 
-## Statistical Chart
+# Statistical Chart
 
 - Histogram
 - Bar Chart
@@ -185,7 +222,7 @@
 - Flow Chart
 - Pedigree Chart
 
-## Probability Distribution 確率分布
+# Probability Distribution 確率分布
 
 - １変数離散型確率分布
 - １変数離散型連続分布
@@ -227,7 +264,7 @@
 - 累積分布関数
 - 確率密度関数
 
-## 実世界での分布
+# 実世界での分布
 
 - 品質管理をやりにくい場合（農業など）の不良品の数 二項分布
 - 厳密な品質管理の場合の不良品の数 ポアソン分布
@@ -239,7 +276,7 @@
 - 体重の分布 変数変換により、正規分布
 - 所得の分布 変数変換により、正規分布
 
-## 正規分布の解析の代表的ケース
+# 正規分布の解析の代表的ケース
 
 - 分散が未知のときの、標本平均の標本分布
 - 分散が未知のときの、標本分散の標本分布
@@ -251,7 +288,7 @@
 - 標本平均の差の標本分布（母分散が未知で、等しいとは限らない場合）
 - 標本分散の比の標本分布
 
-## Estimation 推定
+# Estimation 推定
 
 - 推定の意義
   - 実問題では、ある事象がどの確率分布に従うのかがわかっても、パラメータがわかないことが多い。
@@ -307,7 +344,7 @@
 - R 推定
 - ロバスト最小二乗法
 
-## Sampling 標本抽出
+# Sampling 標本抽出
 
 - Population 母集団
   - 正規母集団 実用上は、ほとんどこの母集団分布を仮定する。
@@ -337,7 +374,7 @@
 - 母平均の検定
 - 母分散の検定
 
-## 検定
+# 検定
 
 - t 検定
 - F 検定
@@ -358,7 +395,7 @@
     - ぼんやりものの誤り
     - false accept
 
-## 多重共線性　 multicollinearity
+# 多重共線性　 multicollinearity
 
 - 説明変数間で相関係数が高いときに、それが原因で発生する悪現象です
 - どうしてダメなのか？
@@ -370,7 +407,7 @@
   - 相関関係が高い説明変数を外す
   - どれを外すべきか判然としない時は、いくつか除外候補（or の組み合わせ）を試す
 
-## 確率
+# 確率
 
 - 確率空間 (Ω, F, P)
   - 標本空間 Ω
@@ -445,14 +482,14 @@
 - 特性関数
   - 確率変数 X
 
-## ベイズ統計
+# ベイズ統計
 
 - ベイズの公式
   - X，Y がどちらも離散値の場合
   - X，Y がどちらも実数値の場合
   - X が離散値，Y が実数値の場合
 
-## 統計量
+# 統計量
 
 - 平均値
 - 中央値
@@ -473,7 +510,7 @@
   - 分散の平方根．
   - 分散では，単位系がもとの xi の単位の２乗になってしまっているので，平方根で元に戻す．
 
-## Model
+# Model
 
 - 一般線形モデル General Linear Model
 - 一般化線形モデル Generalized Linear Model
@@ -486,7 +523,7 @@
 - マルコフ連鎖 確率変数がとりうる値が離散的なマルコフ過程
 - 時間的に均一 マルコフ過程のうち、遷移確率が時間によらないもの
 
-### HMM: Hidden Markov Model
+## HMM: Hidden Markov Model
 
 - 状態を直接観測できないマルコフモデルを HMM という
 - 状態に依存して、観測可能な変数の値（の確率分布）が決まる
@@ -498,7 +535,7 @@
   - 初期状態分布（t=1 のとき）
   - -> Baum Welch Algorithm
 
-## Regression 回帰
+# Regression 回帰
 
 - Regression 回帰
   - 散らばったデータに数式を当てはめること
@@ -525,12 +562,12 @@
 - 単回帰
 - 重回帰
 
-## 相関
+# 相関
 
 - 自己相関係数
 - 偏自己相関
 
-## 原理のまとめ
+# 原理のまとめ
 
 - 大数の法則
   - たくさん平均すれば一定値に落ち着く
@@ -540,7 +577,7 @@
 - 最大エントロピー原理
 -
 
-## 推定
+# 推定
 
 - 種類
 - 仮定
@@ -570,7 +607,7 @@
 - BIC：ベイズ情報量規準
 - MDL 最小記述長
 
-## 擬似乱数
+# 擬似乱数
 
 - モンテカルロ法
   - 生成
@@ -591,10 +628,11 @@
 - - 正規分布に従わせる
     - Box Muller 変換
 
-## Stochastic Process 確率過程　 {X(t); t ∈ T}
+# Stochastic Process 確率過程　 {X(t); t ∈ T}
 
 - Stationary Process 定常過程
-- Independent Increments Process 独立増分過程 Additive Process 加法過程
+- Independent Increments Process 独立増分過程
+- Additive Process 加法過程
 - Lévy process
 - Wiener Process One of Independent Increments Process / Levy Process / Gaussian Process Brownian Motion
 - Stationary Process 　定常過程
@@ -631,10 +669,8 @@
   - パラメータ集合 T が可算集合である
 - 連続型確率過程
   - パラメータ集合 T が連続である
-- 状態
-  - X(t)がとり得る個々の値
-- 状態集合
-  - すべての状態からなる集合
+- 状態: X(t)がとり得る個々の値
+- 状態集合: すべての状態からなる集合
 - 信頼性理論
 - ブラウン運動
 - マルコフ過程
@@ -645,12 +681,7 @@
 - 定常過程
 - ウィーナー過程
 - 独立増分過程（レヴィ過程）
-  - ポアソン過程
-    - ランダムに生起する事象を表す基本的な確率過程
-    - 例
-      - 客の到着
-      - 故障の発生,
-      - 個体の出生
+  - ポアソン過程: ランダムに生起する事象を表す基本的な確率過程. 客の到着, 故障の発生, 個体の出生
   - ブラウン運動
 - 出生死滅過程
   - ポアソン過程の生起に加えて，ランダムな死滅も考慮
@@ -671,7 +702,11 @@
     - 自転するブラックホールからエネルギーを取り出す過程
     - 思考実験である
 
-## Distance
+- Wiener–Khinchin theorem (aka Khinchine-Kolmogorov theorem):
+
+- Spectral Density (aka Power Spectral Density, Energy Spectral Density)
+
+# Distance
 
 - ユークリッド距離
   - 三平方の定理で求める普通の距離
@@ -685,7 +720,7 @@
 - ハウスドルフ距離
   - 集合と集合の間の距離
 
-## Spline
+# Spline
 
 - 平滑化スプライン
 - B スプライン
