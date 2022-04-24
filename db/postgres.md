@@ -5,8 +5,7 @@
 - [PostgreSQL](#postgresql)
   - [ToC](#toc)
   - [Termininology](#termininology)
-  - [Commands (from shell)](#commands-from-shell)
-  - [Commands (inside psql)](#commands-inside-psql)
+  - [Commands](#commands)
   - [Config](#config)
   - [User & Role](#user--role)
   - [Privilege (for roles)](#privilege-for-roles)
@@ -25,19 +24,15 @@
 - Database Cluster
 
 
-## Commands (from shell)
+## Commands
 
 ```sh
 psql -d mydb -U myuser
+sudo su - postgres
 sudo -U postgres psql # Allegedly better than `sudo su - postgres`. Can't be used when the `hba_file` value is converted from `peer` to `md5`
 sudo -i -u postgres # Available even after using md5
 psql -U default -h postgres # -h: Server host
 psql mydb
-```
-
-## Commands (inside psql)
-
-```
 \q # quit
 \l # list DB
 \d my_table
@@ -80,7 +75,7 @@ psql -U john -d mydb
 
 ## Privilege (for tables)
 
-- `GRANT select 
+- `GRANT select
 
 
 
@@ -105,13 +100,13 @@ sudo service postgresql restart
 
 ## Auth method
 
-Some 
+Some
 
 - Password Auth (md5)
 - Password Auth (password)
 - Peer Auth
   - Default auth method
-  - This sets the DB user name which is same as OS user name 
+  - This sets the DB user name which is same as OS user name
   - Available only for local DB
 - Ident
   - Available only for TCP/IP connection

@@ -5,10 +5,6 @@
 - [RoR](#ror)
   - [ToC](#toc)
   - [Installation](#installation)
-    - [Install Ruby with Rbenv](#install-ruby-with-rbenv)
-    - [Install dependencies for the Rails project](#install-dependencies-for-the-rails-project)
-    - [Key files](#key-files)
-    - [Functionalities](#functionalities)
   - [Rails Command](#rails-command)
   - [Default config for resourceful routes](#default-config-for-resourceful-routes)
   - [Naming](#naming)
@@ -57,103 +53,55 @@
 
 ## Installation
 
-### Install Ruby with Rbenv
-
-- Installed on Oct. 30, 2020 on Ubuntu 20.04 (WSL)
-- [rbenv official](https://github.com/rbenv/rbenv)
-- [rbenv installer official](https://github.com/rbenv/rbenv-installer)
+Installed on April 2022 on Ubuntu 20.04 (WSL)
 
 ```sh
-
+# rbenv
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
-
-# This clones the rbenv to ~/.rbenv, and build it
-curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
-
+~/.rbenv/bin/rbenv init
 echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-source ~/.bashrc
+git clone https://github.com/rbenv/ruby-build.git
+sudo PREFIX=/usr/local ./ruby-build/install.sh # required for "rbenv install" command
 
-# This adds ~/.rbenv/shim in the path
-rbenv init
-
-# validate installation
-curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
-
-# install ruby
-rbenv install -l # list the stable ruby versions
+# ruby
+rbenv install -l
 rbenv install 2.7.2
-rbenv install -L # list the local ruby versions
-rbenv global 2.7.2 # use the ruby version globally
-rbenv local 2.7.2 # optional: when you want to use the ruby version inside the specific dir only
+rbenv global 2.7.2 # if necessary
+rbenv local 2.7.2 # if necessary
 
-sudo apt update
-
-# node.js
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+# node
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 nvm ls-remote --lts
 nvm install v14.15.0 # choose the latest lts
 nvm use v14.15.0 # if necessary
 nvm ls # check current version
 
 # yarn
-# Procedure described in the official website using "apt install yarn" failed;
-# yarn installed by this gets "git+0.32" version which Ruby doesn't recognize correctly
 npm install -g yarn
 
-# rails
+# postgres
+sudo apt install postgresql postgresql-contrib libpq-dev
+sudo service postgresql start
+sudo su - postgres
+psql
+CREATE ROLE blahblah CREATEDB LOGIN
+
+#
+# new project
+#
 gem install rails
-
-# sqlite3 (optional)
-sudo apt install sqlite3
-```
-
-### Install dependencies for the Rails project
-
-```sh
-# Choose the right version of Node.js
-# As of Nov. 2020, v15 wasn't compatible with the latest RoR
-nvm use v10.23.0 # for example
-
-# For new project:
 rails new my_project # Hyphenation in the project name (e.g. my-project) caused "Errno::EACCES: Permission denied @ rb_file_s_rename"
 rails webpacker:install
 
-# For existing project:
+#
+# existing project
+#
 bundle install # on Gemfile
 yarn install # on package.json
-rails migrate # if the app uses DB
+echo "SECRET_KEY_BASE=$(bin/rails secret)" >> .env # with dotenv. You can use credential.yml.enc instead
+bin/rails db:migrate && bin/rails db:seed # if the app uses DB
 ```
-
-
-
-### Key files
-
-```sh
-app/
-  controllers/blahblah_controller.rb
-  views/blahblah/
-  models/
-config/
-  routes.rb
-db
-  migrate/YYYYMMDDHHMMSS_create_articles.rb
-  schema.rb
-
-```
-
-### Functionalities
-
-- Article: Title & Body
-  - create
-  - show single / show multiple
-  - edit
-  - delete (with its comments)
-- Comment: Commentor & Body
-  - create
-  - show
-  - edit
-  - delete
 
 ## Rails Command
 
